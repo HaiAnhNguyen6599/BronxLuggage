@@ -9,7 +9,7 @@ git config --global user.email nguyenhai.anh6599@gmail.com
 * Git command
 
 - Lấy project từ trên Git server về Local
-git clone https://github.com/HaiAnhNguyen6599/demo-react.git
+git clone https://github.com/HaiAnhNguyen6599/BronxLuggage.git
 
 - Check status hiện tại của thư mục
 git status
