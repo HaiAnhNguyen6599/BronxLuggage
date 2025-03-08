@@ -94,8 +94,8 @@ $categories_result = $conn->query($categories_sql);
     class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
     <div class="col-lg-4">
       <a href="" class="text-decoration-none">
-        <span class="h1 text-uppercase text-primary bg-dark px-2">Multi</span>
-        <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Shop</span>
+        <span class="h1 text-uppercase text-primary bg-dark px-2">Bronx</span>
+        <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Luggage</span>
       </a>
     </div>
     <div class="col-lg-4 col-6 text-left">
@@ -168,8 +168,8 @@ $categories_result = $conn->query($categories_sql);
         <nav
           class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
           <a href="" class="text-decoration-none d-block d-lg-none">
-            <span class="h1 text-uppercase text-dark bg-light px-2">Multi</span>
-            <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Shop</span>
+            <span class="h1 text-uppercase text-dark bg-light px-2">Bronx</span>
+            <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Luggage</span>
           </a>
           <button
             type="button"
@@ -182,9 +182,9 @@ $categories_result = $conn->query($categories_sql);
             class="collapse navbar-collapse justify-content-between"
             id="navbarCollapse">
             <div class="navbar-nav mr-auto py-0">
-              <a href="index.html" class="nav-item nav-link active">Home</a>
+              <a href="index.php" class="nav-item nav-link active">Home</a>
               <a href="shop.html" class="nav-item nav-link">Shop</a>
-              <a href="detail.html" class="nav-item nav-link">Shop Detail</a>
+              <a href="detail.html" class="nav-item nav-link">Male</a>
               <div class="nav-item dropdown">
                 <a
                   href="#"
@@ -249,7 +249,7 @@ $categories_result = $conn->query($categories_sql);
                 <div class="p-3" style="max-width: 700px">
                   <h1
                     class="display-4 text-white mb-3 animate__animated animate__fadeInDown">
-                    Men Fashion
+                    Men Luggage
                   </h1>
                   <p class="mx-md-5 px-5 animate__animated animate__bounceIn">
                     Lorem rebum magna amet lorem magna erat diam stet. Sadips
@@ -273,7 +273,7 @@ $categories_result = $conn->query($categories_sql);
                 <div class="p-3" style="max-width: 700px">
                   <h1
                     class="display-4 text-white mb-3 animate__animated animate__fadeInDown">
-                    Women Fashion
+                    Women Luggage
                   </h1>
                   <p class="mx-md-5 px-5 animate__animated animate__bounceIn">
                     Lorem rebum magna amet lorem magna erat diam stet. Sadips
@@ -297,7 +297,7 @@ $categories_result = $conn->query($categories_sql);
                 <div class="p-3" style="max-width: 700px">
                   <h1
                     class="display-4 text-white mb-3 animate__animated animate__fadeInDown">
-                    Kids Fashion
+                    Kids Luggage
                   </h1>
                   <p class="mx-md-5 px-5 animate__animated animate__bounceIn">
                     Lorem rebum magna amet lorem magna erat diam stet. Sadips
@@ -318,169 +318,6 @@ $categories_result = $conn->query($categories_sql);
 
   
 <!-- Categories Start -->
-  <!-- <div class="container-fluid pt-5">
-    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
-      <span class="bg-secondary pr-3">Categories</span>
-    </h2>
-    <div class="row px-xl-5 pb-3">
-      <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-        <a class="text-decoration-none" href="">
-          <div class="cat-item d-flex align-items-center mb-4">
-            <div class="overflow-hidden" style="width: 100px; height: 100px">
-              <img class="img-fluid" src="img/cat-1.jpg" alt="" />
-            </div>
-            <div class="flex-fill pl-3">
-              <h6>Category Name</h6>
-              <small class="text-body">100 Products</small>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-        <a class="text-decoration-none" href="">
-          <div class="cat-item img-zoom d-flex align-items-center mb-4">
-            <div class="overflow-hidden" style="width: 100px; height: 100px">
-              <img class="img-fluid" src="img/cat-2.jpg" alt="" />
-            </div>
-            <div class="flex-fill pl-3">
-              <h6>Category Name</h6>
-              <small class="text-body">100 Products</small>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-        <a class="text-decoration-none" href="">
-          <div class="cat-item img-zoom d-flex align-items-center mb-4">
-            <div class="overflow-hidden" style="width: 100px; height: 100px">
-              <img class="img-fluid" src="img/cat-3.jpg" alt="" />
-            </div>
-            <div class="flex-fill pl-3">
-              <h6>Category Name</h6>
-              <small class="text-body">100 Products</small>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-        <a class="text-decoration-none" href="">
-          <div class="cat-item img-zoom d-flex align-items-center mb-4">
-            <div class="overflow-hidden" style="width: 100px; height: 100px">
-              <img class="img-fluid" src="img/cat-4.jpg" alt="" />
-            </div>
-            <div class="flex-fill pl-3">
-              <h6>Category Name</h6>
-              <small class="text-body">100 Products</small>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-        <a class="text-decoration-none" href="">
-          <div class="cat-item img-zoom d-flex align-items-center mb-4">
-            <div class="overflow-hidden" style="width: 100px; height: 100px">
-              <img class="img-fluid" src="img/cat-4.jpg" alt="" />
-            </div>
-            <div class="flex-fill pl-3">
-              <h6>Category Name</h6>
-              <small class="text-body">100 Products</small>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-        <a class="text-decoration-none" href="">
-          <div class="cat-item img-zoom d-flex align-items-center mb-4">
-            <div class="overflow-hidden" style="width: 100px; height: 100px">
-              <img class="img-fluid" src="img/cat-3.jpg" alt="" />
-            </div>
-            <div class="flex-fill pl-3">
-              <h6>Category Name</h6>
-              <small class="text-body">100 Products</small>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-        <a class="text-decoration-none" href="">
-          <div class="cat-item img-zoom d-flex align-items-center mb-4">
-            <div class="overflow-hidden" style="width: 100px; height: 100px">
-              <img class="img-fluid" src="img/cat-2.jpg" alt="" />
-            </div>
-            <div class="flex-fill pl-3">
-              <h6>Category Name</h6>
-              <small class="text-body">100 Products</small>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-        <a class="text-decoration-none" href="">
-          <div class="cat-item img-zoom d-flex align-items-center mb-4">
-            <div class="overflow-hidden" style="width: 100px; height: 100px">
-              <img class="img-fluid" src="img/cat-1.jpg" alt="" />
-            </div>
-            <div class="flex-fill pl-3">
-              <h6>Category Name</h6>
-              <small class="text-body">100 Products</small>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-        <a class="text-decoration-none" href="">
-          <div class="cat-item img-zoom d-flex align-items-center mb-4">
-            <div class="overflow-hidden" style="width: 100px; height: 100px">
-              <img class="img-fluid" src="img/cat-2.jpg" alt="" />
-            </div>
-            <div class="flex-fill pl-3">
-              <h6>Category Name</h6>
-              <small class="text-body">100 Products</small>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-        <a class="text-decoration-none" href="">
-          <div class="cat-item img-zoom d-flex align-items-center mb-4">
-            <div class="overflow-hidden" style="width: 100px; height: 100px">
-              <img class="img-fluid" src="img/cat-1.jpg" alt="" />
-            </div>
-            <div class="flex-fill pl-3">
-              <h6>Category Name</h6>
-              <small class="text-body">100 Products</small>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-        <a class="text-decoration-none" href="">
-          <div class="cat-item img-zoom d-flex align-items-center mb-4">
-            <div class="overflow-hidden" style="width: 100px; height: 100px">
-              <img class="img-fluid" src="img/cat-4.jpg" alt="" />
-            </div>
-            <div class="flex-fill pl-3">
-              <h6>Category Name</h6>
-              <small class="text-body">100 Products</small>
-            </div>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-        <a class="text-decoration-none" href="">
-          <div class="cat-item img-zoom d-flex align-items-center mb-4">
-            <div class="overflow-hidden" style="width: 100px; height: 100px">
-              <img class="img-fluid" src="img/cat-3.jpg" alt="" />
-            </div>
-            <div class="flex-fill pl-3">
-              <h6>Category Name</h6>
-              <small class="text-body">100 Products</small>
-            </div>
-          </div>
-        </a>
-      </div>
-    </div>
-  </div> -->
     <div class="container-fluid pt-5">
       <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
           <span class="bg-secondary pr-3">Categories</span>
