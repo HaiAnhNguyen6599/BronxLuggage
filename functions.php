@@ -8,6 +8,7 @@ function getCategories($conn) {
         FROM categories c
         LEFT JOIN products p ON c.id = p.category_id
         GROUP BY c.id, c.name
+        HAVING product_count > 0  -- Chỉ lấy danh mục có sản phẩm
         ORDER BY c.id;
     ";
     return $conn->query($sql);
@@ -34,8 +35,14 @@ function getTopRatedProducts($limit = 8) {
                 p.name, 
                 COALESCE(AVG(f.rating), 0) AS rating,
                 COUNT(f.id) AS reviews,
-                (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) AS img,
-                (SELECT price FROM product_variants WHERE product_id = p.id ORDER BY price ASC LIMIT 1) AS price
+                COALESCE(
+                    (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1), 
+                    'default.jpg'
+                ) AS img,
+                COALESCE(
+                    (SELECT MIN(price) FROM product_variants WHERE product_id = p.id), 
+                    0
+                ) AS price
             FROM products p
             LEFT JOIN feedback f ON p.id = f.product_id
             GROUP BY p.id
@@ -54,5 +61,27 @@ function getTopRatedProducts($limit = 8) {
 
     return $products;
 }
+
+// functions.php
+
+function get_products_by_gender($gender) {
+    global $conn;  // Sử dụng kết nối từ config.php
+
+    // Xây dựng câu truy vấn SQL để lấy sản phẩm theo giới tính
+    $sql = "SELECT * 
+            FROM products p
+            left join product_images pi on p.id = pi.product_id
+            left join product_variants pv on p.id = pv.product_id
+            WHERE gender = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $gender);  // "s" là kiểu dữ liệu string
+    $stmt->execute();
+
+    // Lấy kết quả và trả về
+    $result = $stmt->get_result();
+    return $result;
+}
+
+
 ?>
-?>
+

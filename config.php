@@ -13,7 +13,7 @@ try {
         throw new Exception("Connection Failed: " . $conn->connect_error);
     }
 
-    echo "Connection Success!";
+    // echo "Connection Success!";
 } catch (Exception $e) {
     die("Connection Error: " . $e->getMessage());
 }
