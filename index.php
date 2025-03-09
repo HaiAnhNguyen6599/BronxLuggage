@@ -1,17 +1,12 @@
 <?php
 require "config.php";
-require_once 'functions.php'; 
+require_once 'functions.php';
 
-// Truy vấn lấy danh mục
-$categories_sql = $query = "
-    SELECT c.id, c.name, COUNT(p.id) as product_count
-    FROM categories c
-    LEFT JOIN products p ON c.id = p.category_id
-    GROUP BY c.id, c.name
-    order by c.id;
-";
+$categories_result = getCategories($conn);
 
-$categories_result = $conn->query($categories_sql);
+$brands = getBrands($conn);
+
+$products = getTopRatedProducts(); // Lấy 8 sản phẩm có rating cao nhất
 ?>
 
 <!DOCTYPE html>
@@ -29,14 +24,10 @@ $categories_result = $conn->query($categories_sql);
 
   <!-- Google Web Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
 
   <!-- Font Awesome -->
-  <link
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
-    rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
 
   <!-- Libraries Stylesheet -->
   <link href="lib/animate/animate.min.css" rel="stylesheet" />
@@ -61,10 +52,7 @@ $categories_result = $conn->query($categories_sql);
       <div class="col-lg-6 text-center text-lg-right">
         <div class="d-inline-flex align-items-center">
           <div class="btn-group">
-            <button
-              type="button"
-              class="btn btn-sm btn-light dropdown-toggle"
-              data-toggle="dropdown">
+            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
               My Account
             </button>
             <div class="dropdown-menu dropdown-menu-right">
@@ -74,24 +62,9 @@ $categories_result = $conn->query($categories_sql);
           </div>
         </div>
       </div>
-      <!-- <div class="d-inline-flex align-items-center d-block d-lg-none">
-        <a href="" class="btn px-0 ml-2">
-          <i class="fas fa-heart text-dark"></i>
-          <span
-            class="badge text-dark border border-dark rounded-circle"
-            style="padding-bottom: 2px">0</span>
-        </a>
-        <a href="" class="btn px-0 ml-2">
-          <i class="fas fa-shopping-cart text-dark"></i>
-          <span
-            class="badge text-dark border border-dark rounded-circle"
-            style="padding-bottom: 2px">0</span>
-        </a>
-      </div> -->
     </div>
   </div>
-  <div
-    class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
+  <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
     <div class="col-lg-4">
       <a href="" class="text-decoration-none">
         <span class="h1 text-uppercase text-primary bg-dark px-2">Bronx</span>
@@ -101,10 +74,7 @@ $categories_result = $conn->query($categories_sql);
     <div class="col-lg-4 col-6 text-left">
       <form action="">
         <div class="input-group">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Search for products" />
+          <input type="text" class="form-control" placeholder="Search for products" />
           <div class="input-group-append">
             <span class="input-group-text bg-transparent text-primary">
               <i class="fa fa-search"></i>
@@ -125,28 +95,20 @@ $categories_result = $conn->query($categories_sql);
   <div class="container-fluid bg-dark mb-30">
     <div class="row px-xl-5">
       <div class="col-lg-3 d-none d-lg-block">
-        <a
-          class="btn d-flex align-items-center justify-content-between bg-primary w-100"
-          data-toggle="collapse"
-          href="#navbar-vertical"
-          style="height: 65px; padding: 0 30px">
+        <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse"
+          href="#navbar-vertical" style="height: 65px; padding: 0 30px">
           <h6 class="text-dark m-0">
             <i class="fa fa-bars mr-2"></i>Categories
           </h6>
           <i class="fa fa-angle-down text-dark"></i>
         </a>
-        <nav
-          class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light"
-          id="navbar-vertical"
-          style="width: calc(100% - 30px); z-index: 999">
+        <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light"
+          id="navbar-vertical" style="width: calc(100% - 30px); z-index: 999">
           <div class="navbar-nav w-100">
             <div class="nav-item dropdown dropright">
-              <a
-                href="#"
-                class="nav-link dropdown-toggle"
-                data-toggle="dropdown">Dresses <i class="fa fa-angle-right float-right mt-1"></i></a>
-              <div
-                class="dropdown-menu position-absolute rounded-0 border-0 m-0">
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Dresses <i
+                  class="fa fa-angle-right float-right mt-1"></i></a>
+              <div class="dropdown-menu position-absolute rounded-0 border-0 m-0">
                 <a href="" class="dropdown-item">Men's Dresses</a>
                 <a href="" class="dropdown-item">Women's Dresses</a>
                 <a href="" class="dropdown-item">Baby's Dresses</a>
@@ -165,31 +127,22 @@ $categories_result = $conn->query($categories_sql);
         </nav>
       </div>
       <div class="col-lg-9">
-        <nav
-          class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
           <a href="" class="text-decoration-none d-block d-lg-none">
             <span class="h1 text-uppercase text-dark bg-light px-2">Bronx</span>
             <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Luggage</span>
           </a>
-          <button
-            type="button"
-            class="navbar-toggler"
-            data-toggle="collapse"
-            data-target="#navbarCollapse">
+          <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div
-            class="collapse navbar-collapse justify-content-between"
-            id="navbarCollapse">
+          <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
             <div class="navbar-nav mr-auto py-0">
               <a href="index.php" class="nav-item nav-link active">Home</a>
               <a href="shop.html" class="nav-item nav-link">Shop</a>
               <a href="detail.html" class="nav-item nav-link">Male</a>
               <div class="nav-item dropdown">
-                <a
-                  href="#"
-                  class="nav-link dropdown-toggle"
-                  data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i
+                    class="fa fa-angle-down mt-1"></i></a>
                 <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
                   <a href="cart.html" class="dropdown-item">Shopping Cart</a>
                   <a href="checkout.html" class="dropdown-item">Checkout</a>
@@ -198,18 +151,9 @@ $categories_result = $conn->query($categories_sql);
               <a href="contact.html" class="nav-item nav-link">Contact</a>
             </div>
             <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-              <!-- <a href="" class="btn px-0">
-                  <i class="fas fa-heart text-primary"></i>
-                  <span
-                    class="badge text-secondary border border-secondary rounded-circle"
-                    style="padding-bottom: 2px"
-                    >0</span
-                  >
-                </a> -->
               <a href="" class="btn px-0 ml-3">
                 <i class="fas fa-shopping-cart text-primary"></i>
-                <span
-                  class="badge text-secondary border border-secondary rounded-circle"
+                <span class="badge text-secondary border border-secondary rounded-circle"
                   style="padding-bottom: 2px">0</span>
               </a>
             </div>
@@ -224,88 +168,58 @@ $categories_result = $conn->query($categories_sql);
   <div class="container-fluid mb-3">
     <div class="row px-xl-5">
       <div class="col-lg-12">
-        <div
-          id="header-carousel"
-          class="carousel slide carousel-fade mb-30 mb-lg-0"
-          data-ride="carousel">
+        <div id="header-carousel" class="carousel slide carousel-fade mb-30 mb-lg-0" data-ride="carousel">
           <ol class="carousel-indicators">
-            <li
-              data-target="#header-carousel"
-              data-slide-to="0"
-              class="active"></li>
+            <li data-target="#header-carousel" data-slide-to="0" class="active"></li>
             <li data-target="#header-carousel" data-slide-to="1"></li>
             <li data-target="#header-carousel" data-slide-to="2"></li>
           </ol>
           <div class="carousel-inner">
-            <div
-              class="carousel-item position-relative active"
-              style="height: 430px">
-              <img
-                class="position-absolute w-100 h-100"
-                src="img/carousel-1.jpg"
-                style="object-fit: cover" />
-              <div
-                class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+            <div class="carousel-item position-relative active" style="height: 430px">
+              <img class="position-absolute w-100 h-100" src="img/carousel-1.jpg" style="object-fit: cover" />
+              <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                 <div class="p-3" style="max-width: 700px">
-                  <h1
-                    class="display-4 text-white mb-3 animate__animated animate__fadeInDown">
+                  <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">
                     Men Luggage
                   </h1>
                   <p class="mx-md-5 px-5 animate__animated animate__bounceIn">
                     Lorem rebum magna amet lorem magna erat diam stet. Sadips
                     duo stet amet amet ndiam elitr ipsum diam
                   </p>
-                  <a
-                    class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp"
+                  <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp"
                     href="shop.html">Shop Now</a>
                 </div>
               </div>
             </div>
-            <div
-              class="carousel-item position-relative"
-              style="height: 430px">
-              <img
-                class="position-absolute w-100 h-100"
-                src="img/carousel-2.jpg"
-                style="object-fit: cover" />
-              <div
-                class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+            <div class="carousel-item position-relative" style="height: 430px">
+              <img class="position-absolute w-100 h-100" src="img/carousel-2.jpg" style="object-fit: cover" />
+              <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                 <div class="p-3" style="max-width: 700px">
-                  <h1
-                    class="display-4 text-white mb-3 animate__animated animate__fadeInDown">
+                  <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">
                     Women Luggage
                   </h1>
                   <p class="mx-md-5 px-5 animate__animated animate__bounceIn">
                     Lorem rebum magna amet lorem magna erat diam stet. Sadips
                     duo stet amet amet ndiam elitr ipsum diam
                   </p>
-                  <a
-                    class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp"
-                    href="#">Shop Now</a>
+                  <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="#">Shop
+                    Now</a>
                 </div>
               </div>
             </div>
-            <div
-              class="carousel-item position-relative"
-              style="height: 430px">
-              <img
-                class="position-absolute w-100 h-100"
-                src="img/carousel-3.jpg"
-                style="object-fit: cover" />
-              <div
-                class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+            <div class="carousel-item position-relative" style="height: 430px">
+              <img class="position-absolute w-100 h-100" src="img/carousel-3.jpg" style="object-fit: cover" />
+              <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                 <div class="p-3" style="max-width: 700px">
-                  <h1
-                    class="display-4 text-white mb-3 animate__animated animate__fadeInDown">
+                  <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">
                     Kids Luggage
                   </h1>
                   <p class="mx-md-5 px-5 animate__animated animate__bounceIn">
                     Lorem rebum magna amet lorem magna erat diam stet. Sadips
                     duo stet amet amet ndiam elitr ipsum diam
                   </p>
-                  <a
-                    class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp"
-                    href="#">Shop Now</a>
+                  <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="#">Shop
+                    Now</a>
                 </div>
               </div>
             </div>
@@ -316,91 +230,94 @@ $categories_result = $conn->query($categories_sql);
   </div>
   <!-- Carousel End -->
 
-  
-<!-- Categories Start -->
-    <div class="container-fluid pt-5">
-      <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
-          <span class="bg-secondary pr-3">Categories</span>
-      </h2>
-      <div class="row px-xl-5 pb-3">
-          <?php while ($row = $categories_result->fetch_assoc()) { ?>
-              <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                  <a class="text-decoration-none" href="products.php?category_id=<?= $row['id'] ?>">
-                      <div class="cat-item d-flex align-items-center mb-4">
-                          <div class="overflow-hidden" style="width: 100px; height: 100px">
-                              <img class="img-fluid" src="img/cat-<?= $row['id'] ?>.jpg" alt="<?= $row['name'] ?>" />
-                          </div>
-                          <div class="flex-fill pl-3">
-                              <h6><?= $row['name'] ?></h6>
-                              <small class="text-body"><?= $row['product_count'] ?> Products</small>
-                          </div>
-                      </div>
-                  </a>
+
+  <!-- Categories Start -->
+  <div class="container-fluid pt-5">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
+      <span class="bg-secondary pr-3">Categories</span>
+    </h2>
+    <div class="row px-xl-5 pb-3">
+      <?php while ($row = $categories_result->fetch_assoc()) { ?>
+        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+          <a class="text-decoration-none" href="products.php?category_id=<?= $row['id'] ?>">
+            <div class="cat-item d-flex align-items-center mb-4">
+              <div class="overflow-hidden" style="width: 100px; height: 100px">
+                <img class="img-fluid" src="img/cat-<?= $row['id'] ?>.jpg" alt="<?= $row['name'] ?>" />
               </div>
-          <?php } ?>
-      </div>
+              <div class="flex-fill pl-3">
+                <h6><?= $row['name'] ?></h6>
+                <small class="text-body"><?= $row['product_count'] ?> Products</small>
+              </div>
+            </div>
+          </a>
+        </div>
+      <?php } ?>
+    </div>
   </div>
+  <!-- Categories End -->
 
-  <?php 
-  ?>
-<!-- Categories End -->
-
-<!-- Featured Products Start -->
-<?php
-$products = [
-    ["name" => "Product 1", "price" => 123.00, "img" => "img/product-1.jpg", "rating" => 5, "reviews" => 99],
-    ["name" => "Product 2", "price" => 123.00, "img" => "img/product-2.jpg", "rating" => 4.5, "reviews" => 89],
-    ["name" => "Product 3", "price" => 123.00, "img" => "img/product-3.jpg", "rating" => 4, "reviews" => 76],
-    ["name" => "Product 4", "price" => 123.00, "img" => "img/product-4.jpg", "rating" => 3.5, "reviews" => 60],
-    ["name" => "Product 5", "price" => 123.00, "img" => "img/product-5.jpg", "rating" => 5, "reviews" => 110],
-    ["name" => "Product 6", "price" => 123.00, "img" => "img/product-6.jpg", "rating" => 4.5, "reviews" => 95],
-    ["name" => "Product 7", "price" => 123.00, "img" => "img/product-7.jpg", "rating" => 4, "reviews" => 88],
-    ["name" => "Product 8", "price" => 123.00, "img" => "img/product-8.jpg", "rating" => 3.5, "reviews" => 70]
-];
-?>
+  <!-- Featured Products Start -->
 
   <div class="container-fluid pt-5 pb-3">
-      <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
-          <span class="bg-secondary pr-3">Featured Products</span>
-      </h2>
-      <div class="row px-xl-5">
-          <?php foreach ($products as $product): ?>
-              <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                  <div class="product-item bg-light mb-4">
-                      <div class="product-img position-relative overflow-hidden">
-                          <img class="img-fluid w-100" src="<?php echo $product['img']; ?>" alt="<?php echo $product['name']; ?>">
-                          <div class="product-action">
-                              <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                              <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                          </div>
-                      </div>
-                      <div class="text-center py-4">
-                          <a class="h6 text-decoration-none text-truncate" href=""><?php echo $product['name']; ?></a>
-                          <div class="d-flex align-items-center justify-content-center mt-2">
-                              <h5>$<?php echo number_format($product['price'], 2); ?></h5>
-                          </div>
-                          <div class="d-flex align-items-center justify-content-center mb-1">
-                              <?php for ($i = 0; $i < 5; $i++): ?>
-                                  <?php if ($i < floor($product['rating'])): ?>
-                                      <small class="fa fa-star text-primary mr-1"></small>
-                                  <?php elseif ($i < $product['rating']): ?>
-                                      <small class="fa fa-star-half-alt text-primary mr-1"></small>
-                                  <?php else: ?>
-                                      <small class="far fa-star text-primary mr-1"></small>
-                                  <?php endif; ?>
-                              <?php endfor; ?>
-                                   <!-- Tổng số lượt review (count feedback)  -->
-                              <small>(<?php echo $product['reviews']; ?>)</small>
-                          </div>
-                      </div>
-                  </div>
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
+      <span class="bg-secondary pr-3"> Products</span>
+    </h2>
+    <div class="row px-xl-5">
+      <?php foreach ($products as $product): ?>
+        <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+          <div class="product-item bg-light mb-4">
+            <div class="product-img position-relative overflow-hidden">
+              <img class="img-fluid w-100" src="<?php echo $product['img'] ?: 'default.jpg'; ?>"
+                alt="<?php echo $product['name']; ?>">
+              <div class="product-action">
+                <a class="btn btn-outline-dark btn-square" href="#"><i class="fa fa-shopping-cart"></i></a>
+                <a class="btn btn-outline-dark btn-square" href="#"><i class="fa fa-search"></i></a>
               </div>
-          <?php endforeach; ?>
-      </div>
+            </div>
+            <div class="text-center py-4">
+              <a class="h6 text-decoration-none text-truncate" href="product_detail.php?id=<?php echo $product['id']; ?>">
+                <?php echo $product['name']; ?>
+              </a>
+              <div class="d-flex align-items-center justify-content-center mt-2">
+                <h5>$<?php echo number_format($product['price'], 2); ?></h5>
+              </div>
+              <div class="d-flex align-items-center justify-content-center mb-1">
+                <?php for ($i = 0; $i < 5; $i++): ?>
+                  <?php if ($i < floor($product['rating'])): ?>
+                    <small class="fa fa-star text-primary mr-1"></small>
+                  <?php elseif ($i < $product['rating']): ?>
+                    <small class="fa fa-star-half-alt text-primary mr-1"></small>
+                  <?php else: ?>
+                    <small class="far fa-star text-primary mr-1"></small>
+                  <?php endif; ?>
+                <?php endfor; ?>
+                <small>(<?php echo $product['reviews']; ?>)</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </div>
   </div>
-
   <!-- Featured Products End -->
 
+  <!-- Brands Start -->
+  <div class="container-fluid py-5">
+    <div class="row px-xl-5">
+      <div class="col">
+        <div class="owl-carousel vendor-carousel">
+          <?php while ($brand = $brands->fetch_assoc()): ?>
+            <div class="bg-light p-4">
+              <a href="products.php?brand_id=<?= $brand['id'] ?>">
+                <img src="img/brand-<?= $brand['id'] ?>.jpg" alt="<?= $brand['name'] ?>">
+              </a>
+            </div>
+          <?php endwhile; ?>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Brands End -->
 
 
   <!-- Footer Start -->
@@ -452,10 +369,7 @@ $products = [
             <p>Duo stet tempor ipsum sit amet magna ipsum tempor est</p>
             <form action="">
               <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Your Email Address" />
+                <input type="text" class="form-control" placeholder="Your Email Address" />
                 <div class="input-group-append">
                   <button class="btn btn-primary">Sign Up</button>
                 </div>
@@ -472,9 +386,7 @@ $products = [
         </div>
       </div>
     </div>
-    <div
-      class="row border-top mx-xl-5 py-4"
-      style="border-color: rgba(256, 256, 256, 0.1) !important">
+    <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, 0.1) !important">
       <div class="col-md-6 px-xl-0">
         <p class="mb-md-0 text-center text-md-left text-secondary">
           &copy; <a class="text-primary" href="#">Domain</a>. All Rights

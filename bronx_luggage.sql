@@ -206,6 +206,18 @@ JOIN colors c ON 1=1
 ORDER BY RAND()
 LIMIT 200;
 
+-- insert feedback data
+INSERT INTO feedback (user_id, product_id, rating, comment) VALUES
+(1, 2, 4.5, 'Great product, very satisfied!'),
+(2, 3, 3.8, 'Good quality, but shipping was slow.'),
+(3, 1, 5.0, 'Absolutely amazing! Will buy again.'),
+(4, 4, 4.2, 'Matches the description, reasonable price.'),
+(5, 2, 2.5, 'Quality is below expectations, needs improvement.'),
+(6, 5, 4.0, 'Decent product, worth the price.'),
+(7, 3, 4.8, 'Fast delivery, well-packaged.'),
+(8, 1, 3.5, 'Color is slightly different from the image, but quality is fine.'),
+(9, 4, 5.0, 'Authentic product, highly recommended!'),
+(10, 5, 4.3, 'Works well, I will recommend it to friends.');
 
 -- product cout by categories
 SELECT c.id, c.name, COUNT(p.id) as product_count
@@ -226,3 +238,11 @@ SELECT p.id, p.name,
             WHERE p.gender = 'male'
             GROUP BY p.id, p.name, pv.price, pi.image_url
             ORDER BY p.id
+            
+-- Priduct by brands
+ SELECT DISTINCT b.id, b.name 
+        FROM brands b
+        JOIN products p ON b.id = p.brand_id
+        ORDER BY b.id ASC
+ 
+        
