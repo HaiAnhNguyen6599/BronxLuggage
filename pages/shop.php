@@ -16,11 +16,7 @@ $offset = max(0, $offset); // Tránh trường hợp $offset < 0
 $products = getProducts($conn, $limit, $offset);
 // End logic phân trang
 
-// Start hàm lọc sản phẩm theo giá
 
-// Nhận danh sách giá trị checkbox được chọn
-
-// End hàm lọc sản phẩm 
 
 ?>
 
