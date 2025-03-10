@@ -1,9 +1,15 @@
+<?php
+// lấy tên file PHP đang chạy
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <!-- Meta Tags -->
-  <?php include 'head.php'; ?>
+  <?php
+  include 'head.php'; ?>
   <!-- End Meta Tags -->
 </head>
 
@@ -42,9 +48,9 @@
         </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
           <div class="navbar-nav mr-auto py-0">
-            <a href="index.php" class="nav-item nav-link active">Home</a>
-            <a href="shop.html" class="nav-item nav-link">Shop</a>
-            <a href="detail.html" class="nav-item nav-link">Shop detail</a>
+            <a href="index.php" class="nav-item nav-link <?= ($current_page == 'index.php') ? 'active' : ''; ?>">Home</a> <!-- Home được chọn -->
+            <a href="shop.php" class="nav-item nav-link <?= ($current_page == 'shop.php') ? 'active' : ''; ?>">Shop</a>
+            <a href="detail.php" class="nav-item nav-link <?= ($current_page == 'detail.php') ? 'active' : ''; ?>">Shop Detail</a>
             <div class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i
                   class="fa fa-angle-down mt-1"></i></a>

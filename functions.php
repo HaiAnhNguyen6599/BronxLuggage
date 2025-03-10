@@ -2,7 +2,8 @@
 require_once 'config.php'; // Chỉ gọi một lần
 
 // Hàm lấy danh mục sản phẩm
-function getCategories($conn) {
+function getCategories($conn)
+{
     $sql = "
         SELECT c.id, c.name, COUNT(p.id) as product_count
         FROM categories c
@@ -16,7 +17,8 @@ function getCategories($conn) {
 
 
 // Hàm lấy thương hiệu sản phẩm
-function getBrands($conn) {
+function getBrands($conn)
+{
     $sql = "
         SELECT DISTINCT b.id, b.name 
         FROM brands b
@@ -27,22 +29,20 @@ function getBrands($conn) {
 }
 
 // Lấy 8 sản phẩm rating cao 
-function getTopRatedProducts($limit = 8) {
+function getTopRatedProducts($limit = 8)
+{
     global $conn; // Sử dụng kết nối từ config.php
-    
+
     $sql = "SELECT 
                 p.id, 
                 p.name, 
+                p.price,
                 COALESCE(AVG(f.rating), 0) AS rating,
                 COUNT(f.id) AS reviews,
                 COALESCE(
-                    (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1), 
+                    (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1), 
                     'default.jpg'
-                ) AS img,
-                COALESCE(
-                    (SELECT MIN(price) FROM product_variants WHERE product_id = p.id), 
-                    0
-                ) AS price
+                ) AS img
             FROM products p
             LEFT JOIN feedback f ON p.id = f.product_id
             GROUP BY p.id
@@ -53,7 +53,7 @@ function getTopRatedProducts($limit = 8) {
     $stmt->bind_param("i", $limit);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     $products = [];
     while ($row = $result->fetch_assoc()) {
         $products[] = $row;
@@ -62,9 +62,9 @@ function getTopRatedProducts($limit = 8) {
     return $products;
 }
 
-// functions.php
 
-function get_products_by_gender($gender) {
+function get_products_by_gender($gender)
+{
     global $conn;  // Sử dụng kết nối từ config.php
 
     // Xây dựng câu truy vấn SQL để lấy sản phẩm theo giới tính
@@ -82,6 +82,114 @@ function get_products_by_gender($gender) {
     return $result;
 }
 
+// function getProducts($conn)
+// {
+//     $sql = "
+//         SELECT p.id, 
+//                p.name, 
+//                p.price, 
+//                COALESCE(AVG(f.rating), 0) AS rating, 
+//                COUNT(f.id) AS reviews,
+//                COALESCE(
+//                    (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1), 
+//                    'default.jpg'
+//                ) AS image
+//         FROM products p
+//         LEFT JOIN feedback f ON p.id = f.product_id
+//         GROUP BY p.id, p.name, p.price
+//     ";
 
-?>
+//     $result = mysqli_query($conn, $sql);
+//     $products = [];
 
+//     while ($row = mysqli_fetch_assoc($result)) {
+//         $products[] = $row;
+//     }
+
+//     return $products;
+// }
+
+// function getProducts($conn, $limit, $offset)
+// {
+//     $sql = "
+//         SELECT p.id, 
+//                p.name, 
+//                p.price, 
+//                COALESCE(AVG(f.rating), 0) AS rating, 
+//                COUNT(f.id) AS reviews,
+//                COALESCE(
+//                    (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1), 
+//                    'default.jpg'
+//                ) AS image
+//         FROM products p
+//         LEFT JOIN feedback f ON p.id = f.product_id
+//         GROUP BY p.id, p.name, p.price
+//         LIMIT ? OFFSET ?
+//     ";
+
+//     $stmt = mysqli_prepare($conn, $sql);
+//     mysqli_stmt_bind_param($stmt, "ii", $limit, $offset);
+//     mysqli_stmt_execute($stmt);
+//     $result = mysqli_stmt_get_result($stmt);
+
+//     $products = [];
+//     while ($row = mysqli_fetch_assoc($result)) {
+//         $products[] = $row;
+//     }
+
+//     return $products;
+// }
+
+// function countProducts($conn)
+// {
+//     $sql = "SELECT COUNT(*) AS total FROM products";
+//     $result = mysqli_query($conn, $sql);
+//     $row = mysqli_fetch_assoc($result);
+//     return $row['total'];
+// }
+
+function countProducts($conn)
+{
+    $sql = "SELECT COUNT(*) AS total FROM products";
+    $result = mysqli_query($conn, $sql);
+    if (!$result) {
+        die("Query Error: " . mysqli_error($conn));
+    }
+    $row = mysqli_fetch_assoc($result);
+    return (int) $row['total'];
+}
+
+function getProducts($conn, $limit, $offset)
+{
+    $sql = "
+        SELECT p.id, 
+               p.name, 
+               p.price, 
+               COALESCE(AVG(f.rating), 0) AS rating, 
+               COUNT(f.id) AS reviews,
+               COALESCE(
+                   (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1), 
+                   'default.jpg'
+               ) AS image
+        FROM products p
+        LEFT JOIN feedback f ON p.id = f.product_id
+        GROUP BY p.id, p.name, p.price
+        LIMIT ? OFFSET ?
+    ";
+
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "ii", $limit, $offset);
+    mysqli_stmt_execute($stmt);
+
+    if (mysqli_stmt_errno($stmt)) {
+        die("Query Error: " . mysqli_stmt_error($stmt));
+    }
+
+    $result = mysqli_stmt_get_result($stmt);
+    $products = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $products[] = $row;
+    }
+
+    return $products;
+}

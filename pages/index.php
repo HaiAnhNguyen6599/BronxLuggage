@@ -2,11 +2,11 @@
 require "../config.php";
 require_once '../functions.php';
 
-$categories_result = getCategories($conn);
+// $categories_result = getCategories($conn);
 
-$brands = getBrands($conn);
+// $brands = getBrands($conn);
 
-$products = getTopRatedProducts(); // Lấy 8 sản phẩm có rating cao nhất
+// $products = getTopRatedProducts(); // Lấy 8 sản phẩm có rating cao nhất
 ?>
 
 <!DOCTYPE html>
@@ -106,7 +106,9 @@ $products = getTopRatedProducts(); // Lấy 8 sản phẩm có rating cao nhất
       <span class="bg-secondary pr-3">Categories</span>
     </h2>
     <div class="row px-xl-5 pb-3">
-      <?php while ($row = $categories_result->fetch_assoc()) { ?>
+      <?php
+      $categories = getCategories($conn);
+      while ($row = $categories->fetch_assoc()) { ?>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
           <a class="text-decoration-none" href="products.php?category=<?= $row['name'] ?>">
             <div class="cat-item d-flex align-items-center mb-4">
@@ -132,7 +134,9 @@ $products = getTopRatedProducts(); // Lấy 8 sản phẩm có rating cao nhất
       <span class="bg-secondary pr-3">Featured Products</span>
     </h2>
     <div class="row px-xl-5">
-      <?php foreach ($products as $product): ?>
+      <?php
+      $products = getTopRatedProducts(); // Lấy 8 sản phẩm có rating cao nhất
+      foreach ($products as $product): ?>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
           <div class="product-item bg-light mb-4">
             <div class="product-img position-relative overflow-hidden">
@@ -176,7 +180,9 @@ $products = getTopRatedProducts(); // Lấy 8 sản phẩm có rating cao nhất
     <div class="row px-xl-5">
       <div class="col">
         <div class="owl-carousel vendor-carousel">
-          <?php while ($brand = $brands->fetch_assoc()): ?>
+          <?php
+          $brands = getBrands($conn);
+          while ($brand = $brands->fetch_assoc()): ?>
             <div class="bg-light p-4 d-flex justify-content-center align-items-center" style="height: 150px;">
               <a href="products.php?brand_id=<?= $brand['id'] ?>">
                 <img src="../img/brands/brand-<?= $brand['id'] ?>.jpg" alt="<?= $brand['name'] ?>"
