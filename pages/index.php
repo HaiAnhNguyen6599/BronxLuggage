@@ -110,7 +110,7 @@ require_once '../functions.php';
       $categories = getCategories($conn);
       while ($row = $categories->fetch_assoc()) { ?>
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-          <a class="text-decoration-none" href="products.php?category=<?= $row['name'] ?>">
+          <a class="text-decoration-none" href="shop.php?category=<?= $row['name'] ?>">
             <div class="cat-item d-flex align-items-center mb-4">
               <div class="overflow-hidden" style="width: 120px; height: 120px; border-radius: 10px;">
                 <img class="img-fluid" src="../img/categories/cat-<?= $row['id'] ?>.jpg" alt="<?= $row['name'] ?>"
@@ -144,12 +144,12 @@ require_once '../functions.php';
                 alt="<?php echo $product['name']; ?>" style="height: 400px; object-fit: cover;">
               <div class="product-action">
                 <a class="btn btn-outline-dark btn-square" href="#"><i class="fa fa-shopping-cart"></i></a>
-                <a class="btn btn-outline-dark btn-square" href="product_detail.php?id=<?php echo $product['id']; ?>"><i
+                <a class="btn btn-outline-dark btn-square" href="product.php?id=<?php echo $product['id']; ?>"><i
                     class="fa fa-search"></i></a>
               </div>
             </div>
             <div class="text-center py-4">
-              <a class="h6 text-decoration-none text-truncate" href="product_detail.php?id=<?php echo $product['id']; ?>">
+              <a class="h6 text-decoration-none text-truncate" href="product.php?id=<?php echo $product['id']; ?>">
                 <?php echo $product['name']; ?>
               </a>
               <div class="d-flex align-items-center justify-content-center mt-2">
@@ -184,7 +184,7 @@ require_once '../functions.php';
           $brands = getBrands($conn);
           while ($brand = $brands->fetch_assoc()): ?>
             <div class="bg-light p-4 d-flex justify-content-center align-items-center" style="height: 150px;">
-              <a href="products.php?brand_id=<?= $brand['id'] ?>">
+              <a href="shop.php?brand=<?= $brand['name'] ?>">
                 <img src="../img/brands/brand-<?= $brand['id'] ?>.jpg" alt="<?= $brand['name'] ?>"
                   style="max-width: 100%; max-height: 100%; object-fit: contain;">
               </a>
