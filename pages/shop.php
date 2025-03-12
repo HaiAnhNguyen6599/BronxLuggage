@@ -3,23 +3,6 @@ require "../config.php";
 require_once '../functions.php';
 
 
-// ----------------------------------------------------------
-// Lấy dữ liệu từ URL (GET)
-// $filters = [
-//     'category'  => $_GET['category'] ?? [],
-//     'brand'     => $_GET['brand'] ?? [],
-//     'color'     => $_GET['color'] ?? [],
-//     'size'      => $_GET['size'] ?? [],
-//     'price'     => $_GET['price'] ?? [],
-//     'min_price' => $_GET['min_price'] ?? null,
-//     'max_price' => $_GET['max_price'] ?? null
-// ];
-
-// Lấy sản phẩm theo bộ lọc
-// $products = getFilteredProducts($conn, $filters);
-
-//-------------------------------------------------------------
-
 // Nhận các giá trị lọc từ `$_GET`
 $filters = $_GET;
 

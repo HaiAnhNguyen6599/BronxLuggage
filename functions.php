@@ -92,82 +92,6 @@ function getTopRatedProducts($limit = 8)
 }
 
 
-// function get_products_by_gender($gender)
-// {
-//     global $conn;  // Sử dụng kết nối từ config.php
-
-//     // Xây dựng câu truy vấn SQL để lấy sản phẩm theo giới tính
-//     $sql = "SELECT * 
-//             FROM products p
-//             left join product_images pi on p.id = pi.product_id
-//             left join product_variants pv on p.id = pv.product_id
-//             WHERE gender = ?";
-//     $stmt = $conn->prepare($sql);
-//     $stmt->bind_param("s", $gender);  // "s" là kiểu dữ liệu string
-//     $stmt->execute();
-
-//     // Lấy kết quả và trả về
-//     $result = $stmt->get_result();
-//     return $result;
-// }
-
-
-
-// function countProducts($conn)
-// {
-//     $sql = "SELECT COUNT(*) AS total FROM products";
-//     $result = mysqli_query($conn, $sql);
-//     if (!$result) {
-//         die("Query Error: " . mysqli_error($conn));
-//     }
-//     $row = mysqli_fetch_assoc($result);
-//     return (int) $row['total'];
-// }
-
-// function getProducts($conn, $limit, $offset)
-// {
-//     $sql = "
-//         SELECT p.id, 
-//                p.name as product_name, 
-//                p.price, 
-//                b.name as brand,
-//                c.name as color,
-//                cat.name as category,
-//                s.name as size,
-//                COALESCE(AVG(f.rating), 0) AS rating, 
-//                COUNT(f.id) AS reviews,
-//                COALESCE(
-//                    (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1), 
-//                    'default.jpg'
-//                ) AS image
-//         FROM products p
-//         LEFT JOIN feedback f ON p.id = f.product_id
-//         LEFT JOIN brands b on p.brand_id = b.id
-//         LEFT JOIN colors c on p.color_id = c.id
-//         LEFT jOIN categories cat on p.category_id = cat.id
-//         LEFT JOIN sizes s on p.size_id = s.id
-//         GROUP BY p.id, p.name, p.price, b.name, cat.name, c.name, s.name
-//         LIMIT ? OFFSET ?
-//     ";
-
-//     $stmt = mysqli_prepare($conn, $sql);
-//     mysqli_stmt_bind_param($stmt, "ii", $limit, $offset);
-//     mysqli_stmt_execute($stmt);
-
-//     if (mysqli_stmt_errno($stmt)) {
-//         die("Query Error: " . mysqli_stmt_error($stmt));
-//     }
-
-//     $result = mysqli_stmt_get_result($stmt);
-//     $products = [];
-//     while ($row = mysqli_fetch_assoc($result)) {
-//         $products[] = $row;
-//     }
-
-//     return $products;
-// }
-
-
 
 // ------------------------------------------------------------------------
 // function getFilteredProducts($conn, $filters)
@@ -276,6 +200,8 @@ function getTopRatedProducts($limit = 8)
 // }
 // ----------------------------------------------------------------------------------
 
+
+// Lấy Sản phẩm theo bộ lọc & bao cùng phân trang
 function getFilteredProducts($conn, $filters, $limit, $offset)
 {
     $where_clauses = [];
