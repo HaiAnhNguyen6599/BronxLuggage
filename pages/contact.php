@@ -8,17 +8,17 @@ require_once '../functions.php';
 
 <head>
 
-    <?php include '../includes/head.php' ?>;
+    <?php include '../includes/head.php' ?>
 </head>
 
 <body>
     <!-- Topbar Start -->
-    <?php include '../includes/topbar.php' ?>;
+    <?php include '../includes/topbar.php' ?>
     <!-- Topbar End -->
 
 
     <!-- Navbar Start -->
-    <?php include '../includes/navbar.php' ?>;
+    <?php include '../includes/navbar.php' ?>
     <!-- Navbar End -->
 
 

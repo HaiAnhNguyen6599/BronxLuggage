@@ -10,7 +10,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <head>
     <!-- Meta Tags -->
     <?php
-  include 'head.php'; ?>
+    include 'head.php'; ?>
     <!-- End Meta Tags -->
 </head>
 
@@ -29,11 +29,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 id="navbar-vertical" style="width: calc(100% - 30px); z-index: 999">
                 <div class="navbar-nav w-100">
                     <?php
-          $categories = getCategories($conn);
-          while ($category = $categories->fetch_assoc()): ?>
-                    <a href="shop.php?category=<?= $category['name']; ?>" class="nav-item nav-link">
-                        <?= htmlspecialchars($category['name']); ?>
-                    </a>
+                    $categories = getCategories($conn);
+                    while ($category = $categories->fetch_assoc()): ?>
+                        <a href="shop.php?category=<?= $category['name']; ?>" class="nav-item nav-link">
+                            <?= htmlspecialchars($category['name']); ?>
+                        </a>
                     <?php endwhile; ?>
                 </div>
             </nav>

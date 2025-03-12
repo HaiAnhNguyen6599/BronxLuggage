@@ -2,83 +2,39 @@
 require "../config.php";
 require_once '../functions.php';
 
-$where_clauses = [];
-$params = [];
-$types = "";
 
-// Lọc theo danh mục
-if (!empty($_GET['category'])) {
-    $categories = $_GET['category'];
-    if (!is_array($categories))
-        $categories = [$categories];
+// ----------------------------------------------------------
+// Lấy dữ liệu từ URL (GET)
+// $filters = [
+//     'category'  => $_GET['category'] ?? [],
+//     'brand'     => $_GET['brand'] ?? [],
+//     'color'     => $_GET['color'] ?? [],
+//     'size'      => $_GET['size'] ?? [],
+//     'price'     => $_GET['price'] ?? [],
+//     'min_price' => $_GET['min_price'] ?? null,
+//     'max_price' => $_GET['max_price'] ?? null
+// ];
 
-    $placeholders = implode(',', array_fill(0, count($categories), '?'));
-    $where_clauses[] = "c.name IN ($placeholders)";
-    $params = array_merge($params, $categories);
-    $types .= str_repeat('s', count($categories));
-}
+// Lấy sản phẩm theo bộ lọc
+// $products = getFilteredProducts($conn, $filters);
 
-// Lọc theo thương hiệu
-if (!empty($_GET['brand'])) {
-    $brands = $_GET['brand'];
-    if (!is_array($brands))
-        $brands = [$brands];
+//-------------------------------------------------------------
 
-    $placeholders = implode(',', array_fill(0, count($brands), '?'));
-    $where_clauses[] = "b.name IN ($placeholders)";
-    $params = array_merge($params, $brands);
-    $types .= str_repeat('s', count($brands));
-}
+// Nhận các giá trị lọc từ `$_GET`
+$filters = $_GET;
 
-// Lọc theo màu sắc
-if (!empty($_GET['color'])) {
-    $colors = $_GET['color'];
-    if (!is_array($colors))
-        $colors = [$colors];
+// Số sản phẩm mỗi trang
+$limit = 9;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
 
-    $placeholders = implode(',', array_fill(0, count($colors), '?'));
-    $where_clauses[] = "co.name IN ($placeholders)";
-    $params = array_merge($params, $colors);
-    $types .= str_repeat('s', count($colors));
-}
+// Lấy tổng số sản phẩm
+$total_products = getTotalProducts($conn, $filters);
 
-// Lọc theo kích thước
-if (!empty($_GET['size'])) {
-    $sizes = $_GET['size'];
-    if (!is_array($sizes))
-        $sizes = [$sizes];
+$total_pages = ($total_products > 0) ? ceil($total_products / $limit) : 1;
 
-    $placeholders = implode(',', array_fill(0, count($sizes), '?'));
-    $where_clauses[] = "s.name IN ($placeholders)";
-    $params = array_merge($params, $sizes);
-    $types .= str_repeat('s', count($sizes));
-}
-
-// Tạo câu lệnh SQL với điều kiện WHERE
-$sql = "SELECT p.*, 
-            COALESCE(
-                (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1), 
-                'default.jpg') AS image 
-        FROM products p
-        LEFT JOIN categories c ON p.category_id = c.id
-        LEFT JOIN brands b ON p.brand_id = b.id
-        LEFT JOIN colors co ON p.color_id = co.id
-        LEFT JOIN sizes s ON p.size_id = s.id";
-
-if (!empty($where_clauses)) {
-    $sql .= " WHERE " . implode(" AND ", $where_clauses);
-}
-
-// Thực hiện truy vấn
-$stmt = $conn->prepare($sql);
-
-if (!empty($params)) {
-    $stmt->bind_param($types, ...$params);
-}
-
-$stmt->execute();
-$products = $stmt->get_result();
-
+// Lấy danh sách sản phẩm theo bộ lọc và phân trang
+$products = getFilteredProducts($conn, $filters, $limit, $offset);
 
 
 ?>
@@ -111,17 +67,7 @@ $products = $stmt->get_result();
 
 
     <!-- Breadcrumb Start -->
-    <div class="container-fluid">
-        <div class="row px-xl-5">
-            <div class="col-12">
-                <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="#">Home</a>
-                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
-                    <span class="breadcrumb-item active">Shop List</span>
-                </nav>
-            </div>
-        </div>
-    </div>
+    <?php include '../includes/breadcumb.php' ?>
     <!-- Breadcrumb End -->
 
 
@@ -147,7 +93,7 @@ $products = $stmt->get_result();
                         $categories = getCategories($conn);
                         while ($row = $categories->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_categories) ? 'checked' : '';
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="category[]" value="<?= $row['name'] ?>"
@@ -173,7 +119,7 @@ $products = $stmt->get_result();
                         $brands = getBrands($conn);
                         while ($row = $brands->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_brands) ? 'checked' : '';
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="brand[]" value="<?= $row['name'] ?>"
@@ -198,7 +144,7 @@ $products = $stmt->get_result();
                         $colors = getColors($conn);
                         while ($row = $colors->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_colors) ? 'checked' : '';
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="color[]" value="<?= $row['name'] ?>"
@@ -222,7 +168,7 @@ $products = $stmt->get_result();
                         $sizes = getSizes($conn);
                         while ($row = $sizes->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_sizes) ? 'checked' : '';
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="size[]" value="<?= $row['name'] ?>"
@@ -231,6 +177,41 @@ $products = $stmt->get_result();
                             </div>
                         <?php } ?>
                     </div>
+
+                    <!-- Lọc theo Giá -->
+                    <h5 class="section-title position-relative text-uppercase mb-3">
+                        <span class="bg-secondary pr-3">Filter by price</span>
+                    </h5>
+                    <div class="bg-light p-4 mb-30">
+                        <?php
+                        // Danh sách khoảng giá
+                        $price_ranges = [
+                            "0-50" => "Under $50",
+                            "50-100" => "$50 - $100",
+                            "100-200" => "$100 - $200",
+                            "200-500" => "$200 - $500",
+                            "500-1000" => "Above $500"
+                        ];
+
+                        // Kiểm tra giá trị đã chọn
+                        $selected_prices = $_GET['price'] ?? [];
+
+                        // Đảm bảo $selected_prices là mảng
+                        if (!is_array($selected_prices)) {
+                            $selected_prices = [$selected_prices];
+                        }
+
+                        foreach ($price_ranges as $range => $label) {
+                            $isChecked = in_array($range, $selected_prices) ? 'checked' : '';
+                            $id = "price-" . str_replace("-", "_", $range); // ID duy nhất cho mỗi checkbox
+                        ?>
+                            <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                <input type="checkbox" class="custom-control-input" name="price[]" value="<?= $range ?>" id="<?= $id ?>" <?= $isChecked ?>>
+                                <label class="custom-control-label" for="<?= $id ?>"><?= $label ?></label>
+                            </div>
+                        <?php } ?>
+                    </div>
+
                     <!-- Filter End -->
                     <button id="applyFilters" name="search" class="btn btn-primary w-100 mt-3">Apply Filters</button>
                 </form>
@@ -303,14 +284,28 @@ $products = $stmt->get_result();
                             </div>
                         </div>
                     <?php } ?>
+
+                    <!-- Phân trang -->
                     <div class="col-12">
                         <nav>
                             <ul class="pagination justify-content-center">
-                                <li class="page-item disabled"><a class="page-link" href="#">Previous</span></a></li>
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                <?php if ($page > 1) { ?>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">Previous</a>
+                                    </li>
+                                <?php } ?>
+
+                                <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
+                                    <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                                        <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
+                                    </li>
+                                <?php } ?>
+
+                                <?php if ($page < $total_pages) { ?>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">Next</a>
+                                    </li>
+                                <?php } ?>
                             </ul>
                         </nav>
                     </div>
