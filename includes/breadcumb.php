@@ -66,7 +66,7 @@ $current_title = isset($breadcrumb_titles[$current_page]) ? $breadcrumb_titles[$
 
                 <?php
                 $currentFilters = $_GET;
-                $breadcrumbParts = [];
+                unset($currentFilters['page']);;
 
                 foreach ($currentFilters as $key => $values) {
                     if (!is_array($values)) {
@@ -86,7 +86,7 @@ $current_title = isset($breadcrumb_titles[$current_page]) ? $breadcrumb_titles[$
                         $filterUrl = "?" . http_build_query($filteredParams);
 
                         // Thêm vào breadcrumb list
-                        $breadcrumbParts[] = '<span class="breadcrumb-filter">' . htmlspecialchars($value) .
+                        $breadcrumbParts[] = '<span class="breadcrumb-filter">' . ucfirst(htmlspecialchars($value)) .
                             ' <a href="' . $filterUrl . '" class="remove-filter">✖</a></span>';
                     }
                 }

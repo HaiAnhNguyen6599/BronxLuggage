@@ -166,6 +166,29 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         <?php } ?>
                     </div>
 
+                    <!-- Lọc theo Giới tính -->
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span
+                            class="bg-secondary pr-3">Filter
+                            by gender</span></h5>
+                    <div class="bg-light p-4 mb-30">
+                        <?php
+                        $selected_genders = $_GET['gender'] ?? [];
+                        if (!is_array($selected_genders))
+                            $selected_genders = [$selected_genders];
+
+                        $genders = getGenders($conn);
+                        while ($row = $genders->fetch_assoc()) {
+                            $isChecked = in_array($row['gender'], $selected_genders) ? 'checked' : '';
+                        ?>
+                            <div
+                                class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                <input type="checkbox" name="gender[]" value="<?= $row['gender'] ?>"
+                                    class="custom-control-input" id="gender-<?= $row['gender'] ?>" <?= $isChecked ?>>
+                                <label class="custom-control-label" for="gender-<?= $row['gender'] ?>"><?= ucfirst($row['gender']) ?></label>
+                            </div>
+                        <?php } ?>
+                    </div>
+
                     <!-- Lọc theo Giá -->
                     <h5 class="section-title position-relative text-uppercase mb-3">
                         <span class="bg-secondary pr-3">Filter by price</span>
@@ -211,35 +234,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
             <!-- Shop Product Start -->
             <div class="col-lg-9 col-md-8">
                 <div class="row pb-3">
-                    <div class="col-12 pb-1">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div>
-                                <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
-                                <button class="btn btn-sm btn-light ml-2"><i class="fa fa-bars"></i></button>
-                            </div>
-                            <div class="ml-2">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle"
-                                        data-toggle="dropdown">Sorting</button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">Latest</a>
-                                        <a class="dropdown-item" href="#">Popularity</a>
-                                        <a class="dropdown-item" href="#">Best Rating</a>
-                                    </div>
-                                </div>
-                                <div class="btn-group ml-2">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle"
-                                        data-toggle="dropdown">Showing</button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">10</a>
-                                        <a class="dropdown-item" href="#">20</a>
-                                        <a class="dropdown-item" href="#">30</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Product 1 -->
+                    <!-- Product Loop -->
                     <?php
                     while ($row = $products->fetch_assoc()) { ?>
                         <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
@@ -260,13 +255,16 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                                         <h5>$<?php echo $row['price'] ?></h5>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-center mb-1">
-                                        <!-- Lây foeach bên shop.php còn lại -->
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small>(99)</small>
+                                        <?php for ($i = 0; $i < 5; $i++): ?>
+                                            <?php if ($i < floor($row['avg_rating'])): ?>
+                                                <small class="fa fa-star text-primary mr-1"></small>
+                                            <?php elseif ($i < $row['avg_rating']): ?>
+                                                <small class="fa fa-star-half-alt text-primary mr-1"></small>
+                                            <?php else: ?>
+                                                <small class="far fa-star text-primary mr-1"></small>
+                                            <?php endif; ?>
+                                        <?php endfor; ?>
+                                        <small>(<?php echo $row['total_reviews']; ?>)</small>
                                     </div>
                                 </div>
                             </div>

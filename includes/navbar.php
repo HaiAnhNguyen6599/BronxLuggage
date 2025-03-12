@@ -52,8 +52,25 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <a href="index.php"
                             class="nav-item nav-link <?= ($current_page == 'index.php') ? 'active' : ''; ?>">Home</a>
                         <!-- Home được chọn -->
-                        <a href="shop.php"
-                            class="nav-item nav-link <?= ($current_page == 'shop.php') ? 'active' : ''; ?>">Shop</a>
+                        <!-- -->
+                        <div class="nav-item dropdown">
+                            <a href="#"
+                                class="nav-link dropdown-toggle <?php echo ($current_page == 'shop.php' || $current_page == 'shop.php?gender=male.php' || $current_page == 'shop.php?gender=male') ? 'active' : ''; ?>"
+                                data-toggle="dropdown">
+                                Shop <i class="fa fa-angle-down mt-1"></i>
+                            </a>
+                            <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
+                                <a href="shop.php"
+                                    class="dropdown-item <?php echo ($current_page == 'shop.php') ? 'active' : ''; ?>">Both
+                                </a>
+                                <a href="shop.php?gender=male"
+                                    class="dropdown-item <?php echo ($current_page == 'shop.php?gender=male') ? 'active' : ''; ?>">Male
+                                </a>
+                                <a href="shop.php?gender=female"
+                                    class="dropdown-item <?php echo ($current_page == 'shop.php?gender=female') ? 'active' : ''; ?>">Female</a>
+                            </div>
+                        </div>
+
                         <a href="product.php"
                             class="nav-item nav-link <?= ($current_page == 'product.php') ? 'active' : ''; ?>">Shop
                             Detail</a>
