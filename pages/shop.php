@@ -31,8 +31,13 @@ $offset = ($page - 1) * $limit;
 // Lấy tổng số sản phẩm
 $total_products = getTotalProducts($conn, $filters);
 
-$total_pages = ($total_products > 0) ? ceil($total_products / $limit) : 1;
+// $total_pages = ($total_products > 0) ? ceil($total_products / $limit) : 1;
+$total_pages = max(1, ceil($total_products / $limit));
 
+if ($total_products > 0 && $page > $total_pages) {
+    header("Location: ?" . http_build_query(array_merge($_GET, ['page' => 1])));
+    exit;
+}
 // Lấy danh sách sản phẩm theo bộ lọc và phân trang
 $products = getFilteredProducts($conn, $filters, $limit, $offset);
 
@@ -287,27 +292,32 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
 
                     <!-- Phân trang -->
                     <div class="col-12">
-                        <nav>
-                            <ul class="pagination justify-content-center">
-                                <?php if ($page > 1) { ?>
-                                    <li class="page-item">
-                                        <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">Previous</a>
-                                    </li>
-                                <?php } ?>
+                        <?php if ($total_pages > 1) { ?>
+                            <nav>
+                                <ul class="pagination justify-content-center">
+                                    <!-- Previous Button -->
+                                    <?php if ($page > 1) { ?>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">Previous</a>
+                                        </li>
+                                    <?php } ?>
 
-                                <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
-                                    <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                                        <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
-                                    </li>
-                                <?php } ?>
+                                    <!-- Số trang -->
+                                    <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
+                                        <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
+                                        </li>
+                                    <?php } ?>
 
-                                <?php if ($page < $total_pages) { ?>
-                                    <li class="page-item">
-                                        <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">Next</a>
-                                    </li>
-                                <?php } ?>
-                            </ul>
-                        </nav>
+                                    <!-- Next Button -->
+                                    <?php if ($page < $total_pages) { ?>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">Next</a>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                            </nav>
+                        <?php } ?>
                     </div>
                 </div>
             </div>

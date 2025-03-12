@@ -384,31 +384,92 @@ function getTotalProducts($conn, $filters)
     $params = [];
     $types = "";
 
+    // Lọc theo danh mục
     if (!empty($filters['category'])) {
-        $categories = is_array($filters['category']) ? $filters['category'] : [$filters['category']];
+        $categories = $filters['category'];
+        if (!is_array($categories)) $categories = [$categories];
+
         $placeholders = implode(',', array_fill(0, count($categories), '?'));
         $where_clauses[] = "c.name IN ($placeholders)";
         $params = array_merge($params, $categories);
         $types .= str_repeat('s', count($categories));
     }
 
-    $where_sql = !empty($where_clauses) ? " WHERE " . implode(" AND ", $where_clauses) : "";
+    // Lọc theo thương hiệu
+    if (!empty($filters['brand'])) {
+        $brands = $filters['brand'];
+        if (!is_array($brands)) $brands = [$brands];
 
+        $placeholders = implode(',', array_fill(0, count($brands), '?'));
+        $where_clauses[] = "b.name IN ($placeholders)";
+        $params = array_merge($params, $brands);
+        $types .= str_repeat('s', count($brands));
+    }
+
+    // Lọc theo màu sắc
+    if (!empty($filters['color'])) {
+        $colors = $filters['color'];
+        if (!is_array($colors)) $colors = [$colors];
+
+        $placeholders = implode(',', array_fill(0, count($colors), '?'));
+        $where_clauses[] = "co.name IN ($placeholders)";
+        $params = array_merge($params, $colors);
+        $types .= str_repeat('s', count($colors));
+    }
+
+    // Lọc theo kích thước
+    if (!empty($filters['size'])) {
+        $sizes = $filters['size'];
+        if (!is_array($sizes)) $sizes = [$sizes];
+
+        $placeholders = implode(',', array_fill(0, count($sizes), '?'));
+        $where_clauses[] = "s.name IN ($placeholders)";
+        $params = array_merge($params, $sizes);
+        $types .= str_repeat('s', count($sizes));
+    }
+
+    // Lọc theo khoảng giá (Checkbox hoặc Slider)
+    if (!empty($filters['price'])) {
+        $price_conditions = [];
+        foreach ($filters['price'] as $range) {
+            [$min, $max] = explode("-", $range) + [null, null];
+            if ($min !== null && $max !== null) {
+                $price_conditions[] = "(p.price BETWEEN ? AND ?)";
+                $params[] = $min;
+                $params[] = $max;
+                $types .= "dd";
+            } elseif ($min !== null) { // Lọc "Above $500"
+                $price_conditions[] = "p.price >= ?";
+                $params[] = $min;
+                $types .= "d";
+            }
+        }
+        if (!empty($price_conditions)) {
+            $where_clauses[] = "(" . implode(" OR ", $price_conditions) . ")";
+        }
+    }
+
+    // Câu lệnh SQL
     $sql = "SELECT COUNT(*) FROM products p
             LEFT JOIN categories c ON p.category_id = c.id
             LEFT JOIN brands b ON p.brand_id = b.id
             LEFT JOIN colors co ON p.color_id = co.id
-            LEFT JOIN sizes s ON p.size_id = s.id
-            $where_sql";
+            LEFT JOIN sizes s ON p.size_id = s.id";
 
+    if (!empty($where_clauses)) {
+        $sql .= " WHERE " . implode(" AND ", $where_clauses);
+    }
+
+    // Thực hiện truy vấn
     $stmt = $conn->prepare($sql);
     if (!empty($params)) {
         $stmt->bind_param($types, ...$params);
     }
+
     $stmt->execute();
     $stmt->bind_result($total_products);
     $stmt->fetch();
     $stmt->close();
 
-    return $total_products;
+    return $total_products ?? 0; // Nếu không có sản phẩm, trả về 0
 }
