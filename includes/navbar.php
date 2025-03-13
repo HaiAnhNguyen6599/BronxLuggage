@@ -71,9 +71,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             </div>
                         </div>
 
-                        <a href="product.php"
+                        <!-- <a href="product.php"
                             class="nav-item nav-link <?= ($current_page == 'product.php') ? 'active' : ''; ?>">Shop
-                            Detail</a>
+                            Detail</a> -->
                         <div class="nav-item dropdown">
                             <a href="#"
                                 class="nav-link dropdown-toggle <?php echo ($current_page == 'cart.php' || $current_page == 'checkout.php') ? 'active' : ''; ?>"
