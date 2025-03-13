@@ -1,14 +1,3 @@
-<?php
-// session_start();
-?>
-<script>
-function confirmLogout() {
-    if (confirm("Are you sure you want to logout?")) {
-        window.location.href = '../account/logout.php';
-    }
-}
-</script>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,33 +13,21 @@ function confirmLogout() {
         <div class="col-lg-12 text-center text-lg-right">
             <div class="d-inline-flex align-items-center ml-auto">
                 <div class="btn-group">
-                    <?php if (isset($_SESSION['username'])): ?>
-                    <!-- Nếu đã đăng nhập, hiển thị tên và nút Logout -->
-                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
-                        <?= htmlspecialchars($_SESSION['username']); ?>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="#" onclick="confirmLogout()">Logout</a>
-                    </div>
-                    <?php else: ?>
-                    <!-- Nếu chưa đăng nhập, hiển thị Sign In và Sign Up -->
                     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
                         My Account
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="../account/login.php">Sign in</a>
-                        <a class="dropdown-item" href="../account/signup.php">Sign up</a>
+                        <button class="dropdown-item" type="button">Sign in</button>
+                        <button class="dropdown-item" type="button">Sign up</button>
                     </div>
-                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
     <div class="col-lg-4">
-        <a href="../pages/index.php" class="text-decoration-none">
+        <a href="" class="text-decoration-none">
             <span class="h1 text-uppercase text-primary bg-dark px-2">Bronx</span>
             <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Luggage</span>
         </a>
