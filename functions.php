@@ -107,660 +107,6 @@ function getTopRatedProducts($limit = 8)
 }
 
 
-// Filter sản phẩm
-// function getFilteredProducts($conn, $filters, $limit, $offset)
-// {
-//     $where_clauses = [];
-//     $params = [];
-//     $types = "";
-
-//     // Lọc theo danh mục
-//     if (!empty($filters['category'])) {
-//         $categories = is_array($filters['category']) ? $filters['category'] : [$filters['category']];
-//         $placeholders = implode(',', array_fill(0, count($categories), '?'));
-//         $where_clauses[] = "c.name IN ($placeholders)";
-//         $params = array_merge($params, $categories);
-//         $types .= str_repeat('s', count($categories));
-//     }
-
-//     // Lọc theo thương hiệu
-//     if (!empty($filters['brand'])) {
-//         $brands = is_array($filters['brand']) ? $filters['brand'] : [$filters['brand']];
-//         $placeholders = implode(',', array_fill(0, count($brands), '?'));
-//         $where_clauses[] = "b.name IN ($placeholders)";
-//         $params = array_merge($params, $brands);
-//         $types .= str_repeat('s', count($brands));
-//     }
-
-//     // Lọc theo màu sắc
-//     if (!empty($filters['color'])) {
-//         $colors = is_array($filters['color']) ? $filters['color'] : [$filters['color']];
-//         $placeholders = implode(',', array_fill(0, count($colors), '?'));
-//         $where_clauses[] = "co.name IN ($placeholders)";
-//         $params = array_merge($params, $colors);
-//         $types .= str_repeat('s', count($colors));
-//     }
-
-//     // Lọc theo kích thước
-//     if (!empty($filters['size'])) {
-//         $sizes = is_array($filters['size']) ? $filters['size'] : [$filters['size']];
-//         $placeholders = implode(',', array_fill(0, count($sizes), '?'));
-//         $where_clauses[] = "s.name IN ($placeholders)";
-//         $params = array_merge($params, $sizes);
-//         $types .= str_repeat('s', count($sizes));
-//     }
-
-//     // Lọc theo giới tính
-//     if (!empty($filters['gender'])) {
-//         $genders = is_array($filters['gender']) ? $filters['gender'] : [$filters['gender']];
-//         $placeholders = implode(',', array_fill(0, count($genders), '?'));
-//         $where_clauses[] = "p.gender IN ($placeholders)";
-//         $params = array_merge($params, $genders);
-//         $types .= str_repeat('s', count($genders));
-//     }
-
-//     // Lọc theo khoảng giá (Slider)
-//     if (!empty($filters['min_price']) && !empty($filters['max_price'])) {
-//         $where_clauses[] = "p.price BETWEEN ? AND ?";
-//         $params[] = $filters['min_price'];
-//         $params[] = $filters['max_price'];
-//         $types .= "dd";
-//     }
-
-//     // Lọc theo khoảng giá từ checkbox
-//     if (!empty($filters['price'])) {
-//         $price_conditions = [];
-//         foreach ($filters['price'] as $range) {
-//             [$min, $max] = explode("-", $range) + [null, null];
-//             if ($min !== null && $max !== null) {
-//                 $price_conditions[] = "(p.price BETWEEN ? AND ?)";
-//                 $params[] = $min;
-//                 $params[] = $max;
-//                 $types .= "dd";
-//             } elseif ($min !== null) { // Lọc "Above $500"
-//                 $price_conditions[] = "p.price >= ?";
-//                 $params[] = $min;
-//                 $types .= "d";
-//             }
-//         }
-//         if (!empty($price_conditions)) {
-//             $where_clauses[] = "(" . implode(" OR ", $price_conditions) . ")";
-//         }
-//     }
-
-//     $where_sql = !empty($where_clauses) ? " WHERE " . implode(" AND ", $where_clauses) : "";
-
-//     // Truy vấn lấy sản phẩm với phân trang
-//     $sql = "SELECT p.*, 
-//                 COALESCE(
-//                     (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1), 
-//                     'default.jpg') AS image 
-//             FROM products p
-//             LEFT JOIN categories c ON p.category_id = c.id
-//             LEFT JOIN brands b ON p.brand_id = b.id
-//             LEFT JOIN colors co ON p.color_id = co.id
-//             LEFT JOIN sizes s ON p.size_id = s.id
-//             $where_sql
-//             LIMIT ? OFFSET ?";
-
-//     $stmt = $conn->prepare($sql);
-
-//     if (!empty($params)) {
-//         $types .= "ii"; // 'ii' cho LIMIT và OFFSET
-//         $params[] = $limit;
-//         $params[] = $offset;
-//         $stmt->bind_param($types, ...$params);
-//     } else {
-//         $stmt->bind_param("ii", $limit, $offset);
-//     }
-
-//     $stmt->execute();
-//     return $stmt->get_result();
-// }
-
-// // Tổng sản phẩm -> Phục vụ cho phân trang
-// function getTotalProducts($conn, $filters)
-// {
-//     $total_products = 0;
-//     $where_clauses = [];
-//     $params = [];
-//     $types = "";
-
-//     // Lọc theo danh mục
-//     if (!empty($filters['category'])) {
-//         $categories = is_array($filters['category']) ? $filters['category'] : [$filters['category']];
-//         $placeholders = implode(',', array_fill(0, count($categories), '?'));
-//         $where_clauses[] = "c.name IN ($placeholders)";
-//         $params = array_merge($params, $categories);
-//         $types .= str_repeat('s', count($categories));
-//     }
-
-//     // Lọc theo thương hiệu
-//     if (!empty($filters['brand'])) {
-//         $brands = is_array($filters['brand']) ? $filters['brand'] : [$filters['brand']];
-//         $placeholders = implode(',', array_fill(0, count($brands), '?'));
-//         $where_clauses[] = "b.name IN ($placeholders)";
-//         $params = array_merge($params, $brands);
-//         $types .= str_repeat('s', count($brands));
-//     }
-
-//     // Lọc theo màu sắc
-//     if (!empty($filters['color'])) {
-//         $colors = is_array($filters['color']) ? $filters['color'] : [$filters['color']];
-//         $placeholders = implode(',', array_fill(0, count($colors), '?'));
-//         $where_clauses[] = "co.name IN ($placeholders)";
-//         $params = array_merge($params, $colors);
-//         $types .= str_repeat('s', count($colors));
-//     }
-
-//     // Lọc theo giới tính
-//     if (!empty($filters['gender'])) {
-//         $genders = is_array($filters['gender']) ? $filters['gender'] : [$filters['gender']];
-//         $placeholders = implode(',', array_fill(0, count($genders), '?'));
-//         $where_clauses[] = "p.gender IN ($placeholders)";
-//         $params = array_merge($params, $genders);
-//         $types .= str_repeat('s', count($genders));
-//     }
-
-//     $sql = "SELECT COUNT(*) FROM products p
-//             LEFT JOIN categories c ON p.category_id = c.id
-//             LEFT JOIN brands b ON p.brand_id = b.id
-//             LEFT JOIN colors co ON p.color_id = co.id
-//             LEFT JOIN sizes s ON p.size_id = s.id";
-
-//     if (!empty($where_clauses)) {
-//         $sql .= " WHERE " . implode(" AND ", $where_clauses);
-//     }
-
-//     $stmt = $conn->prepare($sql);
-//     if (!empty($params)) {
-//         $stmt->bind_param($types, ...$params);
-//     }
-
-//     $stmt->execute();
-//     $stmt->bind_result($total_products);
-//     $stmt->fetch();
-//     $stmt->close();
-
-//     return $total_products ?? 0;
-// }
-
-// --------- Quan trọng ---///
-// function getFilteredProducts($conn, $filters, $limit, $offset)
-// {
-//     $where_clauses = [];
-//     $params = [];
-//     $types = "";
-
-//     // Lọc theo danh mục
-//     if (!empty($filters['category'])) {
-//         $categories = is_array($filters['category']) ? $filters['category'] : [$filters['category']];
-//         $placeholders = implode(',', array_fill(0, count($categories), '?'));
-//         $where_clauses[] = "c.name IN ($placeholders)";
-//         $params = array_merge($params, $categories);
-//         $types .= str_repeat('s', count($categories));
-//     }
-
-//     // Lọc theo thương hiệu
-//     if (!empty($filters['brand'])) {
-//         $brands = is_array($filters['brand']) ? $filters['brand'] : [$filters['brand']];
-//         $placeholders = implode(',', array_fill(0, count($brands), '?'));
-//         $where_clauses[] = "b.name IN ($placeholders)";
-//         $params = array_merge($params, $brands);
-//         $types .= str_repeat('s', count($brands));
-//     }
-
-//     // Lọc theo màu sắc
-//     if (!empty($filters['color'])) {
-//         $colors = is_array($filters['color']) ? $filters['color'] : [$filters['color']];
-//         $placeholders = implode(',', array_fill(0, count($colors), '?'));
-//         $where_clauses[] = "co.name IN ($placeholders)";
-//         $params = array_merge($params, $colors);
-//         $types .= str_repeat('s', count($colors));
-//     }
-
-//     // Lọc theo giới tính
-//     if (!empty($filters['gender'])) {
-//         $genders = is_array($filters['gender']) ? $filters['gender'] : [$filters['gender']];
-//         $placeholders = implode(',', array_fill(0, count($genders), '?'));
-//         $where_clauses[] = "p.gender IN ($placeholders)";
-//         $params = array_merge($params, $genders);
-//         $types .= str_repeat('s', count($genders));
-//     }
-
-//     // Thêm điều kiện WHERE nếu có bộ lọc
-//     $where_sql = !empty($where_clauses) ? " WHERE " . implode(" AND ", $where_clauses) : "";
-
-//     // Truy vấn lấy sản phẩm với rating và số lượng review
-//     $sql = "SELECT p.*, 
-//                 COALESCE((SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1), 'default.jpg') AS image,
-//                 COALESCE(AVG(f.rating), 0) AS avg_rating, 
-//                 COUNT(f.id) AS total_reviews 
-//             FROM products p
-//             LEFT JOIN categories c ON p.category_id = c.id
-//             LEFT JOIN brands b ON p.brand_id = b.id
-//             LEFT JOIN colors co ON p.color_id = co.id
-//             LEFT JOIN feedback f ON p.id = f.product_id
-//             $where_sql
-//             GROUP BY p.id
-//             LIMIT ? OFFSET ?";
-
-//     $stmt = $conn->prepare($sql);
-
-//     if (!empty($params)) {
-//         $types .= "ii"; // 'ii' cho LIMIT và OFFSET
-//         $params[] = $limit;
-//         $params[] = $offset;
-//         $stmt->bind_param($types, ...$params);
-//     } else {
-//         $stmt->bind_param("ii", $limit, $offset);
-//     }
-
-//     $stmt->execute();
-//     return $stmt->get_result();
-// }
-
-
-// function getFilteredProducts($conn, $filters, $limit, $offset)
-// {
-//     $where_clauses = [];
-//     $params = [];
-//     $types = "";
-
-//     // Lọc theo danh mục
-//     if (!empty($filters['category'])) {
-//         $categories = is_array($filters['category']) ? $filters['category'] : [$filters['category']];
-//         $placeholders = implode(',', array_fill(0, count($categories), '?'));
-//         $where_clauses[] = "c.name IN ($placeholders)";
-//         $params = array_merge($params, $categories);
-//         $types .= str_repeat('s', count($categories));
-//     }
-
-//     // Lọc theo thương hiệu
-//     if (!empty($filters['brand'])) {
-//         $brands = is_array($filters['brand']) ? $filters['brand'] : [$filters['brand']];
-//         $placeholders = implode(',', array_fill(0, count($brands), '?'));
-//         $where_clauses[] = "b.name IN ($placeholders)";
-//         $params = array_merge($params, $brands);
-//         $types .= str_repeat('s', count($brands));
-//     }
-
-//     // Lọc theo màu sắc
-//     if (!empty($filters['color'])) {
-//         $colors = is_array($filters['color']) ? $filters['color'] : [$filters['color']];
-//         $placeholders = implode(',', array_fill(0, count($colors), '?'));
-//         $where_clauses[] = "co.name IN ($placeholders)";
-//         $params = array_merge($params, $colors);
-//         $types .= str_repeat('s', count($colors));
-//     }
-
-//     // Lọc theo giới tính
-//     if (!empty($filters['gender'])) {
-//         $genders = is_array($filters['gender']) ? $filters['gender'] : [$filters['gender']];
-//         $placeholders = implode(',', array_fill(0, count($genders), '?'));
-//         $where_clauses[] = "p.gender IN ($placeholders)";
-//         $params = array_merge($params, $genders);
-//         $types .= str_repeat('s', count($genders));
-//     }
-
-//     // Thêm điều kiện WHERE nếu có bộ lọc
-//     $where_sql = !empty($where_clauses) ? " WHERE " . implode(" AND ", $where_clauses) : "";
-
-//     // Truy vấn lấy sản phẩm với rating và số lượng review
-//     $sql = "SELECT p.*, 
-//                 COALESCE((SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1), 'default.jpg') AS image,
-//                 COALESCE(AVG(f.rating), 0) AS avg_rating, 
-//                 COUNT(f.id) AS total_reviews 
-//             FROM products p
-//             LEFT JOIN categories c ON p.category_id = c.id
-//             LEFT JOIN brands b ON p.brand_id = b.id
-//             LEFT JOIN colors co ON p.color_id = co.id
-//             LEFT JOIN feedback f ON p.id = f.product_id
-//             $where_sql
-//             GROUP BY p.id
-//             LIMIT ? OFFSET ?";
-
-//     $stmt = $conn->prepare($sql);
-
-//     if (!empty($params)) {
-//         $types .= "ii"; // 'ii' cho LIMIT và OFFSET
-//         $params[] = $limit;
-//         $params[] = $offset;
-//         $stmt->bind_param($types, ...$params);
-//     } else {
-//         $stmt->bind_param("ii", $limit, $offset);
-//     }
-
-//     $stmt->execute();
-//     return $stmt->get_result();
-// }
-
-
-
-//----------------------//
-
-
-// function getFilteredProducts($conn, $filters, $limit, $offset)
-// {
-//     $where_clauses = [];
-//     $params = [];
-//     $types = "";
-
-//     // Lọc theo danh mục
-//     if (!empty($filters['category'])) {
-//         $categories = is_array($filters['category']) ? $filters['category'] : [$filters['category']];
-//         $placeholders = implode(',', array_fill(0, count($categories), '?'));
-//         $where_clauses[] = "c.name IN ($placeholders)";
-//         $params = array_merge($params, $categories);
-//         $types .= str_repeat('s', count($categories));
-//     }
-
-//     // Lọc theo thương hiệu
-//     if (!empty($filters['brand'])) {
-//         $brands = is_array($filters['brand']) ? $filters['brand'] : [$filters['brand']];
-//         $placeholders = implode(',', array_fill(0, count($brands), '?'));
-//         $where_clauses[] = "b.name IN ($placeholders)";
-//         $params = array_merge($params, $brands);
-//         $types .= str_repeat('s', count($brands));
-//     }
-
-//     // Lọc theo màu sắc
-//     if (!empty($filters['color'])) {
-//         $colors = is_array($filters['color']) ? $filters['color'] : [$filters['color']];
-//         $placeholders = implode(',', array_fill(0, count($colors), '?'));
-//         $where_clauses[] = "co.name IN ($placeholders)";
-//         $params = array_merge($params, $colors);
-//         $types .= str_repeat('s', count($colors));
-//     }
-
-//     // Lọc theo giới tính
-//     if (!empty($filters['gender'])) {
-//         $genders = is_array($filters['gender']) ? $filters['gender'] : [$filters['gender']];
-//         $placeholders = implode(',', array_fill(0, count($genders), '?'));
-//         $where_clauses[] = "p.gender IN ($placeholders)";
-//         $params = array_merge($params, $genders);
-//         $types .= str_repeat('s', count($genders));
-//     }
-
-//     // Thêm điều kiện WHERE nếu có bộ lọc
-//     $where_sql = !empty($where_clauses) ? " WHERE " . implode(" AND ", $where_clauses) : "";
-
-//     // Truy vấn lấy sản phẩm với rating và số lượng review
-//     $sql = "SELECT p.*, 
-//                 COALESCE((SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1), 'default.jpg') AS image,
-//                 COALESCE(AVG(f.rating), 0) AS avg_rating, 
-//                 COUNT(f.id) AS total_reviews 
-//             FROM products p
-//             LEFT JOIN categories c ON p.category_id = c.id
-//             LEFT JOIN brands b ON p.brand_id = b.id
-//             LEFT JOIN colors co ON p.color_id = co.id
-//             LEFT JOIN feedback f ON p.id = f.product_id
-//             $where_sql
-//             GROUP BY p.id
-//             LIMIT ? OFFSET ?";
-
-//     $stmt = $conn->prepare($sql);
-
-//     if (!empty($params)) {
-//         $types .= "ii"; // 'ii' cho LIMIT và OFFSET
-//         $params[] = $limit;
-//         $params[] = $offset;
-//         $stmt->bind_param($types, ...$params);
-//     } else {
-//         $stmt->bind_param("ii", $limit, $offset);
-//     }
-
-//     $stmt->execute();
-//     return $stmt->get_result();
-// }
-
-
-
-// // Hàm lấy tổng số sản phẩm
-// function getTotalProducts($conn, $filters)
-// {
-//     $total_products = 0;
-//     $where_clauses = [];
-//     $params = [];
-//     $types = "";
-
-//     // Lọc theo danh mục
-//     if (!empty($filters['category'])) {
-//         $categories = is_array($filters['category']) ? $filters['category'] : [$filters['category']];
-//         $placeholders = implode(',', array_fill(0, count($categories), '?'));
-//         $where_clauses[] = "c.name IN ($placeholders)";
-//         $params = array_merge($params, $categories);
-//         $types .= str_repeat('s', count($categories));
-//     }
-
-//     // Lọc theo thương hiệu
-//     if (!empty($filters['brand'])) {
-//         $brands = is_array($filters['brand']) ? $filters['brand'] : [$filters['brand']];
-//         $placeholders = implode(',', array_fill(0, count($brands), '?'));
-//         $where_clauses[] = "b.name IN ($placeholders)";
-//         $params = array_merge($params, $brands);
-//         $types .= str_repeat('s', count($brands));
-//     }
-
-//     // Lọc theo màu sắc
-//     if (!empty($filters['color'])) {
-//         $colors = is_array($filters['color']) ? $filters['color'] : [$filters['color']];
-//         $placeholders = implode(',', array_fill(0, count($colors), '?'));
-//         $where_clauses[] = "co.name IN ($placeholders)";
-//         $params = array_merge($params, $colors);
-//         $types .= str_repeat('s', count($colors));
-//     }
-
-//     // Lọc theo giới tính
-//     if (!empty($filters['gender'])) {
-//         $genders = is_array($filters['gender']) ? $filters['gender'] : [$filters['gender']];
-//         $placeholders = implode(',', array_fill(0, count($genders), '?'));
-//         $where_clauses[] = "p.gender IN ($placeholders)";
-//         $params = array_merge($params, $genders);
-//         $types .= str_repeat('s', count($genders));
-//     }
-
-//     $where_sql = !empty($where_clauses) ? " WHERE " . implode(" AND ", $where_clauses) : "";
-
-//     $sql = "SELECT COUNT(*) FROM products p
-//             LEFT JOIN categories c ON p.category_id = c.id
-//             LEFT JOIN brands b ON p.brand_id = b.id
-//             LEFT JOIN colors co ON p.color_id = co.id
-//             $where_sql";
-
-//     $stmt = $conn->prepare($sql);
-//     if (!empty($params)) {
-//         $stmt->bind_param($types, ...$params);
-//     }
-
-//     $stmt->execute();
-//     $stmt->bind_result($total_products);
-//     $stmt->fetch();
-//     $stmt->close();
-
-//     return $total_products ?? 0;
-// }
-
-// function getProductRating($conn, $product_id)
-// {
-//     $sql = "SELECT 
-//                 COALESCE(AVG(rating), 0) AS avg_rating, 
-//                 COUNT(*) AS total_reviews 
-//             FROM feedback 
-//             WHERE product_id = ?";
-
-//     if ($stmt = $conn->prepare($sql)) {
-//         $stmt->bind_param("i", $product_id);
-//         $stmt->execute();
-//         $result = $stmt->get_result()->fetch_assoc();
-//         $stmt->close();
-
-//         return [
-//             'rating' => round($result['avg_rating'], 1), // Làm tròn 1 chữ số thập phân
-//             'reviews' => (int) $result['total_reviews'] // Ép kiểu về số nguyên
-//         ];
-//     } else {
-//         return ['rating' => 0, 'reviews' => 0]; // Trả về giá trị mặc định nếu lỗi
-//     }
-// }
-
-// function getFilteredProducts($conn, $filters, $limit, $offset)
-// {
-//     $where_clauses = [];
-//     $params = [];
-//     $types = "";
-
-//     // Lọc theo danh mục
-//     if (!empty($filters['category'])) {
-//         $categories = is_array($filters['category']) ? $filters['category'] : [$filters['category']];
-//         $placeholders = implode(',', array_fill(0, count($categories), '?'));
-//         $where_clauses[] = "c.name IN ($placeholders)";
-//         $params = array_merge($params, $categories);
-//         $types .= str_repeat('s', count($categories));
-//     }
-
-//     // Lọc theo thương hiệu
-//     if (!empty($filters['brand'])) {
-//         $brands = is_array($filters['brand']) ? $filters['brand'] : [$filters['brand']];
-//         $placeholders = implode(',', array_fill(0, count($brands), '?'));
-//         $where_clauses[] = "b.name IN ($placeholders)";
-//         $params = array_merge($params, $brands);
-//         $types .= str_repeat('s', count($brands));
-//     }
-
-//     // Lọc theo màu sắc
-//     if (!empty($filters['color'])) {
-//         $colors = is_array($filters['color']) ? $filters['color'] : [$filters['color']];
-//         $placeholders = implode(',', array_fill(0, count($colors), '?'));
-//         $where_clauses[] = "co.name IN ($placeholders)";
-//         $params = array_merge($params, $colors);
-//         $types .= str_repeat('s', count($colors));
-//     }
-
-//     // Lọc theo giới tính
-//     if (!empty($filters['gender'])) {
-//         $genders = is_array($filters['gender']) ? $filters['gender'] : [$filters['gender']];
-//         $placeholders = implode(',', array_fill(0, count($genders), '?'));
-//         $where_clauses[] = "p.gender IN ($placeholders)";
-//         $params = array_merge($params, $genders);
-//         $types .= str_repeat('s', count($genders));
-//     }
-
-//     // Lọc theo size
-//     if (!empty($filters['size'])) {
-//         $sizes = is_array($filters['size']) ? $filters['size'] : [$filters['size']];
-//         $placeholders = implode(',', array_fill(0, count($sizes), '?'));
-//         $where_clauses[] = "s.name IN ($placeholders)";
-//         $params = array_merge($params, $sizes);
-//         $types .= str_repeat('s', count($sizes));
-//     }
-
-//     // WHERE SQL
-//     $where_sql = !empty($where_clauses) ? " WHERE " . implode(" AND ", $where_clauses) : "";
-
-//     // Truy vấn sản phẩm
-//     $sql = "SELECT p.*, 
-//                 COALESCE((SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1), 'default.jpg') AS image,
-//                 COALESCE(AVG(f.rating), 0) AS avg_rating, 
-//                 COUNT(f.id) AS total_reviews 
-//             FROM products p
-//             LEFT JOIN categories c ON p.category_id = c.id
-//             LEFT JOIN brands b ON p.brand_id = b.id
-//             LEFT JOIN colors co ON p.color_id = co.id
-//             LEFT JOIN sizes s ON p.size_id = s.id
-//             LEFT JOIN feedback f ON p.id = f.product_id
-//             $where_sql
-//             GROUP BY p.id
-//             LIMIT ? OFFSET ?";
-
-//     $stmt = $conn->prepare($sql);
-
-//     // Gắn tham số LIMIT và OFFSET
-//     $types .= "ii";
-//     $params[] = $limit;
-//     $params[] = $offset;
-
-//     $stmt->bind_param($types, ...$params);
-//     $stmt->execute();
-//     return $stmt->get_result();
-// }
-
-// function getTotalProducts($conn, $filters)
-// {
-//     $total_products = 0;
-//     $where_clauses = [];
-//     $params = [];
-//     $types = "";
-
-//     // Lọc theo danh mục
-//     if (!empty($filters['category'])) {
-//         $categories = is_array($filters['category']) ? $filters['category'] : [$filters['category']];
-//         $placeholders = implode(',', array_fill(0, count($categories), '?'));
-//         $where_clauses[] = "c.name IN ($placeholders)";
-//         $params = array_merge($params, $categories);
-//         $types .= str_repeat('s', count($categories));
-//     }
-
-//     // Lọc theo thương hiệu
-//     if (!empty($filters['brand'])) {
-//         $brands = is_array($filters['brand']) ? $filters['brand'] : [$filters['brand']];
-//         $placeholders = implode(',', array_fill(0, count($brands), '?'));
-//         $where_clauses[] = "b.name IN ($placeholders)";
-//         $params = array_merge($params, $brands);
-//         $types .= str_repeat('s', count($brands));
-//     }
-
-//     // Lọc theo màu sắc
-//     if (!empty($filters['color'])) {
-//         $colors = is_array($filters['color']) ? $filters['color'] : [$filters['color']];
-//         $placeholders = implode(',', array_fill(0, count($colors), '?'));
-//         $where_clauses[] = "co.name IN ($placeholders)";
-//         $params = array_merge($params, $colors);
-//         $types .= str_repeat('s', count($colors));
-//     }
-
-//     // Lọc theo giới tính
-//     if (!empty($filters['gender'])) {
-//         $genders = is_array($filters['gender']) ? $filters['gender'] : [$filters['gender']];
-//         $placeholders = implode(',', array_fill(0, count($genders), '?'));
-//         $where_clauses[] = "p.gender IN ($placeholders)";
-//         $params = array_merge($params, $genders);
-//         $types .= str_repeat('s', count($genders));
-//     }
-
-//     // Lọc theo size
-//     if (!empty($filters['size'])) {
-//         $sizes = is_array($filters['size']) ? $filters['size'] : [$filters['size']];
-//         $placeholders = implode(',', array_fill(0, count($sizes), '?'));
-//         $where_clauses[] = "s.name IN ($placeholders)";
-//         $params = array_merge($params, $sizes);
-//         $types .= str_repeat('s', count($sizes));
-//     }
-
-//     // WHERE SQL
-//     $where_sql = !empty($where_clauses) ? " WHERE " . implode(" AND ", $where_clauses) : "";
-
-//     // Truy vấn tổng số sản phẩm
-//     $sql = "SELECT COUNT(DISTINCT p.id) FROM products p
-//             LEFT JOIN categories c ON p.category_id = c.id
-//             LEFT JOIN brands b ON p.brand_id = b.id
-//             LEFT JOIN colors co ON p.color_id = co.id
-//             LEFT JOIN sizes s ON p.size_id = s.id
-//             $where_sql";
-
-//     $stmt = $conn->prepare($sql);
-//     if (!empty($params)) {
-//         $stmt->bind_param($types, ...$params);
-//     }
-
-//     $stmt->execute();
-//     $stmt->bind_result($total_products);
-//     $stmt->fetch();
-//     $stmt->close();
-
-//     return $total_products ?? 0;
-// }
-
 // Hàm lọc chung cho shop.php
 function buildFilterQuery($filters)
 {
@@ -854,3 +200,106 @@ function getTotalProducts($conn, $filters)
 
     return $total_products ?? 0;
 }
+
+
+// product.php
+
+function getProductById($conn, $product_id) {
+    $stmt = $conn->prepare("
+        SELECT p.id, p.name, p.description, c.name AS category, b.name AS brand, 
+               p.size_id, s.name AS size, p.color_id, col.name AS color, 
+               pi.image_url, p.price, p.gender, p.inventory
+        FROM products p
+        LEFT JOIN categories c ON p.category_id = c.id
+        LEFT JOIN brands b ON p.brand_id = b.id
+        LEFT JOIN sizes s ON p.size_id = s.id
+        LEFT JOIN colors col ON p.color_id = col.id
+        LEFT JOIN product_images pi ON p.id = pi.product_id
+        WHERE p.id = ?
+    ");
+    $stmt->bind_param('i', $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_assoc();
+}
+
+function getProductBySizes($conn) {
+    $stmt = $conn->prepare("SELECT id, name FROM sizes");
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $sizes = [];
+    while ($row = $result->fetch_assoc()) {
+        $sizes[] = $row;
+    }
+    return $sizes;
+}
+
+// function getProductByBrands($conn) {
+//     $stmt = $conn->prepare("SELECT id, name FROM colors");
+//     $stmt->execute();
+//     $result = $stmt->get_result();
+//     $brands = "";
+//     while ($row = $result->fetch_assoc()) {
+//         $colors[] = $row;
+//     }
+//     return $brands;
+// }
+// function getProductByColors($conn) {
+//     $stmt = $conn->prepare("SELECT id, name FROM colors");
+//     $stmt->execute();
+//     $result = $stmt->get_result();
+//     $colors = [];
+//     while ($row = $result->fetch_assoc()) {
+//         $colors[] = $row;
+//     }
+//     return $colors;
+// }
+
+function getProductRating($conn, $product_id) {
+    $stmt = $conn->prepare("
+        SELECT AVG(rating) AS avg_rating, COUNT(*) AS review_count 
+        FROM feedback 
+        WHERE product_id = ?
+    ");
+    $stmt->bind_param('i', $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $rating_data = $result->fetch_assoc();
+    return [
+        'avg_rating' => $rating_data['avg_rating'] !== null ? round($rating_data['avg_rating'], 1) : 0,
+        'review_count' => $rating_data['review_count']
+    ];
+}
+
+function getProductFeedback($conn, $product_id) {
+    $feedbacks = [];
+
+    // Kiểm tra kết nối
+    if (!$conn) {
+        return $feedbacks;
+    }
+
+    $query = "
+        SELECT f.id, f.rating, f.message, f.created_at, u.name AS user_name
+        FROM feedback f
+        JOIN users u ON f.user_id = u.id
+        WHERE f.product_id = ?
+        ORDER BY f.created_at DESC
+    ";
+
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param('i', $product_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        while ($row = $result->fetch_assoc()) {
+            $feedbacks[] = $row;
+        }
+
+        $stmt->close();
+    }
+
+    return $feedbacks;
+}
+
+

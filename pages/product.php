@@ -3,24 +3,12 @@
 require "../config.php";
 require_once '../functions.php';
 
+
 if (isset($_GET['id'])) {
     $product_id = $_GET['id'];
-    $stmt = $conn->prepare("
-    SELECT p.id, p.name, p.description, c.name AS category, b.name AS brand, p.size_id, s.name AS size, p.color_id, col.name AS color, pi.image_url , p.price, p.gender, p.inventory
-        FROM products p
-        LEFT JOIN categories c ON p.category_id = c.id
-        LEFT JOIN brands b ON p.brand_id = b.id
-        LEFT JOIN sizes s ON p.size_id = s.id
-        LEFT JOIN colors col ON p.color_id = col.id
-        LEFT JOIN product_images pi ON p.id = pi.product_id
-        WHERE p.id = ?
-    ");
-    $stmt->bind_param('i', $product_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $product = $result->fetch_assoc();
+    $product = getProductById($conn, $product_id);
 
-    if ($product === null) {
+    if (!$product) {
         echo "Error: No Product Found";
         exit;
     }
@@ -29,54 +17,15 @@ if (isset($_GET['id'])) {
     exit;
 }
 
-$stmt_sizes_colors = $conn->prepare("
-    SELECT id, name FROM sizes
-    UNION ALL
-    SELECT id, name FROM colors
-");
-$stmt_sizes_colors->execute();
-$result_sizes_colors = $stmt_sizes_colors->get_result();
-$available_sizes = [];
-$available_colors = [];
-while ($row = $result_sizes_colors->fetch_assoc()) {
-    if (isset($row['size'])) {
-        $available_sizes[] = $row;
-    } else {
-        $available_colors[] = $row;
-    }
-}
+$available_brands = getBrands($conn);
+$available_sizes = getSizes($conn);
+$available_colors = getColors($conn);
+$rating_data = getProductRating($conn, $product_id);
+$feedbacks = getProductFeedback($conn, $product_id);
 
-// Truy vấn rating và review từ bảng feedback
-$rating_stmt = $conn->prepare("
-    SELECT AVG(rating) AS avg_rating, COUNT(*) AS review_count 
-    FROM feedback 
-    WHERE product_id = ?
-");
-$rating_stmt->bind_param('i', $product_id);
-$rating_stmt->execute();
-$rating_result = $rating_stmt->get_result();
-$rating_data = $rating_result->fetch_assoc();
-
-$avg_rating = $rating_data['avg_rating'] !== null ? round($rating_data['avg_rating'], 1) : 0;
+$avg_rating = $rating_data['avg_rating'];
 $review_count = $rating_data['review_count'];
-$rating_stmt->close();
-
-// Truy vấn feedback của sản phẩm
-$feedback_stmt = $conn->prepare("
-    SELECT f.rating, f.message, f.created_at, u.name AS user_name
-    FROM feedback f
-    LEFT JOIN users u ON f.user_id = u.id
-    WHERE f.product_id = ?
-");
-$feedback_stmt->bind_param('i', $product_id);
-$feedback_stmt->execute();
-$feedback_result = $feedback_stmt->get_result();
-$feedbacks = [];
-while ($row = $feedback_result->fetch_assoc()) {
-    $feedbacks[] = $row;
-}
 $feedback_count = count($feedbacks);
-$feedback_stmt->close();
 
 ?>
 
@@ -150,11 +99,11 @@ $feedback_stmt->close();
                     <small class="pt-1">(<?php echo $feedback_count; ?> Reviews)</small>
                 </div>
                 <h3 class="font-weight-semi-bold mb-4">$<?php echo number_format($product['price'], 2); ?></h3>
-                <label><strong class="text-dark mr-3">Quantity :</strong></label>
+                <label><strong class="text-dark mr-3">In stock:</strong></label>                
                 <p class="mb-4" style="display: inline;"><?php echo htmlspecialchars($product['inventory']); ?></p>
-
+                <p class="mb-4"><?php echo htmlspecialchars($product['description']); ?></p>
                     <!-- Form chọn size và colors gửi đến cart.php-->
-                    <form method="POST" action="cart.php">
+                    <form method="get" action="cart.php">
                         <div class="d-flex mb-3">
                             <strong class="text-dark mr-3">Sizes:</strong>
                             <div>
@@ -208,7 +157,7 @@ $feedback_stmt->close();
                                     </button>
                                 </div>
                                 <input type="text" class="form-control bg-secondary border-0 text-center"
-                                    name="quantity_display" value="1" id="quantity" readonly
+                                    name="quantity" value="1" id="quantity" readonly
                                     min="1" max="<?php echo $product['inventory']; ?>">
                                 <div class="input-group-btn">
                                     <button type="button" class="btn btn-primary btn-plus">
@@ -264,6 +213,7 @@ $feedback_stmt->close();
                             <h4 class="mb-3">Product Description</h4>
                             <p><?php echo htmlspecialchars($product['description']); ?></p>
                         </div>
+                        <!-- Phần trang review -->
                         <div class="tab-pane fade" id="tab-pane-3">
                             <div class="row">
                                 <div class="col-md-6">
