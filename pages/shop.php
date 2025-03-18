@@ -2,6 +2,8 @@
 require "../config.php";
 require_once '../functions.php';
 
+// Lấy user_id từ session
+$user_id = $_SESSION['user_id'] ?? 0;
 
 // Nhận các giá trị lọc từ `$_GET`
 $filters = $_GET;
@@ -34,13 +36,13 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
     <?php include '../includes/head.php' ?>
 </head>
 <style>
-.product-img img {
-    width: 100%;
-    height: 400px;
-    /* Điều chỉnh theo ý muốn */
-    object-fit: cover;
-    /* Đảm bảo hình ảnh không bị méo */
-}
+    .product-img img {
+        width: 100%;
+        height: 400px;
+        /* Điều chỉnh theo ý muốn */
+        object-fit: cover;
+        /* Đảm bảo hình ảnh không bị méo */
+    }
 </style>
 
 <body>
@@ -81,14 +83,14 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $categories = getCategories($conn);
                         while ($row = $categories->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_categories) ? 'checked' : '';
-                            ?>
-                        <div
-                            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" name="category[]" value="<?= $row['name'] ?>"
-                                class="custom-control-input" id="category-<?= $row['id'] ?>" <?= $isChecked ?>>
-                            <label class="custom-control-label"
-                                for="category-<?= $row['id'] ?>"><?= $row['name'] ?></label>
-                        </div>
+                        ?>
+                            <div
+                                class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                <input type="checkbox" name="category[]" value="<?= $row['name'] ?>"
+                                    class="custom-control-input" id="category-<?= $row['id'] ?>" <?= $isChecked ?>>
+                                <label class="custom-control-label"
+                                    for="category-<?= $row['id'] ?>"><?= $row['name'] ?></label>
+                            </div>
                         <?php } ?>
 
 
@@ -107,14 +109,14 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $brands = getBrands($conn);
                         while ($row = $brands->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_brands) ? 'checked' : '';
-                            ?>
-                        <div
-                            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" name="brand[]" value="<?= $row['name'] ?>"
-                                class="custom-control-input" id="brand-<?= $row['id'] ?>" <?= $isChecked ?>>
-                            <label class="custom-control-label"
-                                for="brand-<?= $row['id'] ?>"><?= $row['name'] ?></label>
-                        </div>
+                        ?>
+                            <div
+                                class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                <input type="checkbox" name="brand[]" value="<?= $row['name'] ?>"
+                                    class="custom-control-input" id="brand-<?= $row['id'] ?>" <?= $isChecked ?>>
+                                <label class="custom-control-label"
+                                    for="brand-<?= $row['id'] ?>"><?= $row['name'] ?></label>
+                            </div>
                         <?php } ?>
                     </div>
 
@@ -132,14 +134,14 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $colors = getColors($conn);
                         while ($row = $colors->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_colors) ? 'checked' : '';
-                            ?>
-                        <div
-                            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" name="color[]" value="<?= $row['name'] ?>"
-                                class="custom-control-input" id="color-<?= $row['id'] ?>" <?= $isChecked ?>>
-                            <label class="custom-control-label"
-                                for="color-<?= $row['id'] ?>"><?= $row['name'] ?></label>
-                        </div>
+                        ?>
+                            <div
+                                class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                <input type="checkbox" name="color[]" value="<?= $row['name'] ?>"
+                                    class="custom-control-input" id="color-<?= $row['id'] ?>" <?= $isChecked ?>>
+                                <label class="custom-control-label"
+                                    for="color-<?= $row['id'] ?>"><?= $row['name'] ?></label>
+                            </div>
                         <?php } ?>
                     </div>
 
@@ -156,13 +158,13 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $sizes = getSizes($conn);
                         while ($row = $sizes->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_sizes) ? 'checked' : '';
-                            ?>
-                        <div
-                            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" name="size[]" value="<?= $row['name'] ?>"
-                                class="custom-control-input" id="size-<?= $row['id'] ?>" <?= $isChecked ?>>
-                            <label class="custom-control-label" for="size-<?= $row['id'] ?>"><?= $row['name'] ?></label>
-                        </div>
+                        ?>
+                            <div
+                                class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                <input type="checkbox" name="size[]" value="<?= $row['name'] ?>"
+                                    class="custom-control-input" id="size-<?= $row['id'] ?>" <?= $isChecked ?>>
+                                <label class="custom-control-label" for="size-<?= $row['id'] ?>"><?= $row['name'] ?></label>
+                            </div>
                         <?php } ?>
                     </div>
 
@@ -179,14 +181,14 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $genders = getGenders($conn);
                         while ($row = $genders->fetch_assoc()) {
                             $isChecked = in_array($row['gender'], $selected_genders) ? 'checked' : '';
-                            ?>
-                        <div
-                            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" name="gender[]" value="<?= $row['gender'] ?>"
-                                class="custom-control-input" id="gender-<?= $row['gender'] ?>" <?= $isChecked ?>>
-                            <label class="custom-control-label"
-                                for="gender-<?= $row['gender'] ?>"><?= ucfirst($row['gender']) ?></label>
-                        </div>
+                        ?>
+                            <div
+                                class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                <input type="checkbox" name="gender[]" value="<?= $row['gender'] ?>"
+                                    class="custom-control-input" id="gender-<?= $row['gender'] ?>" <?= $isChecked ?>>
+                                <label class="custom-control-label"
+                                    for="gender-<?= $row['gender'] ?>"><?= ucfirst($row['gender']) ?></label>
+                            </div>
                         <?php } ?>
                     </div>
 
@@ -216,13 +218,13 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         foreach ($price_ranges as $range => $label) {
                             $isChecked = in_array($range, $selected_prices) ? 'checked' : '';
                             $id = "price-" . str_replace("-", "_", $range); // ID duy nhất cho mỗi checkbox
-                            ?>
-                        <div
-                            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" name="price[]" value="<?= $range ?>"
-                                id="<?= $id ?>" <?= $isChecked ?>>
-                            <label class="custom-control-label" for="<?= $id ?>"><?= $label ?></label>
-                        </div>
+                        ?>
+                            <div
+                                class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                <input type="checkbox" class="custom-control-input" name="price[]" value="<?= $range ?>"
+                                    id="<?= $id ?>" <?= $isChecked ?>>
+                                <label class="custom-control-label" for="<?= $id ?>"><?= $label ?></label>
+                            </div>
                         <?php } ?>
                     </div>
 
@@ -240,70 +242,70 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                     <!-- Product Loop -->
                     <?php
                     while ($row = $products->fetch_assoc()) { ?>
-                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
-                        <div class="product-item bg-light mb-4">
-                            <div class="product-img position-relative overflow-hidden">
-                                <img class="img-fluid w-100" src="../<?php echo $row['image']; ?>" alt="">
-                                <div class="product-action">
-                                    <a class="btn btn-outline-dark btn-square"
-                                        href="product.php?id=<?php echo $row['id'] ?>"><i
-                                            class="fa fa-shopping-cart"></i></a>
-                                    <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                        <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                            <div class="product-item bg-light mb-4">
+                                <div class="product-img position-relative overflow-hidden">
+                                    <img class="img-fluid w-100" src="../<?php echo $row['image']; ?>" alt="">
+                                    <div class="product-action">
+                                        <a class="btn btn-outline-dark btn-square"
+                                            href="product.php?id=<?php echo $row['id'] ?>"><i
+                                                class="fa fa-shopping-cart"></i></a>
+                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="text-center py-4">
-                                <a class="h6 text-decoration-none text-truncate"
-                                    href="product.php?id=<?php echo $row['id'] ?>"><?php echo $row['name'] ?></a>
-                                <div class="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>$<?php echo $row['price'] ?></h5>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-center mb-1">
-                                    <?php for ($i = 0; $i < 5; $i++): ?>
-                                    <?php if ($i < floor($row['avg_rating'])): ?>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <?php elseif ($i < $row['avg_rating']): ?>
-                                    <small class="fa fa-star-half-alt text-primary mr-1"></small>
-                                    <?php else: ?>
-                                    <small class="far fa-star text-primary mr-1"></small>
-                                    <?php endif; ?>
-                                    <?php endfor; ?>
-                                    <small>(<?php echo $row['total_reviews']; ?>)</small>
+                                <div class="text-center py-4">
+                                    <a class="h6 text-decoration-none text-truncate"
+                                        href="product.php?id=<?php echo $row['id'] ?>"><?php echo $row['name'] ?></a>
+                                    <div class="d-flex align-items-center justify-content-center mt-2">
+                                        <h5>$<?php echo $row['price'] ?></h5>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-center mb-1">
+                                        <?php for ($i = 0; $i < 5; $i++): ?>
+                                            <?php if ($i < floor($row['avg_rating'])): ?>
+                                                <small class="fa fa-star text-primary mr-1"></small>
+                                            <?php elseif ($i < $row['avg_rating']): ?>
+                                                <small class="fa fa-star-half-alt text-primary mr-1"></small>
+                                            <?php else: ?>
+                                                <small class="far fa-star text-primary mr-1"></small>
+                                            <?php endif; ?>
+                                        <?php endfor; ?>
+                                        <small>(<?php echo $row['total_reviews']; ?>)</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     <?php } ?>
 
                     <!-- Phân trang -->
                     <div class="col-12">
                         <?php if ($total_pages > 1) { ?>
-                        <nav>
-                            <ul class="pagination justify-content-center">
-                                <!-- Previous Button -->
-                                <?php if ($page > 1) { ?>
-                                <li class="page-item">
-                                    <a class="page-link"
-                                        href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">Previous</a>
-                                </li>
-                                <?php } ?>
+                            <nav>
+                                <ul class="pagination justify-content-center">
+                                    <!-- Previous Button -->
+                                    <?php if ($page > 1) { ?>
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                                href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">Previous</a>
+                                        </li>
+                                    <?php } ?>
 
-                                <!-- Số trang -->
-                                <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
-                                <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                                    <a class="page-link"
-                                        href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
-                                </li>
-                                <?php } ?>
+                                    <!-- Số trang -->
+                                    <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
+                                        <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                                            <a class="page-link"
+                                                href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
+                                        </li>
+                                    <?php } ?>
 
-                                <!-- Next Button -->
-                                <?php if ($page < $total_pages) { ?>
-                                <li class="page-item">
-                                    <a class="page-link"
-                                        href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">Next</a>
-                                </li>
-                                <?php } ?>
-                            </ul>
-                        </nav>
+                                    <!-- Next Button -->
+                                    <?php if ($page < $total_pages) { ?>
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                                href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">Next</a>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                            </nav>
                         <?php } ?>
                     </div>
                 </div>

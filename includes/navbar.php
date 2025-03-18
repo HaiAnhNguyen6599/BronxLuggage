@@ -2,6 +2,18 @@
 // lấy tên file PHP đang chạy
 $current_page = basename($_SERVER['PHP_SELF']);
 
+
+// Lấy số lượng sản phẩm trong giỏ hàng của người dùng (tính số dòng sản phẩm)
+$sql = "SELECT COUNT(*) AS total_products FROM cart WHERE user_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$total_products = $row['total_products'] ? $row['total_products'] : 0;  // Nếu không có sản phẩm, gán số lượng = 0
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -71,9 +83,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             </div>
                         </div>
 
-                        <!-- <a href="product.php"
-                            class="nav-item nav-link <?= ($current_page == 'product.php') ? 'active' : ''; ?>">Shop
-                            Detail</a> -->
                         <div class="nav-item dropdown">
                             <a href="#"
                                 class="nav-link dropdown-toggle <?php echo ($current_page == 'cart.php' || $current_page == 'checkout.php') ? 'active' : ''; ?>"
@@ -95,7 +104,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <a href="cart.php" class="btn px-0 ml-3">
                             <i class="fas fa-shopping-cart text-primary"></i>
                             <span class="badge text-secondary border border-secondary rounded-circle"
-                                style="padding-bottom: 2px">0</span>
+                                style="padding-bottom: 2px"><?php echo $total_products; ?></span>
                         </a>
                     </div>
                 </div>

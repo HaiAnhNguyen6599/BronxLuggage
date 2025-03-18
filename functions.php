@@ -175,7 +175,7 @@ function getTotalProducts($conn, $filters)
 {
     $total_products = 0;
     list($where_sql, $params, $types) = buildFilterQuery($filters);
-    
+
     $sql = "SELECT COUNT(DISTINCT p.id) FROM products p
             LEFT JOIN categories c ON p.category_id = c.id
             LEFT JOIN brands b ON p.brand_id = b.id
@@ -184,7 +184,7 @@ function getTotalProducts($conn, $filters)
             $where_sql";
 
     $stmt = $conn->prepare($sql);
-    
+
     if (!$stmt) {
         die("SQL Error: " . $conn->error);
     }
@@ -204,7 +204,8 @@ function getTotalProducts($conn, $filters)
 
 // product.php
 
-function getProductById($conn, $product_id) {
+function getProductById($conn, $product_id)
+{
     $stmt = $conn->prepare("
         SELECT p.id, p.name, p.description, c.name AS category, b.name AS brand, 
                p.size_id, s.name AS size, p.color_id, col.name AS color, 
@@ -223,7 +224,8 @@ function getProductById($conn, $product_id) {
     return $result->fetch_assoc();
 }
 
-function getProductBySizes($conn) {
+function getProductBySizes($conn)
+{
     $stmt = $conn->prepare("SELECT id, name FROM sizes");
     $stmt->execute();
     $result = $stmt->get_result();
@@ -234,32 +236,15 @@ function getProductBySizes($conn) {
     return $sizes;
 }
 
-// function getProductByBrands($conn) {
-//     $stmt = $conn->prepare("SELECT id, name FROM colors");
-//     $stmt->execute();
-//     $result = $stmt->get_result();
-//     $brands = "";
-//     while ($row = $result->fetch_assoc()) {
-//         $colors[] = $row;
-//     }
-//     return $brands;
-// }
-// function getProductByColors($conn) {
-//     $stmt = $conn->prepare("SELECT id, name FROM colors");
-//     $stmt->execute();
-//     $result = $stmt->get_result();
-//     $colors = [];
-//     while ($row = $result->fetch_assoc()) {
-//         $colors[] = $row;
-//     }
-//     return $colors;
-// }
 
-function getProductRating($conn, $product_id) {
+function getProductRating($conn, $product_id)
+{
     $stmt = $conn->prepare("
         SELECT AVG(rating) AS avg_rating, COUNT(*) AS review_count 
         FROM feedback 
         WHERE product_id = ?
+        Order by created_at DESC
+        LIMIT 5
     ");
     $stmt->bind_param('i', $product_id);
     $stmt->execute();
@@ -271,7 +256,8 @@ function getProductRating($conn, $product_id) {
     ];
 }
 
-function getProductFeedback($conn, $product_id) {
+function getProductFeedback($conn, $product_id)
+{
     $feedbacks = [];
 
     // Kiểm tra kết nối
@@ -301,5 +287,3 @@ function getProductFeedback($conn, $product_id) {
 
     return $feedbacks;
 }
-
-

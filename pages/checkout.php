@@ -1,10 +1,12 @@
 <?php
-session_start();
+// session_start();
 require "../config.php";
 require_once '../functions.php';
 
-$user_id = 1; // Giả định user đang đăng nhập có ID = 1
+// $user_id = 1; // Giả định user đang đăng nhập có ID = 1
+$user_id = $_SESSION['user_id']; // Giờ có thể lấy user_id an toàn
 
+echo "User hiện tại có id: " . $user_id;
 // Lấy thông tin user
 $query = "SELECT phone, address, city FROM users WHERE id = ?";
 $stmt = $conn->prepare($query);
@@ -27,22 +29,22 @@ $total_price = 0;
 <html lang="en">
 
 <head>
-    <?php include '../includes/head.php' ?>;
+    <?php include '../includes/head.php' ?>
 </head>
 
 <body>
     <!-- Topbar Start -->
-    <?php include '../includes/topbar.php' ?>;
+    <?php include '../includes/topbar.php' ?>
     <!-- Topbar End -->
 
 
     <!-- Navbar Start -->
-    <?php include '../includes/navbar.php' ?>;
+    <?php include '../includes/navbar.php' ?>
     <!-- Navbar End -->
 
 
     <!-- Breadcrumb Start -->
-    <?php include '../includes/breadcumb.php' ?>;
+    <?php include '../includes/breadcumb.php' ?>
 
     <!-- Breadcrumb End -->
 

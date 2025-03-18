@@ -1,7 +1,8 @@
 <?php
 require '../config.php';
 
-$user_id = 1; // Giả định đã đăng nhập
+// $user_id = 1;// Giả định đã đăng nhập
+$user_id = $_SESSION['user_id']; // Giờ có thể lấy user_id an toàn
 $order_id = $_GET['order_id'] ?? null;
 
 if (!$order_id) {
@@ -42,11 +43,13 @@ while ($row = $result_items->fetch_assoc()) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Confirmation</title>
 </head>
+
 <body>
     <h2>Order Confirmation</h2>
     <p>Order ID: <?= $order['id'] ?></p>
@@ -62,4 +65,5 @@ while ($row = $result_items->fetch_assoc()) {
 
     <a href="index.php">Back to Home</a>
 </body>
+
 </html>

@@ -3,6 +3,7 @@
 require "../config.php";
 require_once '../functions.php';
 
+$user_id = $_SESSION['user_id'] ?? 0;
 
 if (isset($_GET['id'])) {
     $product_id = $_GET['id'];
@@ -48,7 +49,7 @@ $feedback_count = count($feedbacks);
     <!-- Breadcrumb -->
     <div class="container-fluid">
         <div class="row px-xl-5">
-            <div class="col-12"> 
+            <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
                     <a class="breadcrumb-item text-dark" href="index.php">Home</a>
                     <a class="breadcrumb-item text-dark" href="shop.php">Shop</a>
@@ -80,28 +81,28 @@ $feedback_count = count($feedbacks);
 
             <div class="col-lg-7 h-auto mb-30">
                 <div class="h-100 bg-light p-30">
-                <h3><?php echo htmlspecialchars($product['name']); ?></h3>
-                <div class="d-flex mb-3">
-                    <!-- Hiển thị rating sao -->
-                    <div class="text-primary mr-2">
-                        <?php
-                        for ($i = 1; $i <= 5; $i++) {
-                            if ($i <= floor($avg_rating)) {
-                                echo '<small class="fas fa-star"></small>'; // Sao đầy
-                            } elseif ($i - 0.5 <= $avg_rating && $avg_rating < $i) {
-                                echo '<small class="fas fa-star-half-alt"></small>'; // Nửa sao
-                            } else {
-                                echo '<small class="far fa-star"></small>'; // Sao rỗng
+                    <h3><?php echo htmlspecialchars($product['name']); ?></h3>
+                    <div class="d-flex mb-3">
+                        <!-- Hiển thị rating sao -->
+                        <div class="text-primary mr-2">
+                            <?php
+                            for ($i = 1; $i <= 5; $i++) {
+                                if ($i <= floor($avg_rating)) {
+                                    echo '<small class="fas fa-star"></small>'; // Sao đầy
+                                } elseif ($i - 0.5 <= $avg_rating && $avg_rating < $i) {
+                                    echo '<small class="fas fa-star-half-alt"></small>'; // Nửa sao
+                                } else {
+                                    echo '<small class="far fa-star"></small>'; // Sao rỗng
+                                }
                             }
-                        }
-                        ?>
+                            ?>
+                        </div>
+                        <small class="pt-1">(<?php echo $feedback_count; ?> Reviews)</small>
                     </div>
-                    <small class="pt-1">(<?php echo $feedback_count; ?> Reviews)</small>
-                </div>
-                <h3 class="font-weight-semi-bold mb-4">$<?php echo number_format($product['price'], 2); ?></h3>
-                <label><strong class="text-dark mr-3">In stock:</strong></label>                
-                <p class="mb-4" style="display: inline;"><?php echo htmlspecialchars($product['inventory']); ?></p>
-                <p class="mb-4"><?php echo htmlspecialchars($product['description']); ?></p>
+                    <h3 class="font-weight-semi-bold mb-4">$<?php echo number_format($product['price'], 2); ?></h3>
+                    <label><strong class="text-dark mr-3">In stock:</strong></label>
+                    <p class="mb-4" style="display: inline;"><?php echo htmlspecialchars($product['inventory']); ?></p>
+                    <p class="mb-4"><?php echo htmlspecialchars($product['description']); ?></p>
                     <!-- Form chọn size và colors gửi đến cart.php-->
                     <form method="get" action="cart.php">
                         <div class="d-flex mb-3">
@@ -147,7 +148,9 @@ $feedback_count = count($feedbacks);
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <script> document.querySelectorAll('.custom-control').forEach(el => el.style.display = el.querySelector('input:checked') ? '' : 'none'); </script>
+                        <script>
+                            document.querySelectorAll('.custom-control').forEach(el => el.style.display = el.querySelector('input:checked') ? '' : 'none');
+                        </script>
 
                         <div class="d-flex align-items-center mb-4 pt-2">
                             <div class="input-group quantity mr-3" style="width: 130px;">
@@ -236,7 +239,7 @@ $feedback_count = count($feedbacks);
                                                                 echo '<i class="far fa-star"></i>'; // Sao rỗng
                                                             }
                                                         }
-                                    ?>
+                                                        ?>
                                                     </div>
                                                     <p><?php echo htmlspecialchars($feedback['message']); ?></p>
                                                 </div>
@@ -279,52 +282,52 @@ $feedback_count = count($feedbacks);
                                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
                                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                 <script>
-                                $(document).ready(function() {
-                                    // Xử lý chọn rating sao
-                                    $('#rating-stars i').on('click', function() {
-                                        var rating = $(this).data('value');
-                                        $('#rating-value').val(rating);
+                                    $(document).ready(function() {
+                                        // Xử lý chọn rating sao
+                                        $('#rating-stars i').on('click', function() {
+                                            var rating = $(this).data('value');
+                                            $('#rating-value').val(rating);
 
-                                        // Cập nhật giao diện sao
-                                        $('#rating-stars i').each(function() {
-                                            if ($(this).data('value') <= rating) {
-                                                $(this).removeClass('far fa-star').addClass('fas fa-star');
-                                            } else {
-                                                $(this).removeClass('fas fa-star').addClass('far fa-star');
-                                            }
-                                        });
-                                    });
-
-                                    // Xử lý submit form bằng Ajax
-                                    $('#review-form').on('submit', function(e) {
-                                        e.preventDefault();
-                                        var rating = $('#rating-value').val();
-                                        if (rating == 0) {
-                                            $('#review-message').html('<p class="text-danger">Please select a rating!</p>');
-                                            return;
-                                        }
-
-                                        $.ajax({
-                                            url: 'submit_review.php',
-                                            type: 'POST',
-                                            data: $(this).serialize(),
-                                            success: function(response) {
-                                                var res = JSON.parse(response);
-                                                if (res.success) {
-                                                    $('#review-message').html('<p class="text-success">' + res.message + '</p>');
-                                                    $('#review-form')[0].reset();
-                                                    $('#rating-stars i').removeClass('fas fa-star').addClass('far fa-star');
-                                                    $('#rating-value').val(0);
+                                            // Cập nhật giao diện sao
+                                            $('#rating-stars i').each(function() {
+                                                if ($(this).data('value') <= rating) {
+                                                    $(this).removeClass('far fa-star').addClass('fas fa-star');
                                                 } else {
-                                                    $('#review-message').html('<p class="text-danger">' + res.message + '</p>');
+                                                    $(this).removeClass('fas fa-star').addClass('far fa-star');
                                                 }
-                                            },
-                                            error: function() {
-                                                $('#review-message').html('<p class="text-danger">Something went wrong. Please try again.</p>');
+                                            });
+                                        });
+
+                                        // Xử lý submit form bằng Ajax
+                                        $('#review-form').on('submit', function(e) {
+                                            e.preventDefault();
+                                            var rating = $('#rating-value').val();
+                                            if (rating == 0) {
+                                                $('#review-message').html('<p class="text-danger">Please select a rating!</p>');
+                                                return;
                                             }
+
+                                            $.ajax({
+                                                url: 'submit_review.php',
+                                                type: 'POST',
+                                                data: $(this).serialize(),
+                                                success: function(response) {
+                                                    var res = JSON.parse(response);
+                                                    if (res.success) {
+                                                        $('#review-message').html('<p class="text-success">' + res.message + '</p>');
+                                                        $('#review-form')[0].reset();
+                                                        $('#rating-stars i').removeClass('fas fa-star').addClass('far fa-star');
+                                                        $('#rating-value').val(0);
+                                                    } else {
+                                                        $('#review-message').html('<p class="text-danger">' + res.message + '</p>');
+                                                    }
+                                                },
+                                                error: function() {
+                                                    $('#review-message').html('<p class="text-danger">Something went wrong. Please try again.</p>');
+                                                }
+                                            });
                                         });
                                     });
-                                });
                                 </script>
 
                             </div>

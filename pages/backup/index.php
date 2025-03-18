@@ -201,23 +201,7 @@ require_once '../functions.php';
 
   <!-- Back to Top -->
   <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
-  <!-- Success Message -->
-  <?php if (isset($_SESSION['success'])): ?>
-          <div id="successMessage" style="display: block; background: #4CAF50; color: white; padding: 10px; text-align: center; position: fixed; top: 10px; left: 50%; transform: translateX(-50%); border-radius: 5px;">
-              <?= htmlspecialchars($_SESSION['success']) ?>
-          </div>
-          <script>
-              document.addEventListener("DOMContentLoaded", function() {
-                  setTimeout(function() {
-                      var successMessage = document.getElementById("successMessage");
-                      if (successMessage) {
-                          successMessage.style.display = "none";
-                      }
-                  }, 3000);
-              });
-          </script>
-          <?php unset($_SESSION['success']); ?>
-      <?php endif; ?>           
+
   <!-- JavaScript Libraries -->
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
