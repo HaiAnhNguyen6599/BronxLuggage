@@ -1,152 +1,90 @@
 <?php
-require "../config.php";
+require "../config.php"; // File kết nối database
 require_once '../functions.php';
 
-// $user_id = 1;  // Lấy thông tin của người dùng, ví dụ ở đây là user_id = 1
-
-$user_id = $_SESSION['user_id'];  // Lấy thông tin của người dùng đã đăng nhập
-
-// Truy vấn thông tin giỏ hàng của người dùng
-$sql = "SELECT p.name AS product_name, p.price AS product_price, c.quantity AS product_quantity, c.id AS cart_id, c.product_id
-        FROM cart c
-        JOIN products p ON c.product_id = p.id
-        WHERE c.user_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-$cart_items = [];
-$total = 0;
-while ($row = $result->fetch_assoc()) {
-    $subtotal = $row['product_price'] * $row['product_quantity'];  // Tính lại subtotal cho mỗi sản phẩm
-    $row['subtotal'] = $subtotal;  // Gán giá trị subtotal vào mảng kết quả
-    $cart_items[] = $row;
-    $total += $subtotal;  // Tổng giá trị giỏ hàng
+// Kiểm tra đăng nhập
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
 }
 
-$shipping = 0;
+$user_id = $_SESSION['user_id'];
 
-// Xử lý hành động tăng hoặc giảm số lượng
-if (isset($_POST['action']) && isset($_POST['product_id']) && isset($_POST['quantity'])) {
-    $product_id = $_POST['product_id'];
+// Xử lý cập nhật số lượng sản phẩm bằng AJAX
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cart_id']) && isset($_POST['quantity'])) {
+    $cart_id = $_POST['cart_id'];
     $quantity = $_POST['quantity'];
 
-    // Lấy thông tin sản phẩm để kiểm tra số lượng trong kho
-    $sql = "SELECT inventory, price FROM products WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $product_id);
+    if ($quantity > 0) {
+        $stmt = $conn->prepare("UPDATE cart SET quantity = ? WHERE id = ? AND user_id = ?");
+        $stmt->bind_param("iii", $quantity, $cart_id, $user_id);
+        $stmt->execute();
+    } else {
+        $stmt = $conn->prepare("DELETE FROM cart WHERE id = ? AND user_id = ?");
+        $stmt->bind_param("ii", $cart_id, $user_id);
+        $stmt->execute();
+    }
+
+    // Lấy tổng tiền mới và tổng tiền từng sản phẩm
+    $stmt = $conn->prepare("SELECT products.price, cart.quantity FROM cart JOIN products ON cart.product_id = products.id WHERE cart.id = ? AND cart.user_id = ?");
+    $stmt->bind_param("ii", $cart_id, $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
-    $product = $result->fetch_assoc();
-    $inventory = $product['inventory']; // Số lượng tồn kho
-    $product_price = $product['price']; // Giá của sản phẩm
+    $item = $result->fetch_assoc();
+    $item_total = $item ? $item['price'] * $item['quantity'] : 0;
 
-    // Kiểm tra hành động tăng số lượng
-    if ($_POST['action'] == 'increase' && $quantity <= $inventory) {
-        // Cập nhật giỏ hàng nếu số lượng không vượt quá số lượng trong kho
-        $sql = "UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iii", $quantity, $user_id, $product_id);
-        $stmt->execute();
-    }
-    // Kiểm tra hành động giảm số lượng
-    elseif ($_POST['action'] == 'decrease' && $quantity >= 1) {
-        // Cập nhật giỏ hàng nếu số lượng >= 1
-        $sql = "UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iii", $quantity, $user_id, $product_id);
-        $stmt->execute();
-    }
-
-    // Tính lại giỏ hàng và tổng giá trị
-    $cart_items = [];
-    $total = 0;
-    // Truy vấn thông tin giỏ hàng của người dùng
-    $sql = "SELECT p.name AS product_name, p.price AS product_price, c.quantity AS product_quantity, c.id AS cart_id, c.product_id
-            FROM cart c
-            JOIN products p ON c.product_id = p.id
-            WHERE c.user_id = ?";
-    $stmt = $conn->prepare($sql);
+    $stmt = $conn->prepare("SELECT SUM(products.price * cart.quantity) as total FROM cart JOIN products ON cart.product_id = products.id WHERE cart.user_id = ?");
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
+    $total_price = $result->fetch_assoc()['total'] ?? 0;
 
-    while ($row = $result->fetch_assoc()) {
-        $subtotal = $row['product_price'] * $row['product_quantity'];  // Tính lại subtotal cho mỗi sản phẩm
-        $row['subtotal'] = $subtotal;  // Gán giá trị subtotal vào mảng kết quả
-        $cart_items[] = $row;
-        $total += $subtotal;  // Tổng giá trị giỏ hàng
-    }
-
-    // Xử lý phí vận chuyển
-    $shipping = 0; // Có thể thêm logic xử lý phí vận chuyển ở đây
-
-    // Trả về JSON cập nhật thông tin giỏ hàng
-    echo json_encode([
-        'status' => 'success',
-        'total' => $total + $shipping, // Tổng cộng có tính cả phí vận chuyển
-        'cart_items' => $cart_items
-    ]);
+    echo json_encode(["success" => true, "item_total" => number_format($item_total, 2), "total_price" => number_format($total_price, 2)]);
+    exit();
 }
 
-// Xử lý xóa sản phẩm khỏi giỏ hàng
-if (isset($_POST['action']) && isset($_POST['product_id']) && $_POST['action'] == 'remove') {
-    $product_id = $_POST['product_id'];
+// Lấy danh sách sản phẩm trong giỏ hàng
+$stmt = $conn->prepare("SELECT cart.id as cart_id, products.id, products.name, products.price, products.inventory, cart.quantity FROM cart JOIN products ON cart.product_id = products.id WHERE cart.user_id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$cart_items = $result->fetch_all(MYSQLI_ASSOC);
 
-    // Xóa sản phẩm khỏi giỏ hàng
-    $sql = "DELETE FROM cart WHERE user_id = ? AND product_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $user_id, $product_id);
-    if ($stmt->execute()) {
-        // Cập nhật lại giỏ hàng và tổng giá trị sau khi xóa
-        $total = 0;
-        $cart_items = [];
-        $sql = "SELECT p.name AS product_name, p.price AS product_price, c.quantity AS product_quantity, c.id AS cart_id, c.product_id
-                FROM cart c
-                JOIN products p ON c.product_id = p.id
-                WHERE c.user_id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        while ($row = $result->fetch_assoc()) {
-            $subtotal = $row['product_price'] * $row['product_quantity'];
-            $row['subtotal'] = $subtotal;
-            $cart_items[] = $row;
-            $total += $subtotal;
-        }
-    } else {
-        // Nếu có lỗi trong việc xóa sản phẩm
-        echo json_encode(['status' => 'error', 'message' => 'Failed to remove product']);
-    }
-}
+$total_price = array_reduce($cart_items, function ($sum, $item) {
+    return $sum + ($item['price'] * $item['quantity']);
+}, 0);
+
+
 ?>
+
 
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <?php include '../includes/head.php'; ?>
+    <?php include '../includes/head.php' ?>
 </head>
 
 <body>
     <!-- Topbar Start -->
-    <?php include '../includes/topbar.php'; ?>
+    <?php include '../includes/topbar.php' ?>
     <!-- Topbar End -->
 
+
     <!-- Navbar Start -->
-    <?php include '../includes/navbar.php'; ?>
+    <?php include '../includes/navbar.php' ?>
+
     <!-- Navbar End -->
+
 
     <!-- Breadcrumb Start -->
     <div class="container-fluid">
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="index.php">Home</a>
-                    <a class="breadcrumb-item text-dark" href="shop.php">Shop</a>
+                    <a class="breadcrumb-item text-dark" href="#">Home</a>
+                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
                     <span class="breadcrumb-item active">Shopping Cart</span>
                 </nav>
             </div>
@@ -154,55 +92,44 @@ if (isset($_POST['action']) && isset($_POST['product_id']) && $_POST['action'] =
     </div>
     <!-- Breadcrumb End -->
 
+
     <!-- Cart Start -->
+
     <div class="container-fluid">
         <div class="row px-xl-5">
             <div class="col-lg-8 table-responsive mb-5">
-                <table class="table table-light table-borderless table-hover text-center mb-0">
+                <table class="table table-light table-borderless table-hover mb-0">
                     <thead class="thead-dark">
                         <tr>
-                            <th>Products</th>
+                            <th class="text-left">Products</th>
                             <th>Price</th>
                             <th>Quantity</th>
                             <th>Total</th>
                             <th>Remove</th>
                         </tr>
                     </thead>
-                    <tbody class="align-middle">
-                        <?php foreach ($cart_items as $item) : ?>
-                            <tr>
-                                <td class="align-middle" style="text-align:left;">
-                                    <a href="product.php?id=<?php echo $item['product_id']; ?>" style="color:#6C757D;"><?php echo $item['product_name']; ?></a>
+                    <tbody class="align-middle" id="cart-items">
+                        <?php foreach ($cart_items as $item): ?>
+                            <tr data-cart-id="<?php echo $item['cart_id']; ?>">
+                                <td class="align-middle text-left">
+                                    <a href="product.php?id=<?php echo $item['id']; ?>">
+                                        <?php echo htmlspecialchars($item['name']); ?>
+                                    </a>
                                 </td>
-                                <td class="align-middle">$<?php echo number_format($item['product_price'], 2); ?></td>
-
+                                <td class="align-middle">$<?php echo number_format($item['price'], 2); ?></td>
                                 <td class="align-middle">
                                     <div class="input-group quantity mx-auto" style="width: 100px;">
                                         <div class="input-group-btn">
-                                            <button type="button" class="btn btn-sm btn-primary btn-minus change_quantity" data-action="decrease" data-product-id="<?= $item['product_id'] ?>" data-cart-id="<?= $item['cart_id'] ?>">
-                                                <i class="fa fa-minus"></i>
-                                            </button>
+                                            <button class="btn btn-sm btn-primary btn-minus">-</button>
                                         </div>
-                                        <input type="number" class="form-control form-control-sm bg-secondary border-0 text-center" style="padding: 4px 0;" name="quantity" value="<?php echo $item['product_quantity']; ?>" id="quantity_<?php echo $item['cart_id']; ?>" min="1" max="<?php echo $product['inventory']; ?>" readonly>
+                                        <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center quantity-input" value="<?php echo $item['quantity']; ?>">
                                         <div class="input-group-btn">
-                                            <button type="button" class="btn btn-sm btn-primary btn-plus change_quantity" data-action="increase" data-product-id="<?= $item['product_id'] ?>" data-cart-id="<?= $item['cart_id'] ?>">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
+                                            <button class="btn btn-sm btn-primary btn-plus">+</button>
                                         </div>
                                     </div>
                                 </td>
-
-                                <td class="align-middle subtotal subtotal_<?php echo $item['cart_id']; ?>">$<?php echo number_format($item['subtotal'], 2); ?></td>
-
-                                <td class="align-middle">
-                                    <form action="cart.php" method="POST" onsubmit="return confirmDelete();">
-                                        <input type="hidden" name="action" value="remove">
-                                        <input type="hidden" name="product_id" value="<?= $item['product_id'] ?>">
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fa fa-times"></i>
-                                        </button>
-                                    </form>
-                                </td>
+                                <td class="align-middle">$<span class="item-total"><?php echo number_format($item['price'] * $item['quantity'], 2); ?></span></td>
+                                <td class="align-middle"><button class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></button></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -211,20 +138,10 @@ if (isset($_POST['action']) && isset($_POST['product_id']) && $_POST['action'] =
             <div class="col-lg-4">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart Summary</span></h5>
                 <div class="bg-light p-30 mb-5">
-                    <div class="border-bottom pb-2">
-                        <div class="d-flex justify-content-between mb-3">
-                            <h6>Subtotal</h6>
-                            <h6 class="cart-total">$<?php echo number_format($total, 2); ?></h6>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <h6 class="font-weight-medium">Shipping</h6>
-                            <h6 class="font-weight-medium">$<?php echo number_format($shipping, 2); ?></h6>
-                        </div>
-                    </div>
                     <div class="pt-2">
                         <div class="d-flex justify-content-between mt-2">
                             <h5>Total</h5>
-                            <h5>$<?php echo number_format($total + $shipping, 2); ?></h5>
+                            <h5 id="total-price">$<?php echo number_format($total_price, 2); ?></h5>
                         </div>
                         <a href="checkout.php" class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</a>
                     </div>
@@ -232,64 +149,112 @@ if (isset($_POST['action']) && isset($_POST['product_id']) && $_POST['action'] =
             </div>
         </div>
     </div>
+
+
     <!-- Cart End -->
-
-
-    <?php include '../includes/footer.php'; ?>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll(".change_quantity").forEach(function(button) {
-                button.addEventListener("click", function() {
-                    var action = this.getAttribute("data-action");
-                    var productId = this.getAttribute("data-product-id");
-                    var cartId = this.getAttribute("data-cart-id");
-                    var quantityInput = document.getElementById("quantity_" + cartId);
-                    var currentQuantity = parseInt(quantityInput.value);
-
-                    // Cập nhật số lượng trong input
-                    if (action === "increase") {
-                        quantityInput.value = currentQuantity + 1;
-                    } else if (action === "decrease" && currentQuantity > 1) {
-                        quantityInput.value = currentQuantity - 1;
-                    }
-
-                    var quantity = quantityInput.value;
-
-                    // Gửi yêu cầu AJAX để cập nhật giỏ hàng
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "cart.php", true);
-                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    xhr.onreadystatechange = function() {
-                        if (xhr.readyState == 4 && xhr.status == 200) {
-                            var response = JSON.parse(xhr.responseText);
-                            if (response.status == "success") {
-                                // Cập nhật tổng giá trị giỏ hàng
-                                document.querySelector(".cart-total").textContent = "$" + response.total.toFixed(2);
-
-                                // Cập nhật subtotal của sản phẩm đã thay đổi
-                                response.cart_items.forEach(function(item) {
-                                    if (item.product_id == productId) {
-                                        // Cập nhật subtotal cho sản phẩm
-                                        document.querySelector(".subtotal_" + item.cart_id).textContent = "$" + item.subtotal.toFixed(2);
-                                    }
-                                });
+            function updateCart(cartId, quantity, row) {
+                fetch("cart.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: `cart_id=${cartId}&quantity=${quantity}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            if (quantity === 0) {
+                                row.remove(); // Xóa hàng nếu số lượng là 0
+                            } else {
+                                row.querySelector(".item-total").textContent = `${data.item_total}`;
                             }
+                            document.getElementById("total-price").textContent = `${data.total_price}`;
                         }
-                    };
+                    });
+            }
 
-                    xhr.send("action=" + action + "&product_id=" + productId + "&quantity=" + quantity);
+            document.querySelectorAll(".quantity-input").forEach(input => {
+                input.addEventListener("input", function() {
+                    const row = this.closest("tr");
+                    const cartId = row.dataset.cartId;
+                    const newQuantity = parseInt(this.value) || 1;
+                    updateCart(cartId, newQuantity, row);
+                });
+            });
+
+            document.querySelectorAll(".btn-minus").forEach(button => {
+                button.addEventListener("click", function() {
+                    const input = this.closest(".quantity").querySelector(".quantity-input");
+                    let value = parseInt(input.value) || 1;
+                    if (value > 1) {
+                        input.value = --value;
+                        input.dispatchEvent(new Event("input"));
+                    }
+                });
+            });
+
+            document.querySelectorAll(".btn-plus").forEach(button => {
+                button.addEventListener("click", function() {
+                    const input = this.closest(".quantity").querySelector(".quantity-input");
+                    input.value = parseInt(input.value) + 1;
+                    input.dispatchEvent(new Event("input"));
+                });
+            });
+
+            // Xử lý sự kiện khi nhấn nút xóa sản phẩm
+            document.querySelectorAll(".btn-remove").forEach(button => {
+                button.addEventListener("click", function() {
+                    const row = this.closest("tr");
+                    const cartId = row.dataset.cartId;
+
+                    // Hiển thị hộp thoại xác nhận
+                    if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?")) {
+                        fetch("cart.php", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/x-www-form-urlencoded"
+                                },
+                                body: `cart_id=${cartId}&quantity=0` // Đặt số lượng về 0 để xóa
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    row.remove(); // Xóa hàng khỏi giao diện
+                                    document.getElementById("total-price").textContent = `${data.total_price}`;
+                                    alert("Sản phẩm đã được xóa khỏi giỏ hàng."); // Hiển thị thông báo
+                                }
+                            });
+                    }
                 });
             });
         });
     </script>
 
-    <script type="text/javascript">
-        function confirmDelete() {
-            return confirm("Are you sure you want to remove this item from your cart?");
-        }
-    </script>
 
+    <!-- Footer Start -->
+    <?php include '../includes/footer.php' ?>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Contact Javascript File -->
+    <script src="mail/jqBootstrapValidation.min.js"></script>
+    <script src="mail/contact.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
 </body>
 
 </html>
