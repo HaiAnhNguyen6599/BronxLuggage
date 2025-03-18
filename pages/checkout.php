@@ -2,7 +2,11 @@
 // session_start();
 require "../config.php";
 require_once '../functions.php';
-
+// Kiểm tra xem người dùng đã đăng nhập chưa
+if (!isset($_SESSION['name']) || !isset($_SESSION['email'])) {
+    header("Location: ../account/login.php"); // Đường dẫn tương đối từ account/
+    exit();
+}
 // $user_id = 1; // Giả định user đang đăng nhập có ID = 1
 $user_id = $_SESSION['user_id']; // Giờ có thể lấy user_id an toàn
 

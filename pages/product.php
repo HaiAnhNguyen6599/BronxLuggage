@@ -109,20 +109,19 @@ $feedback_count = count($feedbacks);
                             <strong class="text-dark mr-3">Sizes:</strong>
                             <div>
                                 <?php if (!empty($available_sizes)) : ?>
-                                    <?php foreach ($available_sizes as $size): ?>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" class="custom-control-input"
-                                                id="size-<?php echo $size['id']; ?>"
-                                                name="size_id"
-                                                value="<?php echo $size['id']; ?>"
-                                                <?php echo ($size['id'] == $product['size_id']) ? 'checked' : ''; ?> required>
-                                            <label class="custom-control-label" for="size-<?php echo $size['id']; ?>">
-                                                <?php echo htmlspecialchars($size['name']); ?>
-                                            </label>
-                                        </div>
-                                    <?php endforeach; ?>
+                                <?php foreach ($available_sizes as $size): ?>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input"
+                                        id="size-<?php echo $size['id']; ?>" name="size_id"
+                                        value="<?php echo $size['id']; ?>"
+                                        <?php echo ($size['id'] == $product['size_id']) ? 'checked' : ''; ?> required>
+                                    <label class="custom-control-label" for="size-<?php echo $size['id']; ?>">
+                                        <?php echo htmlspecialchars($size['name']); ?>
+                                    </label>
+                                </div>
+                                <?php endforeach; ?>
                                 <?php else: ?>
-                                    <p class="text-muted">No sizes available</p>
+                                <p class="text-muted">No sizes available</p>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -131,25 +130,25 @@ $feedback_count = count($feedbacks);
                             <strong class="text-dark mr-3">Colors:</strong>
                             <div>
                                 <?php if (!empty($available_colors)) : ?>
-                                    <?php foreach ($available_colors as $color): ?>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" class="custom-control-input"
-                                                id="color-<?php echo $color['id']; ?>"
-                                                name="color_id"
-                                                value="<?php echo $color['id']; ?>"
-                                                <?php echo ($color['id'] == $product['color_id']) ? 'checked' : ''; ?> required>
-                                            <label class="custom-control-label" for="color-<?php echo $color['id']; ?>">
-                                                <?php echo htmlspecialchars($color['name']); ?>
-                                            </label>
-                                        </div>
-                                    <?php endforeach; ?>
+                                <?php foreach ($available_colors as $color): ?>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input"
+                                        id="color-<?php echo $color['id']; ?>" name="color_id"
+                                        value="<?php echo $color['id']; ?>"
+                                        <?php echo ($color['id'] == $product['color_id']) ? 'checked' : ''; ?> required>
+                                    <label class="custom-control-label" for="color-<?php echo $color['id']; ?>">
+                                        <?php echo htmlspecialchars($color['name']); ?>
+                                    </label>
+                                </div>
+                                <?php endforeach; ?>
                                 <?php else: ?>
-                                    <p class="text-muted">No colors available</p>
+                                <p class="text-muted">No colors available</p>
                                 <?php endif; ?>
                             </div>
                         </div>
                         <script>
-                            document.querySelectorAll('.custom-control').forEach(el => el.style.display = el.querySelector('input:checked') ? '' : 'none');
+                        document.querySelectorAll('.custom-control').forEach(el => el.style.display = el.querySelector(
+                            'input:checked') ? '' : 'none');
                         </script>
 
                         <div class="d-flex align-items-center mb-4 pt-2">
@@ -160,8 +159,8 @@ $feedback_count = count($feedbacks);
                                     </button>
                                 </div>
                                 <input type="text" class="form-control bg-secondary border-0 text-center"
-                                    name="quantity" value="1" id="quantity" readonly
-                                    min="1" max="<?php echo $product['inventory']; ?>">
+                                    name="quantity" value="1" id="quantity" readonly min="1"
+                                    max="<?php echo $product['inventory']; ?>">
                                 <div class="input-group-btn">
                                     <button type="button" class="btn btn-primary btn-plus">
                                         <i class="fa fa-plus"></i>
@@ -177,28 +176,28 @@ $feedback_count = count($feedbacks);
 
                     <!--  js cho nút tăng/giảm số lượng -->
                     <script>
-                        document.addEventListener("DOMContentLoaded", function() {
-                            document.querySelectorAll(".quantity").forEach(function(quantityWrapper) {
-                                let quantityInput = quantityWrapper.querySelector("#quantity");
-                                let minusButton = quantityWrapper.querySelector(".btn-minus");
-                                let plusButton = quantityWrapper.querySelector(".btn-plus");
-                                let maxStock = parseInt(quantityInput.getAttribute("max"));
+                    document.addEventListener("DOMContentLoaded", function() {
+                        document.querySelectorAll(".quantity").forEach(function(quantityWrapper) {
+                            let quantityInput = quantityWrapper.querySelector("#quantity");
+                            let minusButton = quantityWrapper.querySelector(".btn-minus");
+                            let plusButton = quantityWrapper.querySelector(".btn-plus");
+                            let maxStock = parseInt(quantityInput.getAttribute("max"));
 
-                                plusButton.addEventListener("click", function() {
-                                    let currentQuantity = parseInt(quantityInput.value);
-                                    if (currentQuantity < maxStock) {
-                                        quantityInput.value = currentQuantity + 1;
-                                    }
-                                });
+                            plusButton.addEventListener("click", function() {
+                                let currentQuantity = parseInt(quantityInput.value);
+                                if (currentQuantity < maxStock) {
+                                    quantityInput.value = currentQuantity + 1;
+                                }
+                            });
 
-                                minusButton.addEventListener("click", function() {
-                                    let currentQuantity = parseInt(quantityInput.value);
-                                    if (currentQuantity > 1) {
-                                        quantityInput.value = currentQuantity - 1;
-                                    }
-                                });
+                            minusButton.addEventListener("click", function() {
+                                let currentQuantity = parseInt(quantityInput.value);
+                                if (currentQuantity > 1) {
+                                    quantityInput.value = currentQuantity - 1;
+                                }
                             });
                         });
+                    });
                     </script>
                 </div>
             </div>
@@ -208,8 +207,10 @@ $feedback_count = count($feedbacks);
             <div class="col">
                 <div class="bg-light p-30">
                     <div class="nav nav-tabs mb-4">
-                        <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Description</a>
-                        <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Reviews (<?php echo $feedback_count; ?>)</a>
+                        <a class="nav-item nav-link text-dark active" data-toggle="tab"
+                            href="#tab-pane-1">Description</a>
+                        <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Reviews
+                            (<?php echo $feedback_count; ?>)</a>
                     </div>
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="tab-pane-1">
@@ -220,16 +221,20 @@ $feedback_count = count($feedbacks);
                         <div class="tab-pane fade" id="tab-pane-3">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4 class="mb-4"><?php echo $feedback_count; ?> review<?php echo $feedback_count !== 1 ? 's' : ''; ?> for "<?php echo htmlspecialchars($product['name']); ?>"</h4>
+                                    <h4 class="mb-4"><?php echo $feedback_count; ?>
+                                        review<?php echo $feedback_count !== 1 ? 's' : ''; ?> for
+                                        "<?php echo htmlspecialchars($product['name']); ?>"</h4>
                                     <?php if (!empty($feedbacks)): ?>
-                                        <?php foreach ($feedbacks as $feedback): ?>
-                                            <div class="media mb-4">
-                                                <!-- AVt user chưa có -->
-                                                <img src="" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
-                                                <div class="media-body">
-                                                    <h6><?php echo htmlspecialchars($feedback['user_name']); ?><small> - <i><?php echo date('d M Y', strtotime($feedback['created_at'])); ?></i></small></h6>
-                                                    <div class="text-primary mb-2">
-                                                        <?php
+                                    <?php foreach ($feedbacks as $feedback): ?>
+                                    <div class="media mb-4">
+                                        <!-- AVt user chưa có -->
+                                        <img src="" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                        <div class="media-body">
+                                            <h6><?php echo htmlspecialchars($feedback['user_name']); ?><small> -
+                                                    <i><?php echo date('d M Y', strtotime($feedback['created_at'])); ?></i></small>
+                                            </h6>
+                                            <div class="text-primary mb-2">
+                                                <?php
                                                         for ($i = 1; $i <= 5; $i++) {
                                                             if ($i <= floor($feedback['rating'])) {
                                                                 echo '<i class="fas fa-star"></i>'; // Sao đầy
@@ -240,13 +245,13 @@ $feedback_count = count($feedbacks);
                                                             }
                                                         }
                                                         ?>
-                                                    </div>
-                                                    <p><?php echo htmlspecialchars($feedback['message']); ?></p>
-                                                </div>
                                             </div>
-                                        <?php endforeach; ?>
+                                            <p><?php echo htmlspecialchars($feedback['message']); ?></p>
+                                        </div>
+                                    </div>
+                                    <?php endforeach; ?>
                                     <?php else: ?>
-                                        <p>No reviews yet.</p>
+                                    <p>No reviews yet.</p>
                                     <?php endif; ?>
                                 </div>
 
@@ -269,7 +274,8 @@ $feedback_count = count($feedbacks);
                                         <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
                                         <div class="form-group">
                                             <label for="message">Your Review *</label>
-                                            <textarea id="message" name="message" cols="30" rows="5" class="form-control" required></textarea>
+                                            <textarea id="message" name="message" cols="30" rows="5"
+                                                class="form-control" required></textarea>
                                         </div>
                                         <div class="form-group mb-0">
                                             <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
@@ -279,55 +285,68 @@ $feedback_count = count($feedbacks);
                                 </div>
 
 
-                                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+                                <link rel="stylesheet"
+                                    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
                                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                 <script>
-                                    $(document).ready(function() {
-                                        // Xử lý chọn rating sao
-                                        $('#rating-stars i').on('click', function() {
-                                            var rating = $(this).data('value');
-                                            $('#rating-value').val(rating);
+                                $(document).ready(function() {
+                                    // Xử lý chọn rating sao
+                                    $('#rating-stars i').on('click', function() {
+                                        var rating = $(this).data('value');
+                                        $('#rating-value').val(rating);
 
-                                            // Cập nhật giao diện sao
-                                            $('#rating-stars i').each(function() {
-                                                if ($(this).data('value') <= rating) {
-                                                    $(this).removeClass('far fa-star').addClass('fas fa-star');
-                                                } else {
-                                                    $(this).removeClass('fas fa-star').addClass('far fa-star');
-                                                }
-                                            });
-                                        });
-
-                                        // Xử lý submit form bằng Ajax
-                                        $('#review-form').on('submit', function(e) {
-                                            e.preventDefault();
-                                            var rating = $('#rating-value').val();
-                                            if (rating == 0) {
-                                                $('#review-message').html('<p class="text-danger">Please select a rating!</p>');
-                                                return;
+                                        // Cập nhật giao diện sao
+                                        $('#rating-stars i').each(function() {
+                                            if ($(this).data('value') <= rating) {
+                                                $(this).removeClass('far fa-star').addClass(
+                                                    'fas fa-star');
+                                            } else {
+                                                $(this).removeClass('fas fa-star').addClass(
+                                                    'far fa-star');
                                             }
-
-                                            $.ajax({
-                                                url: 'submit_review.php',
-                                                type: 'POST',
-                                                data: $(this).serialize(),
-                                                success: function(response) {
-                                                    var res = JSON.parse(response);
-                                                    if (res.success) {
-                                                        $('#review-message').html('<p class="text-success">' + res.message + '</p>');
-                                                        $('#review-form')[0].reset();
-                                                        $('#rating-stars i').removeClass('fas fa-star').addClass('far fa-star');
-                                                        $('#rating-value').val(0);
-                                                    } else {
-                                                        $('#review-message').html('<p class="text-danger">' + res.message + '</p>');
-                                                    }
-                                                },
-                                                error: function() {
-                                                    $('#review-message').html('<p class="text-danger">Something went wrong. Please try again.</p>');
-                                                }
-                                            });
                                         });
                                     });
+
+                                    // Xử lý submit form bằng Ajax
+                                    $('#review-form').on('submit', function(e) {
+                                        e.preventDefault();
+                                        var rating = $('#rating-value').val();
+                                        if (rating == 0) {
+                                            $('#review-message').html(
+                                                '<p class="text-danger">Please select a rating!</p>'
+                                            );
+                                            return;
+                                        }
+
+                                        $.ajax({
+                                            url: 'submit_review.php',
+                                            type: 'POST',
+                                            data: $(this).serialize(),
+                                            success: function(response) {
+                                                var res = JSON.parse(response);
+                                                if (res.success) {
+                                                    $('#review-message').html(
+                                                        '<p class="text-success">' + res
+                                                        .message + '</p>');
+                                                    $('#review-form')[0].reset();
+                                                    $('#rating-stars i').removeClass(
+                                                        'fas fa-star').addClass(
+                                                        'far fa-star');
+                                                    $('#rating-value').val(0);
+                                                } else {
+                                                    $('#review-message').html(
+                                                        '<p class="text-danger">' + res
+                                                        .message + '</p>');
+                                                }
+                                            },
+                                            error: function() {
+                                                $('#review-message').html(
+                                                    '<p class="text-danger">Something went wrong. Please try again.</p>'
+                                                );
+                                            }
+                                        });
+                                    });
+                                });
                                 </script>
 
                             </div>

@@ -5,7 +5,22 @@
     }
   }
 </script>
-
+<?php if (isset($_SESSION['success'])): ?>
+        <div id="successMessage" style="display: block; background: #4CAF50; color: white; padding: 10px; text-align: center; position: fixed; top: 10px; left: 50%; transform: translateX(-50%); border-radius: 5px;">
+            <?= htmlspecialchars($_SESSION['success']) ?>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                setTimeout(function() {
+                    var successMessage = document.getElementById("successMessage");
+                    if (successMessage) {
+                        successMessage.style.display = "none";
+                    }
+                }, 3000);
+            });
+        </script>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
 <!DOCTYPE html>
 <html lang="en">
 

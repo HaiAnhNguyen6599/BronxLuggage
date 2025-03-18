@@ -43,7 +43,7 @@ $total_products = $row['total_products'] ? $row['total_products'] : 0;  // Nếu
                     <?php
                     $categories = getCategories($conn);
                     while ($category = $categories->fetch_assoc()): ?>
-                        <a href="shop.php?category=<?= $category['name']; ?>" class="nav-item nav-link">
+                        <a href="../pages/shop.php?category=<?= $category['name']; ?>" class="nav-item nav-link">
                             <?= htmlspecialchars($category['name']); ?>
                         </a>
                     <?php endwhile; ?>
@@ -61,10 +61,9 @@ $total_products = $row['total_products'] ? $row['total_products'] : 0;  // Nếu
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto py-0">
-                        <a href="index.php"
+                        <a href="../pages/index.php"
                             class="nav-item nav-link <?= ($current_page == 'index.php') ? 'active' : ''; ?>">Home</a>
                         <!-- Home được chọn -->
-                        <!-- -->
                         <div class="nav-item dropdown">
                             <a href="#"
                                 class="nav-link dropdown-toggle <?php echo ($current_page == 'shop.php' || $current_page == 'shop.php?gender=male.php' || $current_page == 'shop.php?gender=male') ? 'active' : ''; ?>"
@@ -72,13 +71,13 @@ $total_products = $row['total_products'] ? $row['total_products'] : 0;  // Nếu
                                 Shop <i class="fa fa-angle-down mt-1"></i>
                             </a>
                             <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                                <a href="shop.php"
+                                <a href="../pages/shop.php"
                                     class="dropdown-item <?php echo ($current_page == 'shop.php') ? 'active' : ''; ?>">Both
                                 </a>
-                                <a href="shop.php?gender=male"
+                                <a href="../pages/shop.php?gender=male"
                                     class="dropdown-item <?php echo ($current_page == 'shop.php?gender=male') ? 'active' : ''; ?>">Male
                                 </a>
-                                <a href="shop.php?gender=female"
+                                <a href="../pages/shop.php?gender=female"
                                     class="dropdown-item <?php echo ($current_page == 'shop.php?gender=female') ? 'active' : ''; ?>">Female</a>
                             </div>
                         </div>
@@ -90,18 +89,18 @@ $total_products = $row['total_products'] ? $row['total_products'] : 0;  // Nếu
                                 Pages <i class="fa fa-angle-down mt-1"></i>
                             </a>
                             <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                                <a href="cart.php"
+                                <a href="../pages/cart.php"
                                     class="dropdown-item <?php echo ($current_page == 'cart.php') ? 'active' : ''; ?>">Shopping
                                     Cart</a>
-                                <a href="checkout.php"
+                                <a href="../pages/checkout.php"
                                     class="dropdown-item <?php echo ($current_page == 'checkout.php') ? 'active' : ''; ?>">Checkout</a>
                             </div>
                         </div>
-                        <a href="contact.php"
+                        <a href="../pages/contact.php"
                             class="nav-item nav-link <?= ($current_page == 'contact.php') ? 'active' : ''; ?>">Contact</a>
                     </div>
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-                        <a href="cart.php" class="btn px-0 ml-3">
+                        <a href="../pages/cart.php" class="btn px-0 ml-3">
                             <i class="fas fa-shopping-cart text-primary"></i>
                             <span class="badge text-secondary border border-secondary rounded-circle"
                                 style="padding-bottom: 2px"><?php echo $total_products; ?></span>

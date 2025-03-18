@@ -138,7 +138,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php include '../includes/footer.php'; ?>
 
     <!-- Success Message -->
-    <?php if (isset($_SESSION['success'])): ?>
+    <!-- <?php if (isset($_SESSION['success'])): ?>
         <div id="successMessage" style="display: block; background: #4CAF50; color: white; padding: 10px; text-align: center; position: fixed; top: 10px; left: 50%; transform: translateX(-50%); border-radius: 5px;">
             <?= htmlspecialchars($_SESSION['success']) ?>
         </div>
@@ -153,7 +153,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             });
         </script>
         <?php unset($_SESSION['success']); ?>
-    <?php endif; ?>
+    <?php endif; ?> -->
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

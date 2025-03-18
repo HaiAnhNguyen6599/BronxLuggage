@@ -4,7 +4,7 @@ require_once '../functions.php';
 
 // Kiểm tra đăng nhập
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: ../account/login.php");
     exit();
 }
 
@@ -122,28 +122,35 @@ $total_price = array_reduce($cart_items, function ($sum, $item) {
                                         <div class="input-group-btn">
                                             <button class="btn btn-sm btn-primary btn-minus">-</button>
                                         </div>
-                                        <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center quantity-input" value="<?php echo $item['quantity']; ?>">
+                                        <input type="text"
+                                            class="form-control form-control-sm bg-secondary border-0 text-center quantity-input"
+                                            value="<?php echo $item['quantity']; ?>">
                                         <div class="input-group-btn">
                                             <button class="btn btn-sm btn-primary btn-plus">+</button>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="align-middle">$<span class="item-total"><?php echo number_format($item['price'] * $item['quantity'], 2); ?></span></td>
-                                <td class="align-middle"><button class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></button></td>
+                                <td class="align-middle">$<span
+                                        class="item-total"><?php echo number_format($item['price'] * $item['quantity'], 2); ?></span>
+                                </td>
+                                <td class="align-middle"><button class="btn btn-sm btn-danger btn-remove"><i
+                                            class="fa fa-times"></i></button></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
             <div class="col-lg-4">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart Summary</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart
+                        Summary</span></h5>
                 <div class="bg-light p-30 mb-5">
                     <div class="pt-2">
                         <div class="d-flex justify-content-between mt-2">
                             <h5>Total</h5>
                             <h5 id="total-price">$<?php echo number_format($total_price, 2); ?></h5>
                         </div>
-                        <a href="checkout.php" class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</a>
+                        <a href="checkout.php" class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To
+                            Checkout</a>
                     </div>
                 </div>
             </div>
@@ -154,83 +161,86 @@ $total_price = array_reduce($cart_items, function ($sum, $item) {
     <!-- Cart End -->
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            function updateCart(cartId, quantity, row) {
-                fetch("cart.php", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded"
-                        },
-                        body: `cart_id=${cartId}&quantity=${quantity}`
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            if (quantity === 0) {
-                                row.remove(); // Xóa hàng nếu số lượng là 0
-                            } else {
-                                row.querySelector(".item-total").textContent = `${data.item_total}`;
-                            }
-                            document.getElementById("total-price").textContent = `${data.total_price}`;
+    document.addEventListener("DOMContentLoaded", function() {
+        function updateCart(cartId, quantity, row) {
+            fetch("cart.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `cart_id=${cartId}&quantity=${quantity}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (quantity === 0) {
+                            row.remove(); // Xóa hàng nếu số lượng là 0
+                        } else {
+                            row.querySelector(".item-total").textContent = `${data.item_total}`;
                         }
-                    });
-            }
-
-            document.querySelectorAll(".quantity-input").forEach(input => {
-                input.addEventListener("input", function() {
-                    const row = this.closest("tr");
-                    const cartId = row.dataset.cartId;
-                    const newQuantity = parseInt(this.value) || 1;
-                    updateCart(cartId, newQuantity, row);
-                });
-            });
-
-            document.querySelectorAll(".btn-minus").forEach(button => {
-                button.addEventListener("click", function() {
-                    const input = this.closest(".quantity").querySelector(".quantity-input");
-                    let value = parseInt(input.value) || 1;
-                    if (value > 1) {
-                        input.value = --value;
-                        input.dispatchEvent(new Event("input"));
+                        document.getElementById("total-price").textContent = `${data.total_price}`;
                     }
                 });
-            });
+        }
 
-            document.querySelectorAll(".btn-plus").forEach(button => {
-                button.addEventListener("click", function() {
-                    const input = this.closest(".quantity").querySelector(".quantity-input");
-                    input.value = parseInt(input.value) + 1;
-                    input.dispatchEvent(new Event("input"));
-                });
-            });
-
-            // Xử lý sự kiện khi nhấn nút xóa sản phẩm
-            document.querySelectorAll(".btn-remove").forEach(button => {
-                button.addEventListener("click", function() {
-                    const row = this.closest("tr");
-                    const cartId = row.dataset.cartId;
-
-                    // Hiển thị hộp thoại xác nhận
-                    if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?")) {
-                        fetch("cart.php", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/x-www-form-urlencoded"
-                                },
-                                body: `cart_id=${cartId}&quantity=0` // Đặt số lượng về 0 để xóa
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    row.remove(); // Xóa hàng khỏi giao diện
-                                    document.getElementById("total-price").textContent = `${data.total_price}`;
-                                    alert("Sản phẩm đã được xóa khỏi giỏ hàng."); // Hiển thị thông báo
-                                }
-                            });
-                    }
-                });
+        document.querySelectorAll(".quantity-input").forEach(input => {
+            input.addEventListener("input", function() {
+                const row = this.closest("tr");
+                const cartId = row.dataset.cartId;
+                const newQuantity = parseInt(this.value) || 1;
+                updateCart(cartId, newQuantity, row);
             });
         });
+
+        document.querySelectorAll(".btn-minus").forEach(button => {
+            button.addEventListener("click", function() {
+                const input = this.closest(".quantity").querySelector(".quantity-input");
+                let value = parseInt(input.value) || 1;
+                if (value > 1) {
+                    input.value = --value;
+                    input.dispatchEvent(new Event("input"));
+                }
+            });
+        });
+
+        document.querySelectorAll(".btn-plus").forEach(button => {
+            button.addEventListener("click", function() {
+                const input = this.closest(".quantity").querySelector(".quantity-input");
+                input.value = parseInt(input.value) + 1;
+                input.dispatchEvent(new Event("input"));
+            });
+        });
+
+        // Xử lý sự kiện khi nhấn nút xóa sản phẩm
+        document.querySelectorAll(".btn-remove").forEach(button => {
+            button.addEventListener("click", function() {
+                const row = this.closest("tr");
+                const cartId = row.dataset.cartId;
+
+                // Hiển thị hộp thoại xác nhận
+                if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?")) {
+                    fetch("cart.php", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            body: `cart_id=${cartId}&quantity=0` // Đặt số lượng về 0 để xóa
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                row.remove(); // Xóa hàng khỏi giao diện
+                                document.getElementById("total-price").textContent =
+                                    `${data.total_price}`;
+                                alert(
+                                    "Sản phẩm đã được xóa khỏi giỏ hàng."
+                                    ); // Hiển thị thông báo
+                            }
+                        });
+                }
+            });
+        });
+    });
     </script>
 
 

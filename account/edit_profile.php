@@ -30,19 +30,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = trim($_POST['phone']);
     $address = trim($_POST['address']);
     $city = trim($_POST['city']);
-    $delete_phone = isset($_POST['delete_phone']);
-    $delete_address = isset($_POST['delete_address']);
 
-    // Kiểm tra dữ liệu đầu vào
+    // Validate dữ liệu đầu vào
     if (empty($name)) {
         $errors['name'] = "Name cannot be empty!";
     }
+    
+    // Validate email
     if (empty($email)) {
         $errors['email'] = "Email cannot be empty!";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "Invalid email format!";
     } elseif ($email !== $user['email']) {
-        // Kiểm tra email mới có trùng không
         $email_check = $conn->prepare("SELECT id FROM users WHERE email = ? AND id != ?");
         $email_check->bind_param("si", $email, $user['id']);
         $email_check->execute();
@@ -51,22 +50,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         $email_check->close();
     }
-    if (!empty($phone) && !preg_match("/^[0-9]{10,15}$/", $phone)) {
-        $errors['phone'] = "Invalid phone number!";
+
+    // Validate phone
+    if (empty($phone)) {
+        $errors['phone'] = "Phone number cannot be empty!";
+    } elseif (!preg_match("/^[0-9]{11}$/", $phone)) {
+        $errors['phone'] = "Phone number must be 11 digits!";
     }
 
+    // Validate address
+    if (empty($address)) {
+        $errors['address'] = "Address cannot be empty!";
+    }
+    if (empty($city)) {
+        $errors['city'] = "City cannot be empty!";
+    }
     // Nếu không có lỗi, cập nhật thông tin
     if (empty($errors)) {
-        $phone_to_save = $delete_phone ? null : $phone;
-        $address_to_save = $delete_address ? null : $address;
-        $city_to_save = $delete_address ? null : $city;
+        $phone_to_save = $phone; // Luôn sử dụng giá trị mới
+        $address_to_save = $address; // Luôn sử dụng giá trị mới
+        $city_to_save = !empty($city) ? $city : $user['city'];
 
         $update_stmt = $conn->prepare("UPDATE users SET name = ?, email = ?, phone = ?, address = ?, city = ? WHERE id = ?");
         $update_stmt->bind_param("sssssi", $name, $email, $phone_to_save, $address_to_save, $city_to_save, $user['id']);
         if ($update_stmt->execute()) {
-            $success = "Profile updated successfully!";
+            $_SESSION['success'] = "Profile updated successfully!";
             $_SESSION['name'] = $name;
-            $_SESSION['email'] = $email; // Cập nhật email trong session
+            $_SESSION['email'] = $email;
             $user = array_merge($user, [
                 'name' => $name,
                 'email' => $email,
@@ -124,12 +134,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <h2 class="card-title text-uppercase mb-4">Edit Profile</h2>
 
                         <!-- Thông báo -->
-                        <?php if (!empty($success)): ?>
+                        <!-- <?php if (!empty($success)): ?>
                             <div class="alert alert-success" role="alert"><?= $success ?></div>
                         <?php endif; ?>
                         <?php if (isset($errors['general'])): ?>
                             <div class="alert alert-danger" role="alert"><?= $errors['general'] ?></div>
-                        <?php endif; ?>
+                        <?php endif; ?> -->
 
                         <form action="edit_profile.php" method="POST">
                             <!-- Name -->
@@ -155,17 +165,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <!-- Phone -->
                             <div class="form-group">
                                 <label for="phone">Phone</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="phone" name="phone" 
-                                           value="<?= htmlspecialchars($user['phone'] ?? ''); ?>">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <input type="checkbox" name="delete_phone" id="delete_phone" 
-                                                   <?= !$user['phone'] ? 'disabled' : ''; ?>>
-                                            <label class="ml-2 mb-0" for="delete_phone">Delete</label>
-                                        </div>
-                                    </div>
-                                </div>
+                                <input type="text" class="form-control" id="phone" name="phone" 
+                                       value="<?= htmlspecialchars($user['phone'] ?? ''); ?>">
                                 <?php if (isset($errors['phone'])): ?>
                                     <small class="text-danger"><?= $errors['phone'] ?></small>
                                 <?php endif; ?>
@@ -174,17 +175,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <!-- Address -->
                             <div class="form-group">
                                 <label for="address">Address</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="address" name="address" 
-                                           value="<?= htmlspecialchars($user['address'] ?? ''); ?>">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <input type="checkbox" name="delete_address" id="delete_address" 
-                                                   <?= !$user['address'] ? 'disabled' : ''; ?>>
-                                            <label class="ml-2 mb-0" for="delete_address">Delete</label>
-                                        </div>
-                                    </div>
-                                </div>
+                                <input type="text" class="form-control" id="address" name="address" 
+                                       value="<?= htmlspecialchars($user['address'] ?? ''); ?>">
+                                <?php if (isset($errors['address'])): ?>
+                                    <small class="text-danger"><?= $errors['address'] ?></small>
+                                <?php endif; ?>
                             </div>
 
                             <!-- City -->
