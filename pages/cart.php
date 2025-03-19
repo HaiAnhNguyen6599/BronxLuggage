@@ -341,8 +341,8 @@ if (!function_exists('getProductImages')) {
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="#">Home</a>
-                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                    <a class="breadcrumb-item text-dark" href="../pages/index.php">Home</a>
+                    <a class="breadcrumb-item text-dark" href="../pages/shop.php">Shop</a>
                     <span class="breadcrumb-item active">Shopping Cart</span>
                 </nav>
             </div>
@@ -372,7 +372,7 @@ if (!function_exists('getProductImages')) {
                                 <tr data-cart-id="<?php echo htmlspecialchars($item['cart_id'] ?? ''); ?>">
                                     <td class="align-middle text-left">
                                         <img src="../<?php echo htmlspecialchars($item['image_url'] ?? 'img/default.jpg'); ?>" alt="" style="width: 50px;">
-                                        <a href="product.php?id=<?php echo htmlspecialchars($item['id'] ?? ''); ?>">
+                                        <a href="product.php?id=<?php echo htmlspecialchars($item['id'] ?? ''); ?>" style="color: black;">
                                             <?php echo htmlspecialchars($item['name'] ?? 'Unknown Product'); ?>
                                             <?php if ($user_id > 0 || isset($item['size_name'])): ?>
                                                 (Size: <?php echo htmlspecialchars($item['size_name'] ?? 'N/A'); ?>,

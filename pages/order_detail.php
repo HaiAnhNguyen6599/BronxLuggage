@@ -97,7 +97,7 @@ while ($item = $items_result->fetch_assoc()) {
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>Product</th>
-                                        <th>Image</th>
+                                        <!-- <th>Image</th> -->
                                         <th>Quantity</th>
                                         <th>Price</th>
                                         <th>Total</th>
@@ -106,8 +106,9 @@ while ($item = $items_result->fetch_assoc()) {
                                 <tbody>
                                     <?php foreach ($items as $item): ?>
                                         <tr>
-                                            <td><?= htmlspecialchars($item['name']) ?></td>
-                                            <td><img src="../img/products/<?= $item['image_url'] ?: 'default.jpg' ?>" alt="Product Image" width="50"></td>
+                                            
+                                            <td><a href="product.php?id=<?php echo htmlspecialchars($item['product_id'] ?? ''); ?>" style="color: black;""><?= htmlspecialchars($item['name']) ?></a></td>
+                                            <!-- <td><img src="../img/products/<?= $item['image_url'] ?: 'default.jpg' ?>" alt="Product Image" width="50"></td> -->
                                             <td><?= $item['quantity'] ?></td>
                                             <td><?= number_format($item['price'], 2) ?> $</td>
                                             <td><?= number_format($item['item_total'], 2) ?> $</td>

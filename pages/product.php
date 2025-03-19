@@ -3,9 +3,9 @@ require "../config.php";
 require_once '../functions.php';
 
 // Khởi tạo session nếu chưa có
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+// if (session_status() == PHP_SESSION_NONE) {
+//     session_start();
+// }
 
 // Lấy thông tin sản phẩm
 if (isset($_GET['id'])) {
@@ -22,68 +22,66 @@ if (isset($_GET['id'])) {
 }
 
 // Xử lý thêm sản phẩm vào giỏ hàng
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $product_id = $_POST['product_id'];
-    $size_id = $_POST['size_id'];
-    $color_id = $_POST['color_id'];
-    $quantity = max(1, intval($_POST['quantity']));
+// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//     $product_id = $_POST['product_id'];
+//     $size_id = $_POST['size_id'];
+//     $color_id = $_POST['color_id'];
+//     $quantity = max(1, intval($_POST['quantity']));
 
-    // Kiểm tra tồn kho
-    $product = getProductById($conn, $product_id);
-    if (!$product || $quantity > $product['inventory']) {
-        $_SESSION['cart_message'] = "Error: Requested quantity exceeds available stock!";
-        header("Location: product.php?id=$product_id");
-        exit;
-    }
+//     // Kiểm tra tồn kho
+//     $product = getProductById($conn, $product_id);
+//     if (!$product || $quantity > $product['inventory']) {
+//         $_SESSION['cart_message'] = "Error: Requested quantity exceeds available stock!";
+//         header("Location: product.php?id=$product_id");
+//         exit;
+//     }
 
-    // Khởi tạo giỏ hàng trong session nếu chưa có hoặc không phải mảng
-    if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
-        $_SESSION['cart'] = [];
-    }
+//     // Khởi tạo giỏ hàng trong session nếu chưa có hoặc không phải mảng
+//     if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
+//         $_SESSION['cart'] = [];
+//     }
 
-    $cart_item = [
-        'product_id' => $product_id,
-        'size_id' => $size_id,
-        'color_id' => $color_id,
-        'quantity' => $quantity
-    ];
+//     $cart_item = [
+//         'product_id' => $product_id,
+//         'size_id' => $size_id,
+//         'color_id' => $color_id,
+//         'quantity' => $quantity
+//     ];
 
-    // Debug: In dữ liệu session để kiểm tra
-    // echo "<pre>"; print_r($_SESSION['cart']); echo "</pre>"; die();
 
-    // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-    $found = false;
-    if (!empty($_SESSION['cart'])) {
-        foreach ($_SESSION['cart'] as &$item) {
-            // Kiểm tra $item có phải mảng và chứa các khóa cần thiết không
-            if (
-                is_array($item) &&
-                isset($item['product_id']) && $item['product_id'] == $product_id &&
-                isset($item['size_id']) && $item['size_id'] == $size_id &&
-                isset($item['color_id']) && $item['color_id'] == $color_id
-            ) {
-                $new_quantity = $item['quantity'] + $quantity;
-                if ($new_quantity > $product['inventory']) {
-                    $_SESSION['cart_message'] = "Error: Total quantity exceeds available stock!";
-                    header("Location: product.php?id=$product_id");
-                    exit;
-                }
-                $item['quantity'] = $new_quantity;
-                $found = true;
-                break;
-            }
-        }
-        unset($item); // Hủy tham chiếu sau khi dùng &$item
-    }
+//     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+//     $found = false;
+//     if (!empty($_SESSION['cart'])) {
+//         foreach ($_SESSION['cart'] as &$item) {
+//             // Kiểm tra $item có phải mảng và chứa các khóa cần thiết không
+//             if (
+//                 is_array($item) &&
+//                 isset($item['product_id']) && $item['product_id'] == $product_id &&
+//                 isset($item['size_id']) && $item['size_id'] == $size_id &&
+//                 isset($item['color_id']) && $item['color_id'] == $color_id
+//             ) {
+//                 $new_quantity = $item['quantity'] + $quantity;
+//                 if ($new_quantity > $product['inventory']) {
+//                     $_SESSION['cart_message'] = "Error: Total quantity exceeds available stock!";
+//                     header("Location: product.php?id=$product_id");
+//                     exit;
+//                 }
+//                 $item['quantity'] = $new_quantity;
+//                 $found = true;
+//                 break;
+//             }
+//         }
+//         unset($item); // Hủy tham chiếu sau khi dùng &$item
+//     }
 
-    if (!$found) {
-        $_SESSION['cart'][] = $cart_item;
-    }
+//     if (!$found) {
+//         $_SESSION['cart'][] = $cart_item;
+//     }
 
-    $_SESSION['cart_message'] = "Product added to cart successfully!";
-    header("Location: product.php?id=$product_id");
-    exit;
-}
+//     $_SESSION['cart_message'] = "Product added to cart successfully!";
+//     header("Location: product.php?id=$product_id");
+//     exit;
+// }
 
 // Lấy dữ liệu khác
 $available_brands = getBrands($conn);
@@ -144,8 +142,8 @@ $feedback_count = count($feedbacks);
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="index.php">Home</a>
-                    <a class="breadcrumb-item text-dark" href="shop.php">Shop</a>
+                    <a class="breadcrumb-item text-dark" href="../pages/index.php">Home</a>
+                    <a class="breadcrumb-item text-dark" href="../pages/shop.php">Shop</a>
                     <span class="breadcrumb-item active"><?php echo htmlspecialchars($product['name']); ?></span>
                 </nav>
             </div>
@@ -201,7 +199,7 @@ $feedback_count = count($feedbacks);
                     <p class="mb-4"><?php echo htmlspecialchars($product['description']); ?></p>
                     <!-- Form chọn size và colors gửi đến cart.php-->
                     <!-- Form chọn size và colors gửi đến product.php -->
-                    <form method="POST" action="product.php?id=<?php echo $product['id']; ?>">
+                    <form method="POST" action="../actions/add_to_cart.php">
                         <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
 
                         <div class="d-flex mb-3">

@@ -60,7 +60,14 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
     <?php include '../includes/breadcumb.php' ?>
     <!-- Breadcrumb End -->
 
-
+    <!-- Hiển thị thông báo -->
+    <?php if (isset($_SESSION['cart_message'])): ?>
+        <div
+            class="alert <?php echo strpos($_SESSION['cart_message'], 'Error') === false ? 'alert-success' : 'alert-danger'; ?> mt-3">
+            <?php echo $_SESSION['cart_message']; ?>
+        </div>
+        <?php unset($_SESSION['cart_message']); ?>
+    <?php endif; ?>
     <!-- Shop Start -->
     <div class="container-fluid">
         <div class="row px-xl-5">
@@ -83,7 +90,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $categories = getCategories($conn);
                         while ($row = $categories->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_categories) ? 'checked' : '';
-                        ?>
+                            ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="category[]" value="<?= $row['name'] ?>"
@@ -109,7 +116,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $brands = getBrands($conn);
                         while ($row = $brands->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_brands) ? 'checked' : '';
-                        ?>
+                            ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="brand[]" value="<?= $row['name'] ?>"
@@ -134,7 +141,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $colors = getColors($conn);
                         while ($row = $colors->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_colors) ? 'checked' : '';
-                        ?>
+                            ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="color[]" value="<?= $row['name'] ?>"
@@ -158,7 +165,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $sizes = getSizes($conn);
                         while ($row = $sizes->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_sizes) ? 'checked' : '';
-                        ?>
+                            ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="size[]" value="<?= $row['name'] ?>"
@@ -181,7 +188,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $genders = getGenders($conn);
                         while ($row = $genders->fetch_assoc()) {
                             $isChecked = in_array($row['gender'], $selected_genders) ? 'checked' : '';
-                        ?>
+                            ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="gender[]" value="<?= $row['gender'] ?>"
@@ -218,7 +225,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         foreach ($price_ranges as $range => $label) {
                             $isChecked = in_array($range, $selected_prices) ? 'checked' : '';
                             $id = "price-" . str_replace("-", "_", $range); // ID duy nhất cho mỗi checkbox
-                        ?>
+                            ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" class="custom-control-input" name="price[]" value="<?= $range ?>"

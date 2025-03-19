@@ -1,6 +1,69 @@
 <?php
 require "../config.php";
 require_once '../functions.php';
+
+// Declare variables for error messages and input values
+$nameError = $emailError = $subjectError = $messageError = '';
+$successMessage = $errorMessage = '';
+$name = $email = $subject = $message = '';
+
+// Flag to track if the form is valid
+$isValid = true;
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = trim($_POST['name']);
+    $email = trim($_POST['email']);
+    $subject = trim($_POST['subject']);
+    $message = trim($_POST['message']);
+
+    // Validate name
+    if (empty($name)) {
+        $nameError = "Please enter your name.";
+        $isValid = false;
+    }
+
+    // Validate email
+    if (empty($email)) {
+        $emailError = "Please enter your email.";
+        $isValid = false;
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $emailError = "Please enter a valid email address.";
+        $isValid = false;
+    }
+
+    // Validate subject
+    if (empty($subject)) {
+        $subjectError = "Please enter a subject.";
+        $isValid = false;
+    }
+
+    // Validate message
+    if (empty($message)) {
+        $messageError = "Please enter your message.";
+        $isValid = false;
+    }
+
+    // If the form is valid, insert data into the database
+    if ($isValid) {
+        // Sanitize the data to prevent SQL injection
+        $name = $conn->real_escape_string($name);
+        $email = $conn->real_escape_string($email);
+        $subject = $conn->real_escape_string($subject);
+        $message = $conn->real_escape_string($message);
+
+        // Insert into database
+        $sql = "INSERT INTO contact (name, email, subject, message) VALUES ('$name', '$email', '$subject', '$message')";
+
+        if ($conn->query($sql) === TRUE) {
+            $successMessage = "Your message has been sent successfully!";
+            $name = $email = $subject = $message = '';
+        } else {
+            $errorMessage = "There was an issue with your submission. Please try again.";
+        }
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -35,33 +98,62 @@ require_once '../functions.php';
             <div class="col-lg-7 mb-5">
                 <div class="contact-form bg-light p-30">
                     <div id="success"></div>
-                    <form name="sentMessage" id="contactForm" novalidate="novalidate">
+
+
+                    <form name="sentMessage" id="contactForm" method="POST" action="" novalidate="novalidate">
+                        <?php if ($successMessage): ?>
+                            <span class="alert alert-success mb-0"><?php echo $successMessage; ?></span>
+                            <br><br>
+                        <?php endif; ?>
                         <div class="control-group">
-                            <input type="text" class="form-control" id="name" placeholder="Your Name"
-                                required="required" data-validation-required-message="Please enter your name" />
-                            <p class="help-block text-danger"></p>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Your Name"
+                                required="required" value="<?php echo htmlspecialchars($name); ?>" />
+                            <p class="help-block text-danger">
+                                <?php echo isset($nameError) ? $nameError : ''; ?>
+                            </p>
                         </div>
                         <div class="control-group">
-                            <input type="email" class="form-control" id="email" placeholder="Your Email"
-                                required="required" data-validation-required-message="Please enter your email" />
-                            <p class="help-block text-danger"></p>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Your Email"
+                                required="required" value="<?php echo htmlspecialchars($email); ?>" />
+                            <p class="help-block text-danger">
+                                <?php echo isset($emailError) ? $emailError : ''; ?>
+                            </p>
                         </div>
                         <div class="control-group">
-                            <input type="text" class="form-control" id="subject" placeholder="Subject"
-                                required="required" data-validation-required-message="Please enter a subject" />
-                            <p class="help-block text-danger"></p>
+                            <input type="text" class="form-control" id="subject" name="subject" placeholder="Subject"
+                                required="required" value="<?php echo htmlspecialchars($subject); ?>" />
+                            <p class="help-block text-danger">
+                                <?php echo isset($subjectError) ? $subjectError : ''; ?>
+                            </p>
                         </div>
                         <div class="control-group">
-                            <textarea class="form-control" rows="8" id="message" placeholder="Message"
-                                required="required"
-                                data-validation-required-message="Please enter your message"></textarea>
-                            <p class="help-block text-danger"></p>
+                            <textarea class="form-control" rows="8" id="message" name="message" style='resize:none;'
+                                placeholder="Message"
+                                required="required"><?php echo htmlspecialchars($message); ?></textarea>
+                            <p class="help-block text-danger">
+                                <?php echo isset($messageError) ? $messageError : ''; ?>
+                            </p>
                         </div>
-                        <div>
+                        <div class="d-flex justify-content-between">
                             <button class="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Send
                                 Message</button>
+                            <!-- <?php if ($successMessage): ?>
+                    <span class="alert alert-success mb-0"><?php echo $successMessage; ?></span>
+                <?php endif; ?> -->
                         </div>
                     </form>
+
+                    <!-- Display error message below the form if necessary -->
+                    <?php if ($errorMessage): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> <?php echo $errorMessage; ?>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <?php endif; ?>
+
+
                 </div>
             </div>
             <div class="col-lg-5 mb-5">
@@ -82,79 +174,7 @@ require_once '../functions.php';
 
 
     <!-- Footer Start -->
-    <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
-        <div class="row px-xl-5 pt-5">
-            <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
-                <h5 class="text-secondary text-uppercase mb-4">Get In Touch</h5>
-                <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed dolor.
-                    Rebum tempor no vero est magna amet no</p>
-                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>123 Street, New York, USA</p>
-                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@example.com</p>
-                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
-            </div>
-            <div class="col-lg-8 col-md-12">
-                <div class="row">
-                    <div class="col-md-4 mb-5">
-                        <h5 class="text-secondary text-uppercase mb-4">Quick Shop</h5>
-                        <div class="d-flex flex-column justify-content-start">
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop
-                                Detail</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping
-                                Cart</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
-                            <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <h5 class="text-secondary text-uppercase mb-4">My Account</h5>
-                        <div class="d-flex flex-column justify-content-start">
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop
-                                Detail</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping
-                                Cart</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
-                            <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-5">
-                        <h5 class="text-secondary text-uppercase mb-4">Newsletter</h5>
-                        <p>Duo stet tempor ipsum sit amet magna ipsum tempor est</p>
-                        <form action="">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Your Email Address">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary">Sign Up</button>
-                                </div>
-                            </div>
-                        </form>
-                        <h6 class="text-secondary text-uppercase mt-4 mb-3">Follow Us</h6>
-                        <div class="d-flex">
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
-            <div class="col-md-6 px-xl-0">
-                <p class="mb-md-0 text-center text-md-left text-secondary">
-                    &copy; <a class="text-primary" href="#">Domain</a>. All Rights Reserved. Designed
-                    by
-                    <a class="text-primary" href="https://htmlcodex.com">HTML Codex</a>
-                </p>
-            </div>
-            <div class="col-md-6 px-xl-0 text-center text-md-right">
-                <img class="img-fluid" src="img/payments.png" alt="">
-            </div>
-        </div>
-    </div>
+    <?php include '../includes/footer.php' ?>
     <!-- Footer End -->
 
 
