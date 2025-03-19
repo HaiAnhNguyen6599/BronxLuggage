@@ -85,11 +85,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <?php include '../includes/head.php'; ?>
 </head>
-
 <body>
     <?php include '../includes/topbar.php'; ?>
     <?php include '../includes/navbar.php'; ?>
@@ -161,5 +159,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

@@ -78,24 +78,7 @@ INSERT INTO feedback (user_id, product_id, message, rating) VALUES
 INSERT INTO product_images (product_id, image_url, is_primary) VALUES
 (1, 'img/products/product1.jpg', 1),
 (2, 'img/products/product2.jpg', 1),
-(3, 'img/products/product3.jpg', 1),
-(4, 'img/products/product4.jpg', 1),
-(5, 'img/products/product5.jpg', 1),
-(6, 'img/products/product6.jpg', 1),
-(7, 'img/products/product7.jpg', 1),
-(8, 'img/products/product8.jpg', 1),
-(9, 'img/products/product9.jpg', 1),
-(10, 'img/products/product10.jpg', 1),
-(11, 'img/products/product11.jpg', 1),
-(12, 'img/products/product12.jpg', 1),
-(13, 'img/products/product13.jpg', 1),
-(14, 'img/products/product14.jpg', 1),
-(15, 'img/products/product15.jpg', 1),
-(16, 'img/products/product16.jpg', 1),
-(17, 'img/products/product17.jpg', 1),
-(18, 'img/products/product18.jpg', 1),
-(19, 'img/products/product19.jpg', 1),
-(20, 'img/products/product20.jpg', 1);
+
 
 -- Add user address
 UPDATE users  
@@ -126,6 +109,8 @@ SELECT o.id AS order_id, o.user_id, o.status AS order_status,
        p.amount, p.status AS payment_status, p.payment_method
 FROM orders o
 JOIN payments p ON o.id = p.order_id;
+
+
 
 
 

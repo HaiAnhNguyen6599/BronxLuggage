@@ -106,6 +106,23 @@ function getTopRatedProducts($limit = 8)
     return $products;
 }
 
+// Lấy ảnh sản phẩm
+function getProductImages($conn, $product_id)
+{
+    $sql = "SELECT image_url FROM product_images WHERE product_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $images = [];
+    while ($row = $result->fetch_assoc()) {
+        $images[] = $row;
+    }
+
+    return $images;
+}
+
 
 // Hàm lọc chung cho shop.php
 function buildFilterQuery($filters)
@@ -224,17 +241,7 @@ function getProductById($conn, $product_id)
     return $result->fetch_assoc();
 }
 
-function getProductBySizes($conn)
-{
-    $stmt = $conn->prepare("SELECT id, name FROM sizes");
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $sizes = [];
-    while ($row = $result->fetch_assoc()) {
-        $sizes[] = $row;
-    }
-    return $sizes;
-}
+
 
 
 function getProductRating($conn, $product_id)
@@ -286,4 +293,27 @@ function getProductFeedback($conn, $product_id)
     }
 
     return $feedbacks;
+}
+
+
+// Hàm lấy tên kích thước theo ID (dùng trong cart.php)
+function getSizeById($conn, $size_id)
+{
+    if (!$size_id) return null; // Trả về null nếu size_id không tồn tại
+    $stmt = $conn->prepare("SELECT id, name FROM sizes WHERE id = ?");
+    $stmt->bind_param("i", $size_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_assoc(); // Trả về mảng chứa id và name
+}
+
+
+function getColorById($conn, $color_id)
+{
+    if (!$color_id) return null; // Trả về null nếu color_id không tồn tại
+    $stmt = $conn->prepare("SELECT id, name FROM colors WHERE id = ?");
+    $stmt->bind_param("i", $color_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_assoc(); // Trả về mảng chứa id và name
 }

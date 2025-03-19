@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en"></html>
+<html lang="en">
+
+</html>
 
 <head>
   <meta charset="utf-8" />
@@ -24,4 +26,5 @@
 
   <!-- Customized Bootstrap Stylesheet -->
   <link href="../css/style.css" rel="stylesheet" />
+
 </head>
