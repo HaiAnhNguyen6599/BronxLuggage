@@ -1,4 +1,7 @@
--- Insert Brands
+
+
+
+-- Insert Brands- giữ nguyên
 INSERT INTO brands (name) VALUES
 ('Samsonite'),
 ('American Tourister'),
@@ -7,7 +10,8 @@ INSERT INTO brands (name) VALUES
 ('Travelpro'),
 ('Briggs & Riley');
 
--- Insert Categories
+
+-- Insert Categories- giữ nguyên
 INSERT INTO categories (name) VALUES
 ('Backpacks'),
 ('Suitcases'),
@@ -20,100 +24,141 @@ INSERT INTO categories (name) VALUES
 INSERT INTO sizes (name) VALUES ('Small'), ('Medium'), ('Large');
 
 -- Insert colors
-INSERT INTO colors (name) VALUES ('Black'), ('Blue'), ('Red'), ('Gray');
+INSERT INTO colors (name) VALUES
+('Black'),
+('Blue'),
+('Red'),
+('Gray'),
+('White'),
+('Green'),
+('Yellow'),
+('Orange'),
+('Purple'),
+('Pink'),
+('Brown'),
+('Beige'),
+('Navy'),
+('Gold'),
+('Silver');
 
 
--- Insert Product
 INSERT INTO products (name, description, category_id, brand_id, size_id, color_id, price, gender, inventory) VALUES
-	-- Backpacks
-('Samsonite Business Backpack', 'A sleek and professional backpack for business travelers.', 1, 1, 2, 1, 129.99, 'male', 50),
-('American Tourister Casual Backpack', 'Lightweight and stylish backpack for daily use.', 1, 2, 2, 2, 79.99, 'female', 40),
-('Tumi Travel Backpack', 'Premium backpack with multiple compartments.', 1, 3, 3, 3, 199.99, 'male', 30),
-('Delsey Laptop Backpack', 'Durable backpack with laptop protection.', 1, 4, 2, 4, 89.99, 'female', 25),
-	-- Suitcases
-('Samsonite Hardshell Suitcase', 'High-quality suitcase for long trips.', 2, 1, 3, 1, 299.99, 'male', 20),
-('American Tourister Spinner Suitcase', 'Easy to maneuver suitcase for frequent travelers.', 2, 2, 3, 2, 199.99, 'female', 30),
-('Tumi Carry-On Suitcase', 'Luxury carry-on for business professionals.', 2, 3, 2, 3, 399.99, 'male', 15),
-('Delsey Expandable Suitcase', 'Spacious and expandable suitcase.', 2, 4, 3, 4, 249.99, 'female', 18),
-('Travelpro Lightweight Suitcase', 'Light and durable suitcase.', 2, 5, 3, 1, 179.99, 'male', 25),
-	-- Duffel Bags
-('Briggs & Riley Duffel Bag', 'Stylish and functional duffel bag.', 3, 6, 2, 2, 149.99, 'male', 40),
-('Samsonite Travel Duffel', 'Perfect for weekend getaways.', 3, 1, 3, 3, 119.99, 'female', 35),
-('American Tourister Gym Duffel', 'Ideal for gym and travel.', 3, 2, 2, 4, 89.99, 'male', 50),
-('Tumi Large Duffel', 'Premium large duffel bag.', 3, 3, 3, 1, 299.99, 'female', 10),
-	-- Tote Bags
-('Delsey Casual Tote', 'Lightweight tote bag for everyday use.', 4, 4, 2, 2, 79.99, 'female', 45),
-('Travelpro Business Tote', 'Professional tote bag for office.', 4, 5, 2, 3, 99.99, 'female', 30),
-('Briggs & Riley Leather Tote', 'Luxury tote with premium leather.', 4, 6, 3, 4, 199.99, 'female', 20),
-	-- Messenger Bags
-('Samsonite Messenger Bag', 'Classic messenger bag for professionals.', 5, 1, 2, 1, 129.99, 'male', 35),
-('American Tourister Sling Messenger', 'Compact and stylish sling messenger.', 5, 2, 1, 2, 79.99, 'male', 40),
-('Tumi Executive Messenger', 'Premium messenger for business executives.', 5, 3, 3, 3, 249.99, 'male', 15),
-	-- Briefcases
-('Delsey Business Briefcase', 'Elegant and durable briefcase.', 6, 4, 2, 4, 179.99, 'male', 25),
-('Briggs & Riley Expandable Briefcase', 'Spacious briefcase with expandable storage.', 6, 6, 3, 1, 299.99, 'male', 20),
-('Briggs & Riley Briefcase', 'Spacious briefcase with expandable storage.', 6, 6, 3, 1, 299.99, 'male', 20);
+('Tumi Business Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 3, 2, 3, 459.84, 'male', 28),
+('Travelpro Business Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 5, 1, 4, 181.28, 'male', 54),
+('Briggs & Riley Premium Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 6, 1, 9, 236.38, 'female', 58),
+('Tumi Elite Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 3, 1, 15, 424.62, 'female', 60),
+('American Tourister Pro Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 2, 2, 8, 131.4, 'male', 64),
+('Delsey Compact Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 4, 3, 11, 466.14, 'male', 24),
+('Briggs & Riley Traveler Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 6, 1, 6, 426.37, 'female', 64),
+('Samsonite Traveler Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 1, 1, 6, 273.61, 'female', 76),
+('Briggs & Riley Ultimate Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 6, 3, 9, 228.64, 'female', 25),
+('Tumi Luxury Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 3, 2, 10, 132.31, 'male', 41),
+('American Tourister Compact Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 2, 3, 12, 460.66, 'male', 80),
+('Tumi Pro Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 3, 2, 9, 379.12, 'male', 12),
+('Briggs & Riley Smart Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 6, 2, 12, 111.83, 'male', 70),
+('Briggs & Riley Smart Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 6, 2, 9, 123.18, 'male', 67),
+('Briggs & Riley Traveler Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 6, 3, 5, 403.7, 'female', 61),
+('Samsonite Classic Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 1, 1, 11, 183.69, 'female', 58),
+('Briggs & Riley Smart Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 6, 3, 3, 465.28, 'male', 79),
+('Tumi Business Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 3, 3, 9, 367.38, 'female', 13),
+('Delsey Ultimate Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 4, 3, 7, 258.03, 'male', 69),
+('Delsey Classic Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 4, 3, 1, 313.83, 'female', 56),
+('Samsonite Luxury Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 1, 3, 8, 321.78, 'male', 99),
+('Tumi Elite Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 3, 2, 14, 238.6, 'male', 23),
+('American Tourister Smart Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 2, 2, 4, 163.45, 'male', 57),
+('Samsonite Business Duffel Bags', 'A high-quality duffel bags designed for durability and style.', 3, 1, 3, 4, 499.78, 'female', 48),
+('American Tourister Pro Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 2, 3, 5, 380.56, 'male', 93),
+('Delsey Pro Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 4, 2, 2, 222.81, 'male', 27),
+('Samsonite Business Duffel Bags', 'A high-quality duffel bags designed for durability and style.', 3, 1, 3, 2, 352.23, 'female', 59),
+('Briggs & Riley Smart Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 6, 3, 8, 237.59, 'male', 79),
+('Samsonite Elite Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 1, 1, 1, 329.59, 'male', 35),
+('Delsey Compact Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 4, 1, 8, 462.12, 'male', 43),
+('Tumi Luxury Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 3, 1, 4, 308.49, 'female', 77),
+('American Tourister Classic Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 2, 1, 4, 428.32, 'female', 42),
+('Tumi Business Duffel Bags', 'A high-quality duffel bags designed for durability and style.', 3, 3, 2, 2, 448.57, 'male', 31),
+('Travelpro Luxury Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 5, 1, 8, 351.98, 'female', 29),
+('Briggs & Riley Luxury Duffel Bags', 'A high-quality duffel bags designed for durability and style.', 3, 6, 3, 4, 264.09, 'male', 40),
+('Samsonite Luxury Duffel Bags', 'A high-quality duffel bags designed for durability and style.', 3, 1, 1, 10, 131.13, 'male', 75),
+('Delsey Elite Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 4, 1, 2, 269.14, 'male', 56),
+('Travelpro Ultimate Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 5, 2, 11, 177.85, 'female', 80),
+('American Tourister Compact Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 2, 3, 3, 475.48, 'male', 42),
+('Tumi Compact Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 3, 2, 7, 138.63, 'male', 95),
+('Samsonite Luxury Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 1, 2, 4, 422.59, 'female', 18),
+('American Tourister Classic Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 2, 2, 13, 422.62, 'female', 20),
+('Travelpro Elite Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 5, 3, 15, 337.84, 'female', 86),
+('Travelpro Luxury Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 5, 3, 7, 302.08, 'female', 51),
+('Delsey Elite Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 4, 1, 8, 405.98, 'male', 64),
+('American Tourister Ultimate Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 2, 2, 13, 111.45, 'male', 39),
+('American Tourister Premium Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 2, 3, 3, 498.78, 'female', 54),
+('Delsey Traveler Duffel Bags', 'A high-quality duffel bags designed for durability and style.', 3, 4, 2, 1, 456.88, 'female', 89),
+('Delsey Traveler Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 4, 1, 3, 499.8, 'female', 69),
+('Tumi Ultimate Duffel Bags', 'A high-quality duffel bags designed for durability and style.', 3, 3, 2, 8, 465.2, 'male', 29),
+('Briggs & Riley Ultimate Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 6, 2, 10, 434.89, 'male', 71),
+('American Tourister Classic Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 2, 1, 3, 499.29, 'male', 63),
+('Tumi Classic Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 3, 1, 3, 227.87, 'female', 61),
+('Briggs & Riley Traveler Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 6, 1, 4, 310.72, 'female', 13),
+('Samsonite Smart Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 1, 1, 11, 392.28, 'male', 33),
+('Briggs & Riley Classic Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 6, 1, 1, 385.35, 'male', 16),
+('Travelpro Smart Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 5, 3, 8, 368.08, 'male', 67),
+('Samsonite Business Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 1, 2, 13, 221.68, 'male', 81),
+('American Tourister Classic Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 2, 1, 7, 341.15, 'female', 81),
+('Tumi Traveler Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 3, 1, 1, 136.18, 'male', 38),
+('Travelpro Premium Duffel Bags', 'A high-quality duffel bags designed for durability and style.', 3, 5, 3, 12, 132.86, 'male', 32),
+('Travelpro Elite Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 5, 3, 12, 492.16, 'female', 87),
+('Delsey Compact Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 4, 2, 2, 350.26, 'male', 72),
+('Tumi Luxury Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 3, 1, 7, 438.33, 'female', 28),
+('Briggs & Riley Smart Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 6, 2, 6, 280.91, 'female', 25),
+('American Tourister Pro Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 2, 2, 5, 149.88, 'male', 66),
+('Delsey Luxury Duffel Bags', 'A high-quality duffel bags designed for durability and style.', 3, 4, 3, 1, 485.19, 'female', 20),
+('Travelpro Premium Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 5, 1, 3, 404.36, 'female', 83),
+('Tumi Elite Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 3, 2, 12, 67.74, 'female', 25),
+('Briggs & Riley Compact Duffel Bags', 'A high-quality duffel bags designed for durability and style.', 3, 6, 1, 7, 148.03, 'female', 91),
+('American Tourister Smart Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 2, 2, 10, 185.39, 'male', 31),
+('Samsonite Smart Duffel Bags', 'A high-quality duffel bags designed for durability and style.', 3, 1, 2, 14, 165.3, 'male', 15),
+('American Tourister Elite Duffel Bags', 'A high-quality duffel bags designed for durability and style.', 3, 2, 3, 12, 223.95, 'male', 45),
+('Travelpro Compact Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 5, 2, 4, 175.47, 'male', 44),
+('Tumi Premium Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 3, 1, 6, 159.79, 'female', 42),
+('Samsonite Elite Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 1, 3, 2, 84.59, 'female', 86),
+('Briggs & Riley Elite Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 6, 2, 13, 132.66, 'male', 16),
+('American Tourister Elite Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 2, 3, 11, 297.44, 'female', 76),
+('Delsey Ultimate Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 4, 2, 10, 74.26, 'male', 75),
+('American Tourister Smart Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 2, 2, 12, 216.26, 'male', 86),
+('Briggs & Riley Classic Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 6, 3, 4, 239.56, 'female', 79),
+('Delsey Luxury Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 4, 1, 2, 82.04, 'male', 44),
+('Samsonite Premium Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 1, 2, 6, 65.94, 'female', 36),
+('Delsey Traveler Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 4, 3, 8, 257.44, 'female', 60),
+('Samsonite Traveler Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 1, 1, 11, 398.28, 'male', 61),
+('Samsonite Traveler Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 1, 3, 11, 463.39, 'male', 47),
+('American Tourister Luxury Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 2, 1, 2, 62.12, 'male', 26),
+('American Tourister Luxury Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 2, 3, 11, 463.14, 'female', 41),
+('Tumi Business Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 3, 2, 11, 98.88, 'female', 63),
+('Briggs & Riley Business Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 6, 2, 7, 316.7, 'female', 74),
+('Travelpro Classic Duffel Bags', 'A high-quality duffel bags designed for durability and style.', 3, 5, 3, 9, 337.76, 'male', 47),
+('Briggs & Riley Pro Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 6, 2, 1, 68.22, 'female', 74),
+('Delsey Ultimate Suitcases', 'A high-quality suitcases designed for durability and style.', 2, 4, 1, 14, 488.83, 'male', 67),
+('American Tourister Smart Tote Bags', 'A high-quality tote bags designed for durability and style.', 4, 2, 3, 12, 57.02, 'male', 85),
+('Briggs & Riley Traveler Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 6, 2, 13, 180.92, 'male', 36),
+('Tumi Compact Duffel Bags', 'A high-quality duffel bags designed for durability and style.', 3, 3, 3, 10, 306.88, 'female', 71),
+('Briggs & Riley Luxury Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 6, 3, 10, 302.6, 'male', 90),
+('Tumi Business Briefcases', 'A high-quality briefcases designed for durability and style.', 6, 3, 1, 4, 164.51, 'female', 97),
+('Delsey Smart Backpacks', 'A high-quality backpacks designed for durability and style.', 1, 4, 3, 13, 139.5, 'female', 22),
+('Tumi Ultimate Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 3, 1, 4, 190.33, 'male', 77);
 
--- Insert users
-INSERT INTO users (name, email, password, role) VALUES
-('Alice Johnson', 'alice@example.com', 'hashed_password_1', 'customer'),
-('Bob Smith', 'bob@example.com', 'hashed_password_2', 'customer'),
-('Charlie Brown', 'charlie@example.com', 'hashed_password_3', 'customer');
+
 
 -- Insert feedback
 INSERT INTO feedback (user_id, product_id, message, rating) VALUES
-(1, 3, 'Great quality backpack, very comfortable!', 5),
-(2, 5, 'Decent suitcase but a bit heavy.', 4),
-(3, 7, 'Love the design and durability.', 5),
-(1, 2, 'Straps could be more comfortable.', 3),
-(2, 10, 'Spacious and stylish, worth the price.', 5),
-(3, 12, 'Zipper broke after a few weeks.', 2),
-(1, 8, 'Perfect for travel, highly recommend.', 5),
-(2, 15, 'Material feels a bit cheap.', 3),
-(3, 18, 'Exceeded my expectations!', 5),
-(1, 20, 'Good but not waterproof.', 4);
+(1, 1, 'Really sturdy suitcase, perfect for long trips!', 5),
+(1, 1, 'This backpack looks sleek, but the padding could be better.', 3),
+(1, 1, 'Fantastic briefcase, super professional vibe.', 5),
+(1, 1, 'Tote bag is stylish but a little small for my needs.', 4),
+(1, 1, 'Briefcase holds up well, loving the compartments.', 5),
+(1, 1, 'Messenger bag is great, but the strap wears out fast.', 3);
 
--- Inser image
--- Thêm hình ảnh cho products (mỗi sản phẩm có 1 ảnh chính)
+
+
+-- Insert images
 INSERT INTO product_images (product_id, image_url, is_primary) VALUES
-(1, 'img/products/product1.jpg', 1),
-(2, 'img/products/product2.jpg', 1),
-
-
--- Add user address
-UPDATE users  
-SET address = '123 ABC Street, District 1',  
-    city = 'Ho Chi Minh City',  
-    phone = '0987654321'  
-WHERE id = 1;
-
-select * from users;
-
-
--- Start Giả định giỏ hàng
-INSERT INTO cart (user_id, product_id, quantity, created_at)  
-VALUES 
-(1, 2, 1, NOW()),
-(1, 2, 1, NOW()),
-(1, 4, 7, NOW()),
-(1, 2, 3, NOW()),
-(1, 7, 8, NOW());
-select * from cart;
-
--- Check giả định order_item
-select * from order_items where order_id = 2;
-
-
--- Check giả định đơn hàng đã được đặt thành công
-SELECT o.id AS order_id, o.user_id, o.status AS order_status, 
-       p.amount, p.status AS payment_status, p.payment_method
-FROM orders o
-JOIN payments p ON o.id = p.order_id;
-
-
-
-
-
-
-
-
+(1, 'img/products/product1.jpg', true),
+(1, 'img/products/product1.1.jpg', false),
+(1, 'img/products/product1.2.jpg', false);
