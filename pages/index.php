@@ -69,25 +69,6 @@ require_once '../functions.php';
                 </div>
               </div>
             </div>
-
-            <!-- Kids Luggage -->
-            <!-- <div class="carousel-item position-relative" style="height: 430px">
-              <img class="position-absolute w-100 h-100" src="../img/carousel-3.jpg"
-                style="object-fit: cover" />
-              <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-                <div class="p-3" style="max-width: 700px">
-                  <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">
-                    Kids Luggage
-                  </h1>
-                  <p class="mx-md-5 px-5 animate__animated animate__bounceIn">
-                    Lorem rebum magna amet lorem magna erat diam stet. Sadips
-                    duo stet amet amet ndiam elitr ipsum diam
-                  </p>
-                  <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp"
-                    href="shop.php?gender=kids">Shop Now</a>
-                </div>
-              </div>
-            </div> -->
           </div>
         </div>
       </div>
@@ -174,7 +155,11 @@ require_once '../functions.php';
   <!-- Featured Products End -->
 
   <!-- Brands Start -->
+
   <div class="container-fluid py-5">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
+      <span class="bg-secondary pr-3">Featured Brands</span>
+    </h2>
     <div class="row px-xl-5">
       <div class="col">
         <div class="owl-carousel vendor-carousel">

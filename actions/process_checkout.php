@@ -15,7 +15,7 @@ if (!isset($_SESSION['user_id'])) {
 // Kiểm tra phương thức yêu cầu
 if ($_SERVER["REQUEST_METHOD"] != "POST") {
     $_SESSION['error'] = "Invalid request method.";
-    header("Location: checkout.php");
+    header("Location: ../pages/checkout.php");
     exit();
 }
 
@@ -47,7 +47,7 @@ if (!in_array($payment_method, ['cod', 'bank_transfer', 'credit_card'])) {
 // Nếu có lỗi, chuyển hướng về checkout.php với thông báo
 if (!empty($errors)) {
     $_SESSION['errors'] = $errors;
-    header("Location: checkout.php");
+    header("Location: ../pages/checkout.php");
     exit();
 }
 

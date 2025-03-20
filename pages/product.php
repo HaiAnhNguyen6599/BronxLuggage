@@ -2,10 +2,7 @@
 require "../config.php";
 require_once '../functions.php';
 
-// Khởi tạo session nếu chưa có
-// if (session_status() == PHP_SESSION_NONE) {
-//     session_start();
-// }
+$user_id = $_SESSION['user_id'] ?? 0;
 
 // Lấy thông tin sản phẩm
 if (isset($_GET['id'])) {
@@ -21,67 +18,6 @@ if (isset($_GET['id'])) {
     exit;
 }
 
-// Xử lý thêm sản phẩm vào giỏ hàng
-// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//     $product_id = $_POST['product_id'];
-//     $size_id = $_POST['size_id'];
-//     $color_id = $_POST['color_id'];
-//     $quantity = max(1, intval($_POST['quantity']));
-
-//     // Kiểm tra tồn kho
-//     $product = getProductById($conn, $product_id);
-//     if (!$product || $quantity > $product['inventory']) {
-//         $_SESSION['cart_message'] = "Error: Requested quantity exceeds available stock!";
-//         header("Location: product.php?id=$product_id");
-//         exit;
-//     }
-
-//     // Khởi tạo giỏ hàng trong session nếu chưa có hoặc không phải mảng
-//     if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
-//         $_SESSION['cart'] = [];
-//     }
-
-//     $cart_item = [
-//         'product_id' => $product_id,
-//         'size_id' => $size_id,
-//         'color_id' => $color_id,
-//         'quantity' => $quantity
-//     ];
-
-
-//     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-//     $found = false;
-//     if (!empty($_SESSION['cart'])) {
-//         foreach ($_SESSION['cart'] as &$item) {
-//             // Kiểm tra $item có phải mảng và chứa các khóa cần thiết không
-//             if (
-//                 is_array($item) &&
-//                 isset($item['product_id']) && $item['product_id'] == $product_id &&
-//                 isset($item['size_id']) && $item['size_id'] == $size_id &&
-//                 isset($item['color_id']) && $item['color_id'] == $color_id
-//             ) {
-//                 $new_quantity = $item['quantity'] + $quantity;
-//                 if ($new_quantity > $product['inventory']) {
-//                     $_SESSION['cart_message'] = "Error: Total quantity exceeds available stock!";
-//                     header("Location: product.php?id=$product_id");
-//                     exit;
-//                 }
-//                 $item['quantity'] = $new_quantity;
-//                 $found = true;
-//                 break;
-//             }
-//         }
-//         unset($item); // Hủy tham chiếu sau khi dùng &$item
-//     }
-
-//     if (!$found) {
-//         $_SESSION['cart'][] = $cart_item;
-//     }
-
-//     $_SESSION['cart_message'] = "Product added to cart successfully!";
-//     header("Location: product.php?id=$product_id");
-//     exit;
-// }
 
 // Lấy dữ liệu khác
 $available_brands = getBrands($conn);
@@ -125,6 +61,41 @@ $feedback_count = count($feedbacks);
             background: none;
             /* Xóa gạch chéo nếu radio được chọn (trường hợp đặc biệt) */
         }
+
+        /* CSS Star Rating */
+        .rating-stars {
+            cursor: pointer;
+        }
+
+        .stars-container i {
+            margin-right: 5px;
+        }
+
+        .rating-stars:hover i,
+        .rating-stars i.active {
+            color: #ffc107 !important;
+        }
+
+        /* CSS Cart Message */
+        .cart-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            /* Màu xanh lá cho thông báo thành công */
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .cart-alert.error {
+            background-color: #FF3D00;
+            /* Màu đỏ cho thông báo lỗi */
+        }
     </style>
 </head>
 
@@ -132,6 +103,7 @@ $feedback_count = count($feedbacks);
     <!-- Topbar Start -->
     <?php include '../includes/topbar.php'; ?>
     <!-- Topbar End -->
+
 
     <!-- Navbar Start -->
     <?php include '../includes/navbar.php'; ?>
@@ -175,6 +147,27 @@ $feedback_count = count($feedbacks);
 
             <div class="col-lg-7 h-auto mb-30">
                 <div class="h-100 bg-light p-30">
+                    <!-- Hiển thị thông báo add to cart-->
+                    <?php if (isset($_SESSION['cart_message'])): ?>
+                        <div id="cart-message" class="cart-alert">
+                            <?php
+                            echo $_SESSION['cart_message'];
+                            unset($_SESSION['cart_message']); // Xóa session sau khi hiển thị
+                            ?>
+                        </div>
+
+                        <script>
+                            setTimeout(function() {
+                                var messageBox = document.getElementById("cart-message");
+                                if (messageBox) {
+                                    messageBox.style.opacity = "0"; // Làm mờ dần
+                                    setTimeout(() => messageBox.style.display = "none", 500); // Ẩn hẳn sau 0.5s
+                                }
+                            }, 3000);
+                        </script>
+                    <?php endif; ?>
+
+
                     <h3><?php echo htmlspecialchars($product['name']); ?></h3>
                     <div class="d-flex mb-3">
                         <!-- Hiển thị rating sao -->
@@ -198,10 +191,8 @@ $feedback_count = count($feedbacks);
                     <p class="mb-4" style="display: inline;"><?php echo htmlspecialchars($product['inventory']); ?></p>
                     <p class="mb-4"><?php echo htmlspecialchars($product['description']); ?></p>
                     <!-- Form chọn size và colors gửi đến cart.php-->
-                    <!-- Form chọn size và colors gửi đến product.php -->
                     <form method="POST" action="../actions/add_to_cart.php">
                         <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-
                         <div class="d-flex mb-3">
                             <strong class="text-dark mr-3">Sizes:</strong>
                             <div>
@@ -222,7 +213,6 @@ $feedback_count = count($feedbacks);
                                 <?php endif; ?>
                             </div>
                         </div>
-
                         <div class="d-flex mb-4">
                             <strong class="text-dark mr-3">Colors:</strong>
                             <div>
@@ -266,13 +256,7 @@ $feedback_count = count($feedbacks);
                         </div>
                     </form>
 
-                    <!-- Hiển thị thông báo -->
-                    <?php if (isset($_SESSION['cart_message'])): ?>
-                        <div class="alert <?php echo strpos($_SESSION['cart_message'], 'Error') === false ? 'alert-success' : 'alert-danger'; ?> mt-3">
-                            <?php echo $_SESSION['cart_message']; ?>
-                        </div>
-                        <?php unset($_SESSION['cart_message']); ?>
-                    <?php endif; ?>
+                    <a href="../pages/shop.php">Back to Shop</a>
 
                     <!--  js cho nút tăng/giảm số lượng -->
                     <script>
@@ -303,6 +287,7 @@ $feedback_count = count($feedbacks);
             </div>
         </div>
 
+        <!-- Review and description -->
         <div class="row px-xl-5">
             <div class="col">
                 <div class="bg-light p-30">
@@ -358,97 +343,75 @@ $feedback_count = count($feedbacks);
                                 <!-- Phần Leave a review  -->
                                 <div class="col-md-6">
                                     <h4 class="mb-4">Leave a review</h4>
-                                    <div class="d-flex my-3">
-                                        <p class="mb-0 mr-2">Your Rating * :</p>
-                                        <div class="text-primary" id="rating-stars">
-                                            <i class="far fa-star" data-value="1"></i>
-                                            <i class="far fa-star" data-value="2"></i>
-                                            <i class="far fa-star" data-value="3"></i>
-                                            <i class="far fa-star" data-value="4"></i>
-                                            <i class="far fa-star" data-value="5"></i>
-                                            <input type="hidden" name="rating" id="rating-value" value="0">
+                                    <?php if (isset($_SESSION['error'])): ?>
+                                        <div class="alert alert-danger">
+                                            <?php
+                                            echo $_SESSION['error'];
+                                            unset($_SESSION['error']); // Xóa thông báo sau khi hiển thị
+                                            ?>
                                         </div>
-                                    </div>
-                                    <!-- review gửi dến file nao -->
-                                    <form id="review-form" method="POST" action=".php">
-                                        <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
-                                        <div class="form-group">
-                                            <label for="message">Your Review *</label>
-                                            <textarea id="message" name="message" cols="30" rows="5"
-                                                class="form-control" required></textarea>
+                                    <?php endif; ?>
+
+                                    <?php if (isset($_SESSION['success'])): ?>
+                                        <div class="alert alert-success">
+                                            <?php
+                                            echo $_SESSION['success'];
+                                            unset($_SESSION['success']); // Xóa thông báo sau khi hiển thị
+                                            ?>
                                         </div>
-                                        <div class="form-group mb-0">
-                                            <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
+                                    <?php endif; ?>
+                                    <?php if (!$user_id): ?>
+                                        <div class="alert alert-warning">Please <a href="../account/login.php">login</a> to leave a review.</div>
+                                    <?php else: ?>
+                                        <div class="d-flex my-3">
+                                            <p class="mb-0 mr-2">Your Rating * :</p>
+                                            <div class="text-primary" id="star-rating">
+                                                <i class="far fa-star" data-value="1"></i>
+                                                <i class="far fa-star" data-value="2"></i>
+                                                <i class="far fa-star" data-value="3"></i>
+                                                <i class="far fa-star" data-value="4"></i>
+                                                <i class="far fa-star" data-value="5"></i>
+                                            </div>
                                         </div>
-                                    </form>
-                                    <div id="review-message" class="mt-2"></div>
+                                        <form action="../actions/submit_review.php" method="POST">
+                                            <input type="hidden" name="product_id" value="<?= $product_id ?>">
+                                            <input type="hidden" name="rating" id="rating" value="0">
+
+                                            <div class="form-group">
+                                                <label for="message">Your Review *</label>
+                                                <textarea id="message" name="message" cols="30" rows="5" class="form-control" required></textarea>
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
+                                            </div>
+                                        </form>
+                                    <?php endif; ?>
                                 </div>
-
-
-                                <link rel="stylesheet"
-                                    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                 <script>
-                                    $(document).ready(function() {
-                                        // Xử lý chọn rating sao
-                                        $('#rating-stars i').on('click', function() {
-                                            var rating = $(this).data('value');
-                                            $('#rating-value').val(rating);
-
-                                            // Cập nhật giao diện sao
-                                            $('#rating-stars i').each(function() {
-                                                if ($(this).data('value') <= rating) {
-                                                    $(this).removeClass('far fa-star').addClass(
-                                                        'fas fa-star');
-                                                } else {
-                                                    $(this).removeClass('fas fa-star').addClass(
-                                                        'far fa-star');
-                                                }
-                                            });
+                                    let selectedRating = 0;
+                                    document.querySelectorAll("#star-rating i").forEach(star => {
+                                        star.addEventListener("click", function() {
+                                            selectedRating = this.getAttribute("data-value");
+                                            document.getElementById("rating").value = selectedRating;
+                                            updateStars(selectedRating);
                                         });
 
-                                        // Xử lý submit form bằng Ajax
-                                        $('#review-form').on('submit', function(e) {
-                                            e.preventDefault();
-                                            var rating = $('#rating-value').val();
-                                            if (rating == 0) {
-                                                $('#review-message').html(
-                                                    '<p class="text-danger">Please select a rating!</p>'
-                                                );
-                                                return;
-                                            }
+                                        star.addEventListener("mouseover", function() {
+                                            updateStars(this.getAttribute("data-value"));
+                                        });
 
-                                            $.ajax({
-                                                url: 'submit_review.php',
-                                                type: 'POST',
-                                                data: $(this).serialize(),
-                                                success: function(response) {
-                                                    var res = JSON.parse(response);
-                                                    if (res.success) {
-                                                        $('#review-message').html(
-                                                            '<p class="text-success">' + res
-                                                            .message + '</p>');
-                                                        $('#review-form')[0].reset();
-                                                        $('#rating-stars i').removeClass(
-                                                            'fas fa-star').addClass(
-                                                            'far fa-star');
-                                                        $('#rating-value').val(0);
-                                                    } else {
-                                                        $('#review-message').html(
-                                                            '<p class="text-danger">' + res
-                                                            .message + '</p>');
-                                                    }
-                                                },
-                                                error: function() {
-                                                    $('#review-message').html(
-                                                        '<p class="text-danger">Something went wrong. Please try again.</p>'
-                                                    );
-                                                }
-                                            });
+                                        star.addEventListener("mouseout", function() {
+                                            updateStars(selectedRating);
                                         });
                                     });
-                                </script>
 
+                                    function updateStars(rating) {
+                                        document.querySelectorAll("#star-rating i").forEach(star => {
+                                            star.classList.toggle("fas", star.getAttribute("data-value") <= rating);
+                                            star.classList.toggle("far", star.getAttribute("data-value") > rating);
+                                        });
+                                    }
+                                </script>
                             </div>
                         </div>
                     </div>

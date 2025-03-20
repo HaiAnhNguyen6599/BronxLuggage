@@ -145,6 +145,11 @@ INSERT INTO products (name, description, category_id, brand_id, size_id, color_i
 ('Tumi Ultimate Messenger Bags', 'A high-quality messenger bags designed for durability and style.', 5, 3, 1, 4, 190.33, 'male', 77);
 
 
+-- Insert images
+INSERT INTO product_images (product_id, image_url, is_primary) VALUES
+(1, 'img/products/product1.jpg', true),
+(1, 'img/products/product1.1.jpg', false),
+(1, 'img/products/product1.2.jpg', false);
 
 -- Insert feedback
 INSERT INTO feedback (user_id, product_id, message, rating) VALUES
@@ -155,10 +160,3 @@ INSERT INTO feedback (user_id, product_id, message, rating) VALUES
 (1, 1, 'Briefcase holds up well, loving the compartments.', 5),
 (1, 1, 'Messenger bag is great, but the strap wears out fast.', 3);
 
-
-
--- Insert images
-INSERT INTO product_images (product_id, image_url, is_primary) VALUES
-(1, 'img/products/product1.jpg', true),
-(1, 'img/products/product1.1.jpg', false),
-(1, 'img/products/product1.2.jpg', false);

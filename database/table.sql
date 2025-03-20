@@ -135,9 +135,9 @@ ADD FOREIGN KEY (size_id) REFERENCES sizes(id) ON DELETE CASCADE,
 ADD FOREIGN KEY (color_id) REFERENCES colors(id) ON DELETE CASCADE;
 
 CREATE TABLE contact (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
-    email VARCHAR(100),
-    subject VARCHAR(100),
-    message TEXT
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(100),
+email VARCHAR(100),
+subject VARCHAR(100),
+message TEXT
 );

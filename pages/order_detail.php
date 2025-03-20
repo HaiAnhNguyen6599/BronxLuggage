@@ -28,7 +28,7 @@ if ($order['user_id'] != $_SESSION['user_id'] && $_SESSION['role'] != 'admin') {
     exit();
 }
 
-// Lấy chi tiết sản phẩm trong đơn hàng
+// Lấy chi tiết sản phẩm trong order_item
 $stmt = $conn->prepare("
     SELECT oi.product_id, p.name, p.price, oi.quantity, pi.image_url
     FROM order_items oi
@@ -88,7 +88,7 @@ while ($item = $items_result->fetch_assoc()) {
                 <div class="card">
                     <div class="card-body">
                         <h2 class="card-title text-uppercase mb-4">Order Details</h2>
-                        <!-- <p><strong>Order ID:</strong> <?= $order_id ?></p> -->
+
                         <p><strong>Order Date:</strong> <?= date('d-m-Y H:i', strtotime($order['created_at'])); ?></p>
                         <p><strong>Status:</strong> <?= ucfirst($order['status']); ?></p>
 
@@ -97,7 +97,6 @@ while ($item = $items_result->fetch_assoc()) {
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>Product</th>
-                                        <!-- <th>Image</th> -->
                                         <th>Quantity</th>
                                         <th>Price</th>
                                         <th>Total</th>
@@ -106,19 +105,19 @@ while ($item = $items_result->fetch_assoc()) {
                                 <tbody>
                                     <?php foreach ($items as $item): ?>
                                         <tr>
-                                            
+
                                             <td><a href="product.php?id=<?php echo htmlspecialchars($item['product_id'] ?? ''); ?>" style="color: black;""><?= htmlspecialchars($item['name']) ?></a></td>
-                                            <!-- <td><img src="../img/products/<?= $item['image_url'] ?: 'default.jpg' ?>" alt="Product Image" width="50"></td> -->
+                                            <!-- <td><img src=" ../img/products/<?= $item['image_url'] ?: 'default.jpg' ?>" alt="Product Image" width="50"></td> -->
                                             <td><?= $item['quantity'] ?></td>
-                                            <td><?= number_format($item['price'], 2) ?> $</td>
-                                            <td><?= number_format($item['item_total'], 2) ?> $</td>
+                                            <td>$ <?= number_format($item['price'], 2) ?></td>
+                                            <td>$ <?= number_format($item['item_total'], 2) ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>
 
-                        <h3 class="mt-3">Total Amount: <?= number_format($total, 2) ?> $</h3>
+                        <h3 class="mt-3">Total Amount: $ <?= number_format($total, 2) ?> </h3>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-$servername = "localhost"; // Hoặc địa chỉ IP của máy chủ MySQL
+$servername = "localhost:3307"; // Hoặc địa chỉ IP của máy chủ MySQL
 $username = "root"; // Thay bằng username của bạn
 $password = "12345678"; // Thay bằng password của bạn
 $database = "ecommerce"; // Tên database
