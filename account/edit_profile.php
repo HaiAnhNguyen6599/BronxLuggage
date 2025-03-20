@@ -4,7 +4,7 @@ require_once '../functions.php'; // File chứa các hàm bổ trợ (nếu có)
 
 // Kiểm tra xem người dùng đã đăng nhập chưa
 if (!isset($_SESSION['name']) || !isset($_SESSION['email'])) {
-    header("Location: login.php"); // Đường dẫn tương đối từ account/
+    header("Location: ../account/login.php"); // Đường dẫn tương đối từ account/
     exit();
 }
 
@@ -16,7 +16,7 @@ $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 if (!$user) {
     session_destroy();
-    header("Location: login.php"); // Đường dẫn tương đối từ account/
+    header("Location: ../account/login.php"); // Đường dẫn tương đối từ account/
     exit();
 }
 
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($name)) {
         $errors['name'] = "Name cannot be empty!";
     }
-    
+
     // Validate email
     if (empty($email)) {
         $errors['email'] = "Email cannot be empty!";
@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate phone
     if (empty($phone)) {
         $errors['phone'] = "Phone number cannot be empty!";
-    } elseif (!preg_match("/^[0-9]{11}$/", $phone)) {
+    } elseif (!preg_match("/^[0-9]{10}$/", $phone)) {
         $errors['phone'] = "Phone number must be 11 digits!";
     }
 
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $update_stmt = $conn->prepare("UPDATE users SET name = ?, email = ?, phone = ?, address = ?, city = ? WHERE id = ?");
         $update_stmt->bind_param("sssssi", $name, $email, $phone_to_save, $address_to_save, $city_to_save, $user['id']);
         if ($update_stmt->execute()) {
-            $_SESSION['success'] = "Profile updated successfully!";
+            $_SESSION['update_success'] = "Profile updated successfully!";
             $_SESSION['name'] = $name;
             $_SESSION['email'] = $email;
             $user = array_merge($user, [
@@ -84,6 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 'address' => $address_to_save,
                 'city' => $city_to_save
             ]);
+            header("Location: ../pages/account.php");
         } else {
             $errors['general'] = "Failed to update profile. Please try again.";
         }
@@ -99,7 +100,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Meta Tags -->
     <?php include '../includes/head.php'; ?>
     <!-- Bootstrap 4 CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
 <body>
@@ -133,20 +135,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="card-body">
                         <h2 class="card-title text-uppercase mb-4">Edit Profile</h2>
 
-                        <!-- Thông báo -->
-                        <!-- <?php if (!empty($success)): ?>
-                            <div class="alert alert-success" role="alert"><?= $success ?></div>
-                        <?php endif; ?>
-                        <?php if (isset($errors['general'])): ?>
-                            <div class="alert alert-danger" role="alert"><?= $errors['general'] ?></div>
-                        <?php endif; ?> -->
 
                         <form action="edit_profile.php" method="POST">
                             <!-- Name -->
                             <div class="form-group">
                                 <label for="name">Full Name</label>
-                                <input type="text" class="form-control" id="name" name="name" 
-                                       value="<?= htmlspecialchars($user['name']); ?>" required>
+                                <input type="text" class="form-control" id="name" name="name"
+                                    value="<?= htmlspecialchars($user['name']); ?>" required>
                                 <?php if (isset($errors['name'])): ?>
                                     <small class="text-danger"><?= $errors['name'] ?></small>
                                 <?php endif; ?>
@@ -155,8 +150,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <!-- Email -->
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" 
-                                       value="<?= htmlspecialchars($user['email']); ?>" required>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    value="<?= htmlspecialchars($user['email']); ?>" required>
                                 <?php if (isset($errors['email'])): ?>
                                     <small class="text-danger"><?= $errors['email'] ?></small>
                                 <?php endif; ?>
@@ -165,8 +160,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <!-- Phone -->
                             <div class="form-group">
                                 <label for="phone">Phone</label>
-                                <input type="text" class="form-control" id="phone" name="phone" 
-                                       value="<?= htmlspecialchars($user['phone'] ?? ''); ?>">
+                                <input type="text" class="form-control" id="phone" name="phone"
+                                    value="<?= htmlspecialchars($user['phone'] ?? ''); ?>">
                                 <?php if (isset($errors['phone'])): ?>
                                     <small class="text-danger"><?= $errors['phone'] ?></small>
                                 <?php endif; ?>
@@ -175,8 +170,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <!-- Address -->
                             <div class="form-group">
                                 <label for="address">Address</label>
-                                <input type="text" class="form-control" id="address" name="address" 
-                                       value="<?= htmlspecialchars($user['address'] ?? ''); ?>">
+                                <input type="text" class="form-control" id="address" name="address"
+                                    value="<?= htmlspecialchars($user['address'] ?? ''); ?>">
                                 <?php if (isset($errors['address'])): ?>
                                     <small class="text-danger"><?= $errors['address'] ?></small>
                                 <?php endif; ?>
@@ -185,8 +180,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <!-- City -->
                             <div class="form-group">
                                 <label for="city">City</label>
-                                <input type="text" class="form-control" id="city" name="city" 
-                                       value="<?= htmlspecialchars($user['city'] ?? ''); ?>">
+                                <input type="text" class="form-control" id="city" name="city"
+                                    value="<?= htmlspecialchars($user['city'] ?? ''); ?>">
                             </div>
 
                             <!-- Buttons -->
@@ -208,9 +203,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
     <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+        </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+        </script>
     <script src="../lib/easing/easing.min.js"></script>
     <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
 

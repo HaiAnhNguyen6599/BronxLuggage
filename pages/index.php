@@ -36,8 +36,7 @@ $user_id = $_SESSION['user_id'] ?? 0;
           <div class="carousel-inner">
             <!-- Men Luggage -->
             <div class="carousel-item position-relative active" style="height: 430px">
-              <img class="position-absolute w-100 h-100" src="../img/carousel-1.jpg"
-                style="object-fit: cover" />
+              <img class="position-absolute w-100 h-100" src="../img/carousel-1.jpg" style="object-fit: cover" />
               <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                 <div class="p-3" style="max-width: 700px">
                   <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">
@@ -55,8 +54,7 @@ $user_id = $_SESSION['user_id'] ?? 0;
 
             <!-- Women Luggage -->
             <div class="carousel-item position-relative" style="height: 430px">
-              <img class="position-absolute w-100 h-100" src="../img/carousel-2.jpg"
-                style="object-fit: cover" />
+              <img class="position-absolute w-100 h-100" src="../img/carousel-2.jpg" style="object-fit: cover" />
               <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                 <div class="p-3" style="max-width: 700px">
                   <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">
@@ -93,8 +91,8 @@ $user_id = $_SESSION['user_id'] ?? 0;
           <a class="text-decoration-none" href="shop.php?category=<?= $row['name'] ?>">
             <div class="cat-item d-flex align-items-center mb-4">
               <div class="overflow-hidden" style="width: 120px; height: 120px; border-radius: 10px;">
-                <img class="img-fluid" src="../img/categories/cat-<?= $row['id'] ?>.jpg"
-                  alt="<?= $row['name'] ?>" style="width: 100%; height: 100%; object-fit: cover;" />
+                <img class="img-fluid" src="../img/categories/cat-<?= $row['id'] ?>.jpg" alt="<?= $row['name'] ?>"
+                  style="width: 100%; height: 100%; object-fit: cover;" />
               </div>
               <div class="flex-fill pl-3">
                 <h6><?= $row['name'] ?></h6>
@@ -123,14 +121,14 @@ $user_id = $_SESSION['user_id'] ?? 0;
               <img class="img-fluid w-100" src="../<?php echo $product['img'] ?: 'default.jpg'; ?>"
                 alt="<?php echo $product['name']; ?>" style="height: 400px; object-fit: cover;">
               <div class="product-action">
-                <a class="btn btn-outline-dark btn-square" href="product.php?id=<?php echo $product['id']; ?>"><i class="fa fa-shopping-cart"></i></a>
+                <a class="btn btn-outline-dark btn-square" href="product.php?id=<?php echo $product['id']; ?>"><i
+                    class="fa fa-shopping-cart"></i></a>
                 <!-- <a class="btn btn-outline-dark btn-square"
                   href="product.php?id=<?php echo $product['id']; ?>"><i class="fa fa-search"></i></a> -->
               </div>
             </div>
             <div class="text-center py-4">
-              <a class="h6 text-decoration-none text-truncate"
-                href="product.php?id=<?php echo $product['id']; ?>">
+              <a class="h6 text-decoration-none text-truncate" href="product.php?id=<?php echo $product['id']; ?>">
                 <?php echo $product['name']; ?>
               </a>
               <div class="d-flex align-items-center justify-content-center mt-2">
@@ -186,25 +184,6 @@ $user_id = $_SESSION['user_id'] ?? 0;
   <?php include '../includes/footer.php'; ?>
   <!-- Footer End -->
 
-  <!-- Back to Top -->
-  <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
-  <!-- Success Message -->
-  <!-- <?php if (isset($_SESSION['success'])): ?>
-    <div id="successMessage" style="display: block; background: #4CAF50; color: white; padding: 10px; text-align: center; position: fixed; top: 10px; left: 50%; transform: translateX(-50%); border-radius: 5px;">
-      <?= htmlspecialchars($_SESSION['success']) ?>
-    </div>
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        setTimeout(function() {
-          var successMessage = document.getElementById("successMessage");
-          if (successMessage) {
-            successMessage.style.display = "none";
-          }
-        }, 3000);
-      });
-    </script>
-    <?php unset($_SESSION['success']); ?>
-  <?php endif; ?> -->
   <!-- JavaScript Libraries -->
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>

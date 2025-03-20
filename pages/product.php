@@ -39,63 +39,63 @@ $feedback_count = count($feedbacks);
     <?php include '../includes/head.php'; ?>
     <!-- CSS để thêm gạch chéo đỏ trong hình tròn radio button -->
     <style>
-        .custom-control-input:disabled~.custom-control-label {
-            color: #6c757d;
-            /* Màu xám nhạt để biểu thị không khả dụng */
-            cursor: not-allowed;
-        }
+    .custom-control-input:disabled~.custom-control-label {
+        color: #6c757d;
+        /* Màu xám nhạt để biểu thị không khả dụng */
+        cursor: not-allowed;
+    }
 
-        .unavailable .custom-control-input:disabled::before {
-            position: relative;
-            content: '';
-            display: inline-block;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, transparent 45%, red 45%, red 55%, transparent 55%);
-            /* Tạo đường chéo đỏ trong hình tròn */
-            border-radius: 50%;
-            pointer-events: none;
-        }
+    .unavailable .custom-control-input:disabled::before {
+        position: relative;
+        content: '';
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, transparent 45%, red 45%, red 55%, transparent 55%);
+        /* Tạo đường chéo đỏ trong hình tròn */
+        border-radius: 50%;
+        pointer-events: none;
+    }
 
-        .unavailable .custom-control-input:disabled:checked::before {
-            background: none;
-            /* Xóa gạch chéo nếu radio được chọn (trường hợp đặc biệt) */
-        }
+    .unavailable .custom-control-input:disabled:checked::before {
+        background: none;
+        /* Xóa gạch chéo nếu radio được chọn (trường hợp đặc biệt) */
+    }
 
-        /* CSS Star Rating */
-        .rating-stars {
-            cursor: pointer;
-        }
+    /* CSS Star Rating */
+    .rating-stars {
+        cursor: pointer;
+    }
 
-        .stars-container i {
-            margin-right: 5px;
-        }
+    .stars-container i {
+        margin-right: 5px;
+    }
 
-        .rating-stars:hover i,
-        .rating-stars i.active {
-            color: #ffc107 !important;
-        }
+    .rating-stars:hover i,
+    .rating-stars i.active {
+        color: #ffc107 !important;
+    }
 
-        /* CSS Cart Message */
-        .cart-alert {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #4CAF50;
-            /* Màu xanh lá cho thông báo thành công */
-            color: white;
-            padding: 15px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            transition: opacity 0.5s ease-in-out;
-        }
+    /* CSS Cart Message */
+    .cart-alert {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #4CAF50;
+        /* Màu xanh lá cho thông báo thành công */
+        color: white;
+        padding: 15px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transition: opacity 0.5s ease-in-out;
+    }
 
-        .cart-alert.error {
-            background-color: #FF3D00;
-            /* Màu đỏ cho thông báo lỗi */
-        }
+    .cart-alert.error {
+        background-color: #FF3D00;
+        /* Màu đỏ cho thông báo lỗi */
+    }
     </style>
 </head>
 
@@ -130,9 +130,11 @@ $feedback_count = count($feedbacks);
                     <div class="carousel-inner bg-light">
                         <div class="carousel-inner bg-light">
                             <?php foreach ($product_images as $index => $image) : ?>
-                                <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
-                                    <img class="d-block w-100" style="height: 700px; object-fit: cover;" src="../<?php echo $image['image_url']; ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
-                                </div>
+                            <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
+                                <img class="d-block w-100" style="height: 700px; object-fit: cover;"
+                                    src="../<?php echo $image['image_url']; ?>"
+                                    alt="<?php echo htmlspecialchars($product['name']); ?>">
+                            </div>
                             <?php endforeach; ?>
                         </div>
                     </div>
@@ -149,21 +151,21 @@ $feedback_count = count($feedbacks);
                 <div class="h-100 bg-light p-30">
                     <!-- Start add to cart-->
                     <?php if (isset($_SESSION['cart_message'])): ?>
-                        <div id="cart-message" class="cart-alert">
-                            <?php
+                    <div id="cart-message" class="cart-alert">
+                        <?php
                             echo $_SESSION['cart_message'];
                             unset($_SESSION['cart_message']); // Xóa session sau khi hiển thị
                             ?>
-                        </div>
-                        <script>
-                            setTimeout(function() {
-                                var messageBox = document.getElementById("cart-message");
-                                if (messageBox) {
-                                    messageBox.style.opacity = "0"; // Làm mờ dần
-                                    setTimeout(() => messageBox.style.display = "none", 500); // Ẩn hẳn sau 0.5s
-                                }
-                            }, 3000);
-                        </script>
+                    </div>
+                    <script>
+                    setTimeout(function() {
+                        var messageBox = document.getElementById("cart-message");
+                        if (messageBox) {
+                            messageBox.style.opacity = "0"; // Làm mờ dần
+                            setTimeout(() => messageBox.style.display = "none", 500); // Ẩn hẳn sau 0.5s
+                        }
+                    }, 3000);
+                    </script>
                     <?php endif; ?>
                     <!-- End add to cart message -->
 
@@ -196,19 +198,21 @@ $feedback_count = count($feedbacks);
                             <strong class="text-dark mr-3">Sizes:</strong>
                             <div>
                                 <?php if (!empty($available_sizes)) : ?>
-                                    <?php foreach ($available_sizes as $size): ?>
-                                        <div class="custom-control custom-radio custom-control-inline <?php echo ($size['id'] != $product['size_id']) ? 'unavailable' : ''; ?>">
-                                            <input type="radio" class="custom-control-input"
-                                                id="size-<?php echo $size['id']; ?>" name="size_id"
-                                                value="<?php echo $size['id']; ?>"
-                                                <?php echo ($size['id'] == $product['size_id']) ? 'checked' : 'disabled'; ?> required>
-                                            <label class="custom-control-label" for="size-<?php echo $size['id']; ?>">
-                                                <?php echo htmlspecialchars($size['name']); ?>
-                                            </label>
-                                        </div>
-                                    <?php endforeach; ?>
+                                <?php foreach ($available_sizes as $size): ?>
+                                <div
+                                    class="custom-control custom-radio custom-control-inline <?php echo ($size['id'] != $product['size_id']) ? 'unavailable' : ''; ?>">
+                                    <input type="radio" class="custom-control-input"
+                                        id="size-<?php echo $size['id']; ?>" name="size_id"
+                                        value="<?php echo $size['id']; ?>"
+                                        <?php echo ($size['id'] == $product['size_id']) ? 'checked' : 'disabled'; ?>
+                                        required>
+                                    <label class="custom-control-label" for="size-<?php echo $size['id']; ?>">
+                                        <?php echo htmlspecialchars($size['name']); ?>
+                                    </label>
+                                </div>
+                                <?php endforeach; ?>
                                 <?php else: ?>
-                                    <p class="text-muted">No sizes available</p>
+                                <p class="text-muted">No sizes available</p>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -216,19 +220,21 @@ $feedback_count = count($feedbacks);
                             <strong class="text-dark mr-3">Colors:</strong>
                             <div>
                                 <?php if (!empty($available_colors)) : ?>
-                                    <?php foreach ($available_colors as $color): ?>
-                                        <div class="custom-control custom-radio custom-control-inline <?php echo ($color['id'] != $product['color_id']) ? 'unavailable' : ''; ?>">
-                                            <input type="radio" class="custom-control-input"
-                                                id="color-<?php echo $color['id']; ?>" name="color_id"
-                                                value="<?php echo $color['id']; ?>"
-                                                <?php echo ($color['id'] == $product['color_id']) ? 'checked' : 'disabled'; ?> required>
-                                            <label class="custom-control-label" for="color-<?php echo $color['id']; ?>">
-                                                <?php echo htmlspecialchars($color['name']); ?>
-                                            </label>
-                                        </div>
-                                    <?php endforeach; ?>
+                                <?php foreach ($available_colors as $color): ?>
+                                <div
+                                    class="custom-control custom-radio custom-control-inline <?php echo ($color['id'] != $product['color_id']) ? 'unavailable' : ''; ?>">
+                                    <input type="radio" class="custom-control-input"
+                                        id="color-<?php echo $color['id']; ?>" name="color_id"
+                                        value="<?php echo $color['id']; ?>"
+                                        <?php echo ($color['id'] == $product['color_id']) ? 'checked' : 'disabled'; ?>
+                                        required>
+                                    <label class="custom-control-label" for="color-<?php echo $color['id']; ?>">
+                                        <?php echo htmlspecialchars($color['name']); ?>
+                                    </label>
+                                </div>
+                                <?php endforeach; ?>
                                 <?php else: ?>
-                                    <p class="text-muted">No colors available</p>
+                                <p class="text-muted">No colors available</p>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -260,35 +266,29 @@ $feedback_count = count($feedbacks);
 
                     <a href="../pages/shop.php">Back to Shop</a>
 
-                    <!-- <div class="text-left mt-3">
-                        <a href="../pages/shop.php" class="btn btn-secondary px-4 py-2">
-                            <i class="fa fa-arrow-left mr-1"></i> Continue Shopping
-                        </a>
-                    </div> -->
-                    <!--  js cho nút tăng/giảm số lượng -->
                     <script>
-                        document.addEventListener("DOMContentLoaded", function() {
-                            document.querySelectorAll(".quantity").forEach(function(quantityWrapper) {
-                                let quantityInput = quantityWrapper.querySelector("#quantity");
-                                let minusButton = quantityWrapper.querySelector(".btn-minus");
-                                let plusButton = quantityWrapper.querySelector(".btn-plus");
-                                let maxStock = parseInt(quantityInput.getAttribute("max"));
+                    document.addEventListener("DOMContentLoaded", function() {
+                        document.querySelectorAll(".quantity").forEach(function(quantityWrapper) {
+                            let quantityInput = quantityWrapper.querySelector("#quantity");
+                            let minusButton = quantityWrapper.querySelector(".btn-minus");
+                            let plusButton = quantityWrapper.querySelector(".btn-plus");
+                            let maxStock = parseInt(quantityInput.getAttribute("max"));
 
-                                plusButton.addEventListener("click", function() {
-                                    let currentQuantity = parseInt(quantityInput.value);
-                                    if (currentQuantity < maxStock) {
-                                        quantityInput.value = currentQuantity + 1;
-                                    }
-                                });
+                            plusButton.addEventListener("click", function() {
+                                let currentQuantity = parseInt(quantityInput.value);
+                                if (currentQuantity < maxStock) {
+                                    quantityInput.value = currentQuantity + 1;
+                                }
+                            });
 
-                                minusButton.addEventListener("click", function() {
-                                    let currentQuantity = parseInt(quantityInput.value);
-                                    if (currentQuantity > 1) {
-                                        quantityInput.value = currentQuantity - 1;
-                                    }
-                                });
+                            minusButton.addEventListener("click", function() {
+                                let currentQuantity = parseInt(quantityInput.value);
+                                if (currentQuantity > 1) {
+                                    quantityInput.value = currentQuantity - 1;
+                                }
                             });
                         });
+                    });
                     </script>
                 </div>
             </div>
@@ -317,16 +317,16 @@ $feedback_count = count($feedbacks);
                                         review<?php echo $feedback_count !== 1 ? 's' : ''; ?> for
                                         "<?php echo htmlspecialchars($product['name']); ?>"</h4>
                                     <?php if (!empty($feedbacks)): ?>
-                                        <?php foreach ($feedbacks as $feedback): ?>
-                                            <div class="media mb-4">
-                                                <!-- AVt user chưa có -->
-                                                <img src="" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
-                                                <div class="media-body">
-                                                    <h6><?php echo htmlspecialchars($feedback['user_name']); ?><small> -
-                                                            <i><?php echo date('d M Y', strtotime($feedback['created_at'])); ?></i></small>
-                                                    </h6>
-                                                    <div class="text-primary mb-2">
-                                                        <?php
+                                    <?php foreach ($feedbacks as $feedback): ?>
+                                    <div class="media mb-4">
+                                        <!-- AVt user chưa có -->
+                                        <img src="" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                        <div class="media-body">
+                                            <h6><?php echo htmlspecialchars($feedback['user_name']); ?><small> -
+                                                    <i><?php echo date('d M Y', strtotime($feedback['created_at'])); ?></i></small>
+                                            </h6>
+                                            <div class="text-primary mb-2">
+                                                <?php
                                                         for ($i = 1; $i <= 5; $i++) {
                                                             if ($i <= floor($feedback['rating'])) {
                                                                 echo '<i class="fas fa-star"></i>'; // Sao đầy
@@ -337,13 +337,13 @@ $feedback_count = count($feedbacks);
                                                             }
                                                         }
                                                         ?>
-                                                    </div>
-                                                    <p><?php echo htmlspecialchars($feedback['message']); ?></p>
-                                                </div>
                                             </div>
-                                        <?php endforeach; ?>
+                                            <p><?php echo htmlspecialchars($feedback['message']); ?></p>
+                                        </div>
+                                    </div>
+                                    <?php endforeach; ?>
                                     <?php else: ?>
-                                        <p>No reviews yet.</p>
+                                    <p>No reviews yet.</p>
                                     <?php endif; ?>
                                 </div>
 
@@ -351,73 +351,75 @@ $feedback_count = count($feedbacks);
                                 <div class="col-md-6">
                                     <h4 class="mb-4">Leave a review</h4>
                                     <?php if (isset($_SESSION['error'])): ?>
-                                        <div class="alert alert-danger">
-                                            <?php
+                                    <div class="alert alert-danger">
+                                        <?php
                                             echo $_SESSION['error'];
                                             unset($_SESSION['error']); // Xóa thông báo sau khi hiển thị
                                             ?>
-                                        </div>
+                                    </div>
                                     <?php endif; ?>
 
                                     <?php if (isset($_SESSION['success'])): ?>
-                                        <div class="alert alert-success">
-                                            <?php
+                                    <div class="alert alert-success">
+                                        <?php
                                             echo $_SESSION['success'];
                                             unset($_SESSION['success']); // Xóa thông báo sau khi hiển thị
                                             ?>
-                                        </div>
+                                    </div>
                                     <?php endif; ?>
                                     <?php if (!$user_id): ?>
-                                        <div class="alert alert-warning">Please <a href="../account/login.php">login</a> to leave a review.</div>
+                                    <div class="alert alert-warning">Please <a href="../account/login.php">login</a> to
+                                        leave a review.</div>
                                     <?php else: ?>
-                                        <div class="d-flex my-3">
-                                            <p class="mb-0 mr-2">Your Rating * :</p>
-                                            <div class="text-primary" id="star-rating">
-                                                <i class="far fa-star" data-value="1"></i>
-                                                <i class="far fa-star" data-value="2"></i>
-                                                <i class="far fa-star" data-value="3"></i>
-                                                <i class="far fa-star" data-value="4"></i>
-                                                <i class="far fa-star" data-value="5"></i>
-                                            </div>
+                                    <div class="d-flex my-3">
+                                        <p class="mb-0 mr-2">Your Rating * :</p>
+                                        <div class="text-primary" id="star-rating">
+                                            <i class="far fa-star" data-value="1"></i>
+                                            <i class="far fa-star" data-value="2"></i>
+                                            <i class="far fa-star" data-value="3"></i>
+                                            <i class="far fa-star" data-value="4"></i>
+                                            <i class="far fa-star" data-value="5"></i>
                                         </div>
-                                        <form action="../actions/submit_review.php" method="POST">
-                                            <input type="hidden" name="product_id" value="<?= $product_id ?>">
-                                            <input type="hidden" name="rating" id="rating" value="0">
+                                    </div>
+                                    <form action="../actions/submit_review.php" method="POST">
+                                        <input type="hidden" name="product_id" value="<?= $product_id ?>">
+                                        <input type="hidden" name="rating" id="rating" value="0">
 
-                                            <div class="form-group">
-                                                <label for="message">Your Review *</label>
-                                                <textarea id="message" name="message" cols="30" rows="5" class="form-control" required></textarea>
-                                            </div>
-                                            <div class="form-group mb-0">
-                                                <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
-                                            </div>
-                                        </form>
+                                        <div class="form-group">
+                                            <label for="message">Your Review *</label>
+                                            <textarea id="message" name="message" cols="30" rows="5"
+                                                class="form-control" required></textarea>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
+                                        </div>
+                                    </form>
                                     <?php endif; ?>
                                 </div>
                                 <script>
-                                    let selectedRating = 0;
-                                    document.querySelectorAll("#star-rating i").forEach(star => {
-                                        star.addEventListener("click", function() {
-                                            selectedRating = this.getAttribute("data-value");
-                                            document.getElementById("rating").value = selectedRating;
-                                            updateStars(selectedRating);
-                                        });
-
-                                        star.addEventListener("mouseover", function() {
-                                            updateStars(this.getAttribute("data-value"));
-                                        });
-
-                                        star.addEventListener("mouseout", function() {
-                                            updateStars(selectedRating);
-                                        });
+                                let selectedRating = 0;
+                                document.querySelectorAll("#star-rating i").forEach(star => {
+                                    star.addEventListener("click", function() {
+                                        selectedRating = this.getAttribute("data-value");
+                                        document.getElementById("rating").value = selectedRating;
+                                        updateStars(selectedRating);
                                     });
 
-                                    function updateStars(rating) {
-                                        document.querySelectorAll("#star-rating i").forEach(star => {
-                                            star.classList.toggle("fas", star.getAttribute("data-value") <= rating);
-                                            star.classList.toggle("far", star.getAttribute("data-value") > rating);
-                                        });
-                                    }
+                                    star.addEventListener("mouseover", function() {
+                                        updateStars(this.getAttribute("data-value"));
+                                    });
+
+                                    star.addEventListener("mouseout", function() {
+                                        updateStars(selectedRating);
+                                    });
+                                });
+
+                                function updateStars(rating) {
+                                    document.querySelectorAll("#star-rating i").forEach(star => {
+                                        star.classList.toggle("fas", star.getAttribute("data-value") <= rating);
+                                        star.classList.toggle("far", star.getAttribute("data-value") > rating);
+                                    });
+                                }
                                 </script>
                             </div>
                         </div>
@@ -433,8 +435,6 @@ $feedback_count = count($feedbacks);
     <!-- Footer End -->
 
 
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
 
     <!-- JavaScript Libraries -->

@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $product = getProductById($conn, $product_id);
     if (!$product || $quantity > $product['inventory']) {
         $_SESSION['cart_message'] = "Error: Requested quantity exceeds available stock!";
-        header("Location: product.php?id=$product_id");
+        header("Location: ../pages/product.php?id=$product_id");
         exit;
     }
 
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $new_quantity = $item['quantity'] + $quantity;
                 if ($new_quantity > $product['inventory']) {
                     $_SESSION['cart_message'] = "Error: Total quantity exceeds available stock!";
-                    header("Location: product.php?id=$product_id");
+                    header("Location: ../pages/product.php?id=$product_id");
                     exit;
                 }
                 $item['quantity'] = $new_quantity;

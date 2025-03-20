@@ -103,8 +103,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <form name="sentMessage" id="contactForm" method="POST" action="" novalidate="novalidate">
                         <?php if ($successMessage): ?>
-                            <span class="alert alert-success mb-0"><?php echo $successMessage; ?></span>
-                            <br><br>
+                        <span class="alert alert-success mb-0"><?php echo $successMessage; ?></span>
+                        <br><br>
                         <?php endif; ?>
                         <div class="control-group">
                             <input type="text" class="form-control" id="name" name="name" placeholder="Your Name"
@@ -146,12 +146,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <!-- Display error message below the form if necessary -->
                     <?php if ($errorMessage): ?>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Error!</strong> <?php echo $errorMessage; ?>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error!</strong> <?php echo $errorMessage; ?>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     <?php endif; ?>
 
 
@@ -179,8 +179,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Footer End -->
 
 
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
 
     <!-- JavaScript Libraries -->

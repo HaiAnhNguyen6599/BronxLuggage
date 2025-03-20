@@ -58,7 +58,8 @@ while ($item = $items_result->fetch_assoc()) {
     <!-- Meta Tags và CSS -->
     <?php include '../includes/head.php'; ?>
     <!-- Bootstrap 4 CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
 <body>
@@ -104,14 +105,17 @@ while ($item = $items_result->fetch_assoc()) {
                                 </thead>
                                 <tbody>
                                     <?php foreach ($items as $item): ?>
-                                        <tr>
+                                    <tr>
 
-                                            <td><a href="product.php?id=<?php echo htmlspecialchars($item['product_id'] ?? ''); ?>" style="color: black;""><?= htmlspecialchars($item['name']) ?></a></td>
-                                            <!-- <td><img src=" ../img/products/<?= $item['image_url'] ?: 'default.jpg' ?>" alt="Product Image" width="50"></td> -->
-                                            <td><?= $item['quantity'] ?></td>
-                                            <td>$ <?= number_format($item['price'], 2) ?></td>
-                                            <td>$ <?= number_format($item['item_total'], 2) ?></td>
-                                        </tr>
+                                        <td><a href="product.php?id=<?php echo htmlspecialchars($item['product_id'] ?? ''); ?>"
+                                                style="color: black;""><?= htmlspecialchars($item['name']) ?></a></td>
+                                            <!-- <td><img src="
+                                                ../img/products/<?= $item['image_url'] ?: 'default.jpg' ?>"
+                                                alt="Product Image" width="50"></td> -->
+                                        <td><?= $item['quantity'] ?></td>
+                                        <td>$ <?= number_format($item['price'], 2) ?></td>
+                                        <td>$ <?= number_format($item['item_total'], 2) ?></td>
+                                    </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
@@ -127,13 +131,17 @@ while ($item = $items_result->fetch_assoc()) {
     <!-- Footer -->
     <?php include '../includes/footer.php'; ?>
 
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
 
     <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
     <script src="../js/main.js"></script>
 </body>
 

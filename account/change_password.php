@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $update_stmt->bind_param("si", $new_hashed_password, $user_id);
                             if ($update_stmt->execute()) {
                                 $_SESSION['success'] = "Password changed successfully!";
-                                header("Location: change_password.php"); // Tải lại trang để hiển thị thông báo
+                                header("Location: ../pages/account.php"); // Tải lại trang để hiển thị thông báo
                                 exit();
                             } else {
                                 $errors['db'] = "Failed to update password: " . $update_stmt->error;
@@ -113,9 +113,11 @@ if (isset($_SESSION['success'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <?php include '../includes/head.php'; ?>
 </head>
+
 <body>
     <?php include '../includes/topbar.php'; ?>
     <?php include '../includes/navbar.php'; ?>
@@ -135,7 +137,8 @@ if (isset($_SESSION['success'])) {
                         <form action="change_password.php" method="POST">
                             <!-- Old Password -->
                             <div class="form-group">
-                                <input type="password" id="old_password" name="old_password" class="form-control" placeholder="Old Password">
+                                <input type="password" id="old_password" name="old_password" class="form-control"
+                                    placeholder="Old Password">
                                 <?php if (isset($errors['old_password'])): ?>
                                     <small class="text-danger"><?= htmlspecialchars($errors['old_password']) ?></small>
                                 <?php endif; ?>
@@ -143,7 +146,8 @@ if (isset($_SESSION['success'])) {
 
                             <!-- New Password -->
                             <div class="form-group">
-                                <input type="password" id="new_password" name="new_password" class="form-control" placeholder="New Password">
+                                <input type="password" id="new_password" name="new_password" class="form-control"
+                                    placeholder="New Password">
                                 <?php if (isset($errors['new_password'])): ?>
                                     <small class="text-danger"><?= htmlspecialchars($errors['new_password']) ?></small>
                                 <?php endif; ?>
@@ -151,7 +155,8 @@ if (isset($_SESSION['success'])) {
 
                             <!-- Confirm New Password -->
                             <div class="form-group">
-                                <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Confirm New Password">
+                                <input type="password" id="confirm_password" name="confirm_password"
+                                    class="form-control" placeholder="Confirm New Password">
                                 <?php if (isset($errors['confirm_password'])): ?>
                                     <small class="text-danger"><?= htmlspecialchars($errors['confirm_password']) ?></small>
                                 <?php endif; ?>
@@ -177,4 +182,5 @@ if (isset($_SESSION['success'])) {
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

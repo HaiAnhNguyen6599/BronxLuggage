@@ -384,8 +384,10 @@ if (!function_exists('getProductImages')) {
                             <?php foreach ($cart_items as $item): ?>
                                 <tr data-cart-id="<?php echo htmlspecialchars($item['cart_id'] ?? ''); ?>">
                                     <td class="align-middle text-left">
-                                        <img src="../<?php echo htmlspecialchars($item['image_url'] ?? 'img/default.jpg'); ?>" alt="" style="width: 50px;">
-                                        <a href="product.php?id=<?php echo htmlspecialchars($item['id'] ?? ''); ?>" style="color: black;">
+                                        <img src="../<?php echo htmlspecialchars($item['image_url'] ?? 'img/default.jpg'); ?>"
+                                            alt="" style="width: 50px;">
+                                        <a href="product.php?id=<?php echo htmlspecialchars($item['id'] ?? ''); ?>"
+                                            style="color: black;">
                                             <?php echo htmlspecialchars($item['name'] ?? 'Unknown Product'); ?>
                                             <?php if ($user_id > 0 || isset($item['size_name'])): ?>
                                                 (Size: <?php echo htmlspecialchars($item['size_name'] ?? 'N/A'); ?>,
@@ -401,7 +403,8 @@ if (!function_exists('getProductImages')) {
                                                     <i class="fa fa-minus"></i>
                                                 </button>
                                             </div>
-                                            <input type="number" min="1" max="<?php echo htmlspecialchars($item['inventory'] ?? 0); ?>"
+                                            <input type="number" min="1"
+                                                max="<?php echo htmlspecialchars($item['inventory'] ?? 0); ?>"
                                                 class="form-control form-control-sm bg-secondary border-0 text-center quantity-input"
                                                 value="<?php echo htmlspecialchars($item['quantity'] ?? 1); ?>">
                                             <div class="input-group-btn">
@@ -411,9 +414,12 @@ if (!function_exists('getProductImages')) {
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="align-middle">$<span class="item-total"><?php echo number_format(($item['price'] ?? 0) * ($item['quantity'] ?? 1), 2); ?></span></td>
+                                    <td class="align-middle">$<span
+                                            class="item-total"><?php echo number_format(($item['price'] ?? 0) * ($item['quantity'] ?? 1), 2); ?></span>
+                                    </td>
                                     <td class="align-middle">
-                                        <button class="btn btn-sm btn-danger btn-remove" data-cart-id="<?php echo htmlspecialchars($item['cart_id'] ?? ''); ?>">
+                                        <button class="btn btn-sm btn-danger btn-remove"
+                                            data-cart-id="<?php echo htmlspecialchars($item['cart_id'] ?? ''); ?>">
                                             <i class="fa fa-times"></i>
                                         </button>
                                     </td>
@@ -430,7 +436,8 @@ if (!function_exists('getProductImages')) {
             </div>
 
             <div class="col-lg-4">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart Summary</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart
+                        Summary</span></h5>
                 <div class="bg-light p-30 mb-5">
                     <div class="pt-2">
                         <div class="d-flex justify-content-between mt-2">
@@ -446,15 +453,15 @@ if (!function_exists('getProductImages')) {
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll(".quantity").forEach(function(quantityWrapper) {
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".quantity").forEach(function (quantityWrapper) {
                 let quantityInput = quantityWrapper.querySelector(".quantity-input");
                 let minusButton = quantityWrapper.querySelector(".btn-minus");
                 let plusButton = quantityWrapper.querySelector(".btn-plus");
                 let maxStock = parseInt(quantityInput.getAttribute("max"));
                 let cartId = quantityWrapper.closest("tr").getAttribute("data-cart-id");
 
-                plusButton.addEventListener("click", function(e) {
+                plusButton.addEventListener("click", function (e) {
                     e.preventDefault();
                     let currentQuantity = parseInt(quantityInput.value) || 0;
                     if (currentQuantity < maxStock) {
@@ -464,7 +471,7 @@ if (!function_exists('getProductImages')) {
                     }
                 });
 
-                minusButton.addEventListener("click", function(e) {
+                minusButton.addEventListener("click", function (e) {
                     e.preventDefault();
                     let currentQuantity = parseInt(quantityInput.value) || 0;
                     if (currentQuantity > 1) {
@@ -474,7 +481,7 @@ if (!function_exists('getProductImages')) {
                     }
                 });
 
-                quantityInput.addEventListener("change", function() {
+                quantityInput.addEventListener("change", function () {
                     let value = parseInt(this.value) || 1;
                     if (value < 1) value = 1;
                     if (value > maxStock) value = maxStock;
@@ -485,18 +492,20 @@ if (!function_exists('getProductImages')) {
             });
 
             function updateQuantity(cartId, quantity, quantityInput) {
-                let previousQuantity = parseInt(quantityInput.getAttribute("data-previous-value") || quantityInput.value);
+                let previousQuantity = parseInt(quantityInput.getAttribute("data-previous-value") || quantityInput
+                    .value);
                 quantityInput.setAttribute("data-previous-value", quantity);
 
                 console.log("Updating quantity: cartId=" + cartId + ", quantity=" + quantity); // Debug
 
                 fetch("cart.php", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded",
-                        },
-                        body: "action=update_quantity&cart_id=" + encodeURIComponent(cartId) + "&quantity=" + quantity
-                    })
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: "action=update_quantity&cart_id=" + encodeURIComponent(cartId) + "&quantity=" +
+                        quantity
+                })
                     .then(response => {
                         console.log("Response status:", response.status); // Debug
                         if (!response.ok) {
@@ -531,29 +540,32 @@ if (!function_exists('getProductImages')) {
                     });
             }
 
-            document.querySelectorAll(".btn-remove").forEach(function(button) {
-                button.addEventListener("click", function(e) {
+            document.querySelectorAll(".btn-remove").forEach(function (button) {
+                button.addEventListener("click", function (e) {
                     e.preventDefault();
                     let cartId = this.getAttribute("data-cart-id");
 
                     // Hiển thị hộp thoại xác nhận trước khi xóa
-                    let confirmDelete = confirm(`Are you sure you want to remove item with Cart ID: ${cartId}?`);
+                    let confirmDelete = confirm(
+                        `Are you sure you want to remove item with Cart ID: ${cartId}?`);
                     if (!confirmDelete) return; // Nếu người dùng nhấn Cancel, thoát luôn
                     console.log("Removing item with cart_id:", cartId);
                     let row = this.closest("tr");
 
                     fetch("cart.php", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/x-www-form-urlencoded",
-                            },
-                            body: "action=remove&cart_id=" + encodeURIComponent(cartId)
-                        })
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                        body: "action=remove&cart_id=" + encodeURIComponent(cartId)
+                    })
                         .then(response => {
                             console.log("Response status:", response.status);
-                            console.log("Response headers:", response.headers.get("content-type"));
+                            console.log("Response headers:", response.headers.get(
+                                "content-type"));
                             if (!response.ok) {
-                                throw new Error("Network response was not ok: " + response.statusText);
+                                throw new Error("Network response was not ok: " + response
+                                    .statusText);
                             }
                             return response.text();
                         })
@@ -566,10 +578,12 @@ if (!function_exists('getProductImages')) {
                                     row.remove();
                                     updateCartTotal();
                                     if (document.querySelectorAll("tbody tr").length === 0) {
-                                        document.querySelector("tbody").innerHTML = '<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>';
+                                        document.querySelector("tbody").innerHTML =
+                                            '<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>';
                                     }
                                 } else {
-                                    alert("Failed to remove item: " + (data.message || "Unknown error"));
+                                    alert("Failed to remove item: " + (data.message ||
+                                        "Unknown error"));
                                     if (data.message.includes("Item not found")) {
                                         window.location.reload();
                                     }
@@ -581,7 +595,8 @@ if (!function_exists('getProductImages')) {
                         })
                         .catch(error => {
                             console.error("Fetch error:", error);
-                            alert("An error occurred while removing the item: " + error.message);
+                            alert("An error occurred while removing the item: " + error
+                                .message);
                         });
                 });
             });
@@ -596,16 +611,15 @@ if (!function_exists('getProductImages')) {
 
             function updateCartTotal() {
                 let total = 0;
-                document.querySelectorAll(".item-total").forEach(function(totalElement) {
+                document.querySelectorAll(".item-total").forEach(function (totalElement) {
                     total += parseFloat(totalElement.textContent);
                 });
                 document.getElementById("total-price").textContent = "$" + total.toFixed(2);
             }
         });
     </script>
-
     <?php include '../includes/footer.php'; ?>
-    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>

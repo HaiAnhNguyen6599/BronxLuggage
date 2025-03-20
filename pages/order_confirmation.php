@@ -60,13 +60,14 @@ $stmt_items->close();
     <!-- Meta Tags -->
     <?php include '../includes/head.php'; ?>
     <!-- Bootstrap 4 CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
 <body>
     <!-- Topbar -->
     <?php include '../includes/topbar.php'; ?>
-    
+
     <!-- Navbar -->
     <?php include '../includes/navbar.php'; ?>
 
@@ -108,7 +109,8 @@ $stmt_items->close();
                                 <tr>
                                     <th>Status:</th>
                                     <td>
-                                        <span class="badge <?= $order['status'] === 'completed' ? 'badge-success' : 'badge-warning' ?>">
+                                        <span
+                                            class="badge <?= $order['status'] === 'completed' ? 'badge-success' : 'badge-warning' ?>">
                                             <?= ucfirst(htmlspecialchars($order['status'])) ?>
                                         </span>
                                     </td>
@@ -134,12 +136,12 @@ $stmt_items->close();
                                 </thead>
                                 <tbody>
                                     <?php foreach ($order_items as $item): ?>
-                                        <tr>
-                                            <td><?= htmlspecialchars($item['name']) ?></td>
-                                            <td><?= $item['quantity'] ?></td>
-                                            <td>$<?= number_format($item['price'], 2) ?></td>
-                                            <td>$<?= number_format($item['quantity'] * $item['price'], 2) ?></td>
-                                        </tr>
+                                    <tr>
+                                        <td><?= htmlspecialchars($item['name']) ?></td>
+                                        <td><?= $item['quantity'] ?></td>
+                                        <td>$<?= number_format($item['price'], 2) ?></td>
+                                        <td>$<?= number_format($item['quantity'] * $item['price'], 2) ?></td>
+                                    </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                                 <tfoot>
@@ -154,7 +156,8 @@ $stmt_items->close();
                         <!-- Buttons -->
                         <div class="text-center">
                             <a href="../pages/index.php" class="btn btn-primary">Back to Home</a>
-                            <a href="../pages/order_detail.php?order_id=<?php echo $order_id?>" class="btn btn-secondary ml-2">View My Orders</a>
+                            <a href="../pages/order_detail.php?order_id=<?php echo $order_id?>"
+                                class="btn btn-secondary ml-2">View My Orders</a>
                         </div>
                     </div>
                 </div>
@@ -166,13 +169,17 @@ $stmt_items->close();
     <!-- Footer -->
     <?php include '../includes/footer.php'; ?>
 
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
 
     <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
     <script src="../lib/easing/easing.min.js"></script>
     <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
     <script src="../js/main.js"></script>
