@@ -147,7 +147,7 @@ $feedback_count = count($feedbacks);
 
             <div class="col-lg-7 h-auto mb-30">
                 <div class="h-100 bg-light p-30">
-                    <!-- Hiển thị thông báo add to cart-->
+                    <!-- Start add to cart-->
                     <?php if (isset($_SESSION['cart_message'])): ?>
                         <div id="cart-message" class="cart-alert">
                             <?php
@@ -155,7 +155,6 @@ $feedback_count = count($feedbacks);
                             unset($_SESSION['cart_message']); // Xóa session sau khi hiển thị
                             ?>
                         </div>
-
                         <script>
                             setTimeout(function() {
                                 var messageBox = document.getElementById("cart-message");
@@ -166,7 +165,7 @@ $feedback_count = count($feedbacks);
                             }, 3000);
                         </script>
                     <?php endif; ?>
-
+                    <!-- End add to cart message -->
 
                     <h3><?php echo htmlspecialchars($product['name']); ?></h3>
                     <div class="d-flex mb-3">
@@ -251,13 +250,21 @@ $feedback_count = count($feedbacks);
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary px-3">
-                                <i class="fa fa-shopping-cart mr-1"></i> Add To Cart
+                                <i class="fa fa-cart-plus mr-1"></i> Add To Cart
                             </button>
+                            <a href="../pages/cart.php" class="btn btn-success px-3 ml-3">
+                                <i class="fa fa-shopping-cart mr-1"></i> View Cart
+                            </a>
                         </div>
                     </form>
 
                     <a href="../pages/shop.php">Back to Shop</a>
 
+                    <!-- <div class="text-left mt-3">
+                        <a href="../pages/shop.php" class="btn btn-secondary px-4 py-2">
+                            <i class="fa fa-arrow-left mr-1"></i> Continue Shopping
+                        </a>
+                    </div> -->
                     <!--  js cho nút tăng/giảm số lượng -->
                     <script>
                         document.addEventListener("DOMContentLoaded", function() {

@@ -152,11 +152,11 @@ INSERT INTO product_images (product_id, image_url, is_primary) VALUES
 (1, 'img/products/product1.2.jpg', false);
 
 -- Insert feedback
-INSERT INTO feedback (user_id, product_id, message, rating) VALUES
-(1, 1, 'Really sturdy suitcase, perfect for long trips!', 5),
-(1, 1, 'This backpack looks sleek, but the padding could be better.', 3),
-(1, 1, 'Fantastic briefcase, super professional vibe.', 5),
-(1, 1, 'Tote bag is stylish but a little small for my needs.', 4),
-(1, 1, 'Briefcase holds up well, loving the compartments.', 5),
-(1, 1, 'Messenger bag is great, but the strap wears out fast.', 3);
+-- INSERT INTO feedback (user_id, product_id, message, rating) VALUES
+-- (1, 1, 'Really sturdy suitcase, perfect for long trips!', 5),
+-- (1, 1, 'This backpack looks sleek, but the padding could be better.', 3),
+-- (1, 1, 'Fantastic briefcase, super professional vibe.', 5),
+-- (1, 1, 'Tote bag is stylish but a little small for my needs.', 4),
+-- (1, 1, 'Briefcase holds up well, loving the compartments.', 5),
+-- (1, 1, 'Messenger bag is great, but the strap wears out fast.', 3);
 

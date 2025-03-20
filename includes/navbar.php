@@ -2,18 +2,31 @@
 // lấy tên file PHP đang chạy
 $current_page = basename($_SERVER['PHP_SELF']);
 
-
-// Lấy số lượng sản phẩm trong giỏ hàng của người dùng (tính số dòng sản phẩm)
-$sql = "SELECT COUNT(*) AS total_products FROM cart WHERE user_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$row = $result->fetch_assoc();
-$total_products = $row['total_products'] ? $row['total_products'] : 0;  // Nếu không có sản phẩm, gán số lượng = 0
+$user_id = $_SESSION['user_id'] ?? 0;  // Lấy user_id từ session, nếu không có thì gán = 0
+echo $user_id;
 
 
+$total_products = 0;
 
+// Nếu có giỏ hàng trong session, đếm số lượng sản phẩm khác nhau
+if (!empty($_SESSION['cart'])) {
+    $total_products = count($_SESSION['cart']); // Mỗi sản phẩm trong session là một item khác nhau
+}
+
+
+// Nếu người dùng đã đăng nhập, lấy số sản phẩm từ database
+if (isset($_SESSION['user_id'])) {
+
+    $sql = "SELECT COUNT(DISTINCT product_id) AS total_products FROM cart WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+
+    // Cộng dồn số lượng sản phẩm distinct từ database
+    $total_products += $row['total_products'] ?? 0;
+}
 ?>
 
 <!DOCTYPE html>

@@ -2,6 +2,10 @@
 require "../config.php"; // File kết nối database
 require_once '../functions.php'; // File chứa các hàm bổ trợ (nếu có)
 
+$user_id = $_SESSION['user_id'] ?? 0;  // Lấy user_id từ session, nếu không có thì gán = 0
+echo $user_id;
+
+
 // Kiểm tra xem người dùng đã đăng nhập chưa
 if (!isset($_SESSION['name']) || !isset($_SESSION['email'])) {
     header("Location: ../account/login.php");
@@ -20,7 +24,7 @@ if (!$user) {
     header("Refresh: 3; url=../account/login.php");
     exit();
 }
-$user_id = $user['id'];
+
 
 // Phân trang cho Order History
 $limit = 5; // Số đơn hàng mỗi trang
@@ -86,9 +90,9 @@ $orders = $orders_stmt->get_result();
                                 <h5 class="card-title">Account Information</h5>
                                 <p><strong>Name:</strong> <?= htmlspecialchars($user['name']); ?></p>
                                 <p><strong>Email:</strong> <?= htmlspecialchars($user['email']); ?></p>
-                                <p><strong>Phone:</strong> <?= htmlspecialchars($user['phone']) ?: 'Not provided'; ?></p>
-                                <p><strong>Address:</strong> <?= htmlspecialchars($user['address']) ?: 'Not provided'; ?></p>
-                                <p><strong>City:</strong> <?= htmlspecialchars($user['city']) ?: 'Not provided'; ?></p>
+                                <p><strong>Phone:</strong> <?= $user['phone'] ? htmlspecialchars($user['phone']) : 'Not provided'; ?></p>
+                                <p><strong>Address:</strong> <?= $user['address'] ? htmlspecialchars($user['address']) : 'Not provided'; ?></p>
+                                <p><strong>City:</strong> <?= $user['city'] ? htmlspecialchars($user['city']) : 'Not provided'; ?></p>
                                 <a href="../account/edit_profile.php" class="btn btn-primary mt-2">Edit Profile</a>
                             </div>
                         </div>

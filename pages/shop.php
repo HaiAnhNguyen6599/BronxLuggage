@@ -90,7 +90,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $categories = getCategories($conn);
                         while ($row = $categories->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_categories) ? 'checked' : '';
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="category[]" value="<?= $row['name'] ?>"
@@ -116,7 +116,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $brands = getBrands($conn);
                         while ($row = $brands->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_brands) ? 'checked' : '';
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="brand[]" value="<?= $row['name'] ?>"
@@ -141,7 +141,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $colors = getColors($conn);
                         while ($row = $colors->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_colors) ? 'checked' : '';
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="color[]" value="<?= $row['name'] ?>"
@@ -165,7 +165,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $sizes = getSizes($conn);
                         while ($row = $sizes->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_sizes) ? 'checked' : '';
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="size[]" value="<?= $row['name'] ?>"
@@ -188,7 +188,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $genders = getGenders($conn);
                         while ($row = $genders->fetch_assoc()) {
                             $isChecked = in_array($row['gender'], $selected_genders) ? 'checked' : '';
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="gender[]" value="<?= $row['gender'] ?>"
@@ -225,7 +225,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         foreach ($price_ranges as $range => $label) {
                             $isChecked = in_array($range, $selected_prices) ? 'checked' : '';
                             $id = "price-" . str_replace("-", "_", $range); // ID duy nhất cho mỗi checkbox
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" class="custom-control-input" name="price[]" value="<?= $range ?>"
@@ -257,7 +257,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                                         <a class="btn btn-outline-dark btn-square"
                                             href="product.php?id=<?php echo $row['id'] ?>"><i
                                                 class="fa fa-shopping-cart"></i></a>
-                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                                        <!-- <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a> -->
                                     </div>
                                 </div>
                                 <div class="text-center py-4">
@@ -291,24 +291,57 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                                     <!-- Previous Button -->
                                     <?php if ($page > 1) { ?>
                                         <li class="page-item">
-                                            <a class="page-link"
-                                                href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">Previous</a>
+                                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">Previous</a>
                                         </li>
                                     <?php } ?>
 
                                     <!-- Số trang -->
-                                    <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
-                                        <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                                            <a class="page-link"
-                                                href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
+                                    <?php
+                                    // Số lượng trang tối đa hiển thị xung quanh trang hiện tại (trái và phải)
+                                    $range = 2;
+                                    $show_dots = false;
+
+                                    // Trang đầu tiên
+                                    if ($total_pages > 1) {
+                                    ?>
+                                        <li class="page-item <?= ($page == 1) ? 'active' : '' ?>">
+                                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => 1])) ?>">1</a>
                                         </li>
-                                    <?php } ?>
+                                        <?php
+                                        // Hiển thị dấu "..." nếu trang 2 cách xa trang hiện tại
+                                        if ($page - $range > 2) {
+                                            echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                            $show_dots = true;
+                                        }
+                                    }
+
+                                    // Các trang xung quanh trang hiện tại
+                                    for ($i = max(2, $page - $range); $i <= min($total_pages - 1, $page + $range); $i++) {
+                                        ?>
+                                        <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
+                                        </li>
+                                    <?php
+                                    }
+
+                                    // Trang cuối cùng và dấu "..." nếu cần
+                                    if ($total_pages > 1) {
+                                        if ($page + $range < $total_pages - 1) {
+                                            echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                            $show_dots = true;
+                                        }
+                                    ?>
+                                        <li class="page-item <?= ($page == $total_pages) ? 'active' : '' ?>">
+                                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $total_pages])) ?>"><?= $total_pages ?></a>
+                                        </li>
+                                    <?php
+                                    }
+                                    ?>
 
                                     <!-- Next Button -->
                                     <?php if ($page < $total_pages) { ?>
                                         <li class="page-item">
-                                            <a class="page-link"
-                                                href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">Next</a>
+                                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">Next</a>
                                         </li>
                                     <?php } ?>
                                 </ul>

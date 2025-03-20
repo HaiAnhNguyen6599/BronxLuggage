@@ -273,7 +273,7 @@ if ($user_id > 0) {
             }
         }
         $total_price = array_reduce($cart_items, function ($sum, $item) {
-            return $sum + ($item['price'] * $item['quantity']);
+            return $sum += $item['price'] * $item['quantity'];
         }, 0);
     }
 }
@@ -329,6 +329,19 @@ if (!function_exists('getProductImages')) {
         input[type="number"]::-webkit-outer-spin-button {
             -webkit-appearance: none;
             margin: 0;
+        }
+
+        /* CSS for Continue Shopping */
+        .btn-secondary {
+            background-color: #6c757d;
+            /* Màu xám Bootstrap */
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            /* Màu tối hơn khi hover */
         }
     </style>
 </head>
@@ -409,7 +422,13 @@ if (!function_exists('getProductImages')) {
                         <?php endif; ?>
                     </tbody>
                 </table>
+                <div class="text-left mt-3">
+                    <a href="../pages/shop.php" class="btn btn-secondary px-4 py-2">
+                        <i class="fa fa-arrow-left mr-1"></i> Continue Shopping
+                    </a>
+                </div>
             </div>
+
             <div class="col-lg-4">
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart Summary</span></h5>
                 <div class="bg-light p-30 mb-5">
@@ -516,6 +535,10 @@ if (!function_exists('getProductImages')) {
                 button.addEventListener("click", function(e) {
                     e.preventDefault();
                     let cartId = this.getAttribute("data-cart-id");
+
+                    // Hiển thị hộp thoại xác nhận trước khi xóa
+                    let confirmDelete = confirm(`Are you sure you want to remove item with Cart ID: ${cartId}?`);
+                    if (!confirmDelete) return; // Nếu người dùng nhấn Cancel, thoát luôn
                     console.log("Removing item with cart_id:", cartId);
                     let row = this.closest("tr");
 

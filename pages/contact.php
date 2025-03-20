@@ -1,6 +1,7 @@
 <?php
 require "../config.php";
 require_once '../functions.php';
+$user_id = $_SESSION['user_id'] ?? 0;
 
 // Declare variables for error messages and input values
 $nameError = $emailError = $subjectError = $messageError = '';

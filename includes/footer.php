@@ -40,11 +40,9 @@
         <div class="col-md-4 mb-5">
           <h5 class="text-secondary text-uppercase mb-4">Account</h5>
           <div class="d-flex flex-column justify-content-start">
-            <a class="text-secondary mb-2" href="../pages/account.php"><i class="fa fa-angle-right mr-2"></i>Home</a>
-            <a class="text-secondary mb-2" href="../pages/cart.php"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
+            <a class="text-secondary mb-2" href="../pages/cart.php"><i class="fa fa-angle-right mr-2"></i>My Cart</a>
             <a class="text-secondary mb-2" href="../pages/account.php"><i class="fa fa-angle-right mr-2"></i>My Orders</a>
             <a class="text-secondary mb-2" href="../pages/checkout.php"><i class=" fa fa-angle-right mr-2"></i>Checkout</a>
-            <a class="text-secondary" href="../pages/contact.php"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
           </div>
         </div>
         <div class="col-md-4 mb-5">

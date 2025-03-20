@@ -1,6 +1,8 @@
 <?php
 require "../config.php";
 require_once '../functions.php';
+
+$user_id = $_SESSION['user_id'] ?? 0;
 ?>
 
 <!DOCTYPE html>
@@ -121,9 +123,9 @@ require_once '../functions.php';
               <img class="img-fluid w-100" src="../<?php echo $product['img'] ?: 'default.jpg'; ?>"
                 alt="<?php echo $product['name']; ?>" style="height: 400px; object-fit: cover;">
               <div class="product-action">
-                <a class="btn btn-outline-dark btn-square" href="#"><i class="fa fa-shopping-cart"></i></a>
-                <a class="btn btn-outline-dark btn-square"
-                  href="product.php?id=<?php echo $product['id']; ?>"><i class="fa fa-search"></i></a>
+                <a class="btn btn-outline-dark btn-square" href="product.php?id=<?php echo $product['id']; ?>"><i class="fa fa-shopping-cart"></i></a>
+                <!-- <a class="btn btn-outline-dark btn-square"
+                  href="product.php?id=<?php echo $product['id']; ?>"><i class="fa fa-search"></i></a> -->
               </div>
             </div>
             <div class="text-center py-4">

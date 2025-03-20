@@ -139,6 +139,7 @@ function buildFilterQuery($filters)
         'size' => ['table' => 's', 'column' => 'name', 'type' => 's']
     ];
 
+    // Xử lý các bộ lọc thông thường
     foreach ($filter_map as $key => $data) {
         if (!empty($filters[$key])) {
             $values = is_array($filters[$key]) ? $filters[$key] : [$filters[$key]];
@@ -146,6 +147,28 @@ function buildFilterQuery($filters)
             $where_clauses[] = "{$data['table']}.{$data['column']} IN ($placeholders)";
             $params = array_merge($params, $values);
             $types .= str_repeat($data['type'], count($values));
+        }
+    }
+
+    // Xử lý bộ lọc theo giá
+    if (!empty($filters['price'])) {
+        $price_conditions = [];
+        $price_values = is_array($filters['price']) ? $filters['price'] : [$filters['price']];
+        foreach ($price_values as $range) {
+            [$min, $max] = explode('-', $range);
+            if ($max == '1000') { // Trường hợp "Above $500"
+                $price_conditions[] = "p.price >= ?";
+                $params[] = (float)$min;
+                $types .= "d"; // 'd' cho kiểu double/float
+            } else {
+                $price_conditions[] = "p.price BETWEEN ? AND ?";
+                $params[] = (float)$min;
+                $params[] = (float)$max;
+                $types .= "dd"; // Hai tham số kiểu double/float
+            }
+        }
+        if (!empty($price_conditions)) {
+            $where_clauses[] = "(" . implode(" OR ", $price_conditions) . ")";
         }
     }
 
@@ -174,14 +197,14 @@ function getFilteredProducts($conn, $filters, $limit, $offset)
 
     $stmt = $conn->prepare($sql);
 
-    // Gắn thêm LIMIT và OFFSET vào tham số
-    $types .= "ii";
-    $params[] = $limit;
-    $params[] = $offset;
-
     if (!$stmt) {
         die("SQL Error: " . $conn->error);
     }
+
+    // Gắn thêm LIMIT và OFFSET vào tham số
+    $types .= "ii"; // Hai tham số kiểu integer
+    $params[] = $limit;
+    $params[] = $offset;
 
     $stmt->bind_param($types, ...$params);
     $stmt->execute();
