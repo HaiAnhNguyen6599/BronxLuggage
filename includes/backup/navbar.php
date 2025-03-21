@@ -109,8 +109,6 @@ if (isset($_SESSION['user_id'])) {
                                     class="dropdown-item <?php echo ($current_page == 'checkout.php') ? 'active' : ''; ?>">Checkout</a>
                             </div>
                         </div>
-                        <a href="../pages/about.php"
-                            class="nav-item nav-link <?= ($current_page == 'about.php') ? 'active' : ''; ?>">About Us</a>
                         <a href="../pages/contact.php"
                             class="nav-item nav-link <?= ($current_page == 'contact.php') ? 'active' : ''; ?>">Contact</a>
                     </div>

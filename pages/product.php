@@ -188,13 +188,8 @@ $feedback_count = count($feedbacks);
                         <small class="pt-1">(<?php echo $feedback_count; ?> Reviews)</small>
                     </div>
                     <h3 class="font-weight-semi-bold mb-4">$<?php echo number_format($product['price'], 2); ?></h3>
-                    <label><strong class="text-dark mr-3">In stock:</strong></label>
-                    <p class="mb-4" style="display: inline;"><?php echo htmlspecialchars($product['inventory']); ?></p>
                     <p class="mb-4"><?php echo htmlspecialchars($product['description']); ?></p>
-                    <!-- Form chọn size và colors gửi đến cart.php-->
-                    <form method="POST" action="../actions/add_to_cart.php">
-                        <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                        <div class="d-flex mb-3">
+                    <div class="d-flex mb-3">
                             <strong class="text-dark mr-3">Sizes:</strong>
                             <div>
                                 <?php if (!empty($available_sizes)) : ?>
@@ -238,7 +233,9 @@ $feedback_count = count($feedbacks);
                                 <?php endif; ?>
                             </div>
                         </div>
-
+                    <!-- Form chọn size và colors gửi đến cart.php-->
+                    <form method="POST" action="../actions/add_to_cart.php">
+                        <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
                         <div class="d-flex align-items-center mb-4 pt-2">
                             <div class="input-group quantity mr-3" style="width: 130px;">
                                 <div class="input-group-btn">
@@ -247,8 +244,7 @@ $feedback_count = count($feedbacks);
                                     </button>
                                 </div>
                                 <input type="text" class="form-control bg-secondary border-0 text-center"
-                                    name="quantity" value="1" id="quantity" readonly min="1"
-                                    max="<?php echo $product['inventory']; ?>">
+                                    name="quantity" value="1" id="quantity" readonly min="1">
                                 <div class="input-group-btn">
                                     <button type="button" class="btn btn-primary btn-plus">
                                         <i class="fa fa-plus"></i>
@@ -266,29 +262,23 @@ $feedback_count = count($feedbacks);
 
                     <a href="../pages/shop.php">Back to Shop</a>
 
+                    
                     <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        document.querySelectorAll(".quantity").forEach(function(quantityWrapper) {
-                            let quantityInput = quantityWrapper.querySelector("#quantity");
-                            let minusButton = quantityWrapper.querySelector(".btn-minus");
-                            let plusButton = quantityWrapper.querySelector(".btn-plus");
-                            let maxStock = parseInt(quantityInput.getAttribute("max"));
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const quantityInput = document.getElementById("quantity");
 
-                            plusButton.addEventListener("click", function() {
-                                let currentQuantity = parseInt(quantityInput.value);
-                                if (currentQuantity < maxStock) {
-                                    quantityInput.value = currentQuantity + 1;
+                            document.querySelector(".btn-minus").addEventListener("click", function() {
+                                let currentValue = parseInt(quantityInput.value);
+                                if (currentValue > 1) {
+                                    quantityInput.value = currentValue - 1;
                                 }
                             });
 
-                            minusButton.addEventListener("click", function() {
-                                let currentQuantity = parseInt(quantityInput.value);
-                                if (currentQuantity > 1) {
-                                    quantityInput.value = currentQuantity - 1;
-                                }
+                            document.querySelector(".btn-plus").addEventListener("click", function() {
+                                let currentValue = parseInt(quantityInput.value);
+                                quantityInput.value = currentValue + 1;
                             });
                         });
-                    });
                     </script>
                 </div>
             </div>

@@ -1,69 +1,66 @@
 <?php
-require "../config.php";
-require_once '../functions.php';
+session_start();
+require_once "../config.php"; // Kết nối database
 
-// Khởi tạo session nếu chưa có
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+// Kiểm tra người dùng đã đăng nhập hay chưa
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../account/login.php");
+    exit();
 }
 
-// Xử lý thêm sản phẩm vào giỏ hàng
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $product_id = $_POST['product_id'];
-    $size_id = $_POST['size_id'];
-    $color_id = $_POST['color_id'];
-    $quantity = max(1, intval($_POST['quantity']));
+// Kiểm tra dữ liệu đầu vào
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['product_id'], $_POST['quantity'])) {
+    $product_id = intval($_POST['product_id']);
+    $quantity = intval($_POST['quantity']);
 
-    // Kiểm tra tồn kho
-    $product = getProductById($conn, $product_id);
-    if (!$product || $quantity > $product['inventory']) {
-        $_SESSION['cart_message'] = "Error: Requested quantity exceeds available stock!";
+    if ($quantity < 1) {
+        $quantity = 1;
+    }
+
+    $user_id = $_SESSION['user_id'];
+
+    // Kiểm tra sản phẩm có tồn tại không
+    $stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
+    $stmt->bind_param("i", $product_id);
+    $stmt->execute();
+    $product = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+
+    if (!$product) {
+        $_SESSION['error'] = "Product not found.";
         header("Location: ../pages/product.php?id=$product_id");
-        exit;
+        exit();
     }
-
-    // Khởi tạo giỏ hàng trong session nếu chưa có hoặc không phải mảng
-    if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
-        $_SESSION['cart'] = [];
-    }
-
-    $cart_item = [
-        'product_id' => $product_id,
-        'size_id' => $size_id,
-        'color_id' => $color_id,
-        'quantity' => $quantity
-    ];
 
     // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-    $found = false;
-    if (!empty($_SESSION['cart'])) {
-        foreach ($_SESSION['cart'] as &$item) {
-            // Kiểm tra $item có phải mảng và chứa các khóa cần thiết không
-            if (
-                is_array($item) &&
-                isset($item['product_id']) && $item['product_id'] == $product_id &&
-                isset($item['size_id']) && $item['size_id'] == $size_id &&
-                isset($item['color_id']) && $item['color_id'] == $color_id
-            ) {
-                $new_quantity = $item['quantity'] + $quantity;
-                if ($new_quantity > $product['inventory']) {
-                    $_SESSION['cart_message'] = "Error: Total quantity exceeds available stock!";
-                    header("Location: ../pages/product.php?id=$product_id");
-                    exit;
-                }
-                $item['quantity'] = $new_quantity;
-                $found = true;
-                break;
-            }
-        }
-        unset($item); // Hủy tham chiếu sau khi dùng &$item
+    $stmt = $conn->prepare("SELECT * FROM cart WHERE user_id = ? AND product_id = ?");
+    $stmt->bind_param("ii", $user_id, $product_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    if ($result->num_rows > 0) {
+        // Nếu sản phẩm đã có, cập nhật số lượng
+        $stmt = $conn->prepare("UPDATE cart SET quantity = quantity + ? WHERE user_id = ? AND product_id = ?");
+        $stmt->bind_param("iii", $quantity, $user_id, $product_id);
+    } else {
+        // Nếu chưa có, thêm mới vào giỏ hàng
+        $stmt = $conn->prepare("INSERT INTO cart (user_id, product_id, quantity) VALUES (?, ?, ?)");
+        $stmt->bind_param("iii", $user_id, $product_id, $quantity);
     }
 
-    if (!$found) {
-        $_SESSION['cart'][] = $cart_item;
+    if ($stmt->execute()) {
+        $_SESSION['success'] = "Product added to cart successfully.";
+    } else {
+        $_SESSION['error'] = "Failed to add product to cart.";
     }
 
-    $_SESSION['cart_message'] = "Product added to cart successfully!";
+    $stmt->close();
     header("Location: ../pages/product.php?id=$product_id");
-    exit;
+    exit();
+} else {
+    $_SESSION['error'] = "Invalid request.";
+    header("Location: ../pages/index.php");
+    exit();
 }
+?>

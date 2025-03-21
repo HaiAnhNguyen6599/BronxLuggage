@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Kiểm tra phương thức yêu cầu
-if ($_SERVER["REQUEST_METHOD"] != "POST") {
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     $_SESSION['error'] = "Invalid request method.";
     header("Location: ../pages/checkout.php");
     exit();
@@ -29,16 +29,14 @@ $payment_method = $_POST['payment_method'] ?? '';
 
 // Kiểm tra dữ liệu đầu vào
 $errors = [];
-if (empty($phone)) {
-    $errors[] = "Phone number is required.";
-} elseif (!preg_match("/^[0-9]{10,15}$/", $phone)) {
-    $errors[] = "Invalid phone number format.";
+if (empty($phone) || !preg_match("/^[0-9]{10,15}$/", $phone)) {
+    $errors[] = "Invalid phone number.";
 }
-if (empty($address)) {
-    $errors[] = "Address is required.";
+if (empty($address) || strlen($address) > 255) {
+    $errors[] = "Address is required and must be under 255 characters.";
 }
-if (empty($city)) {
-    $errors[] = "City is required.";
+if (empty($city) || !preg_match("/^[a-zA-Z\s]+$/", $city)) {
+    $errors[] = "City name is invalid.";
 }
 if (!in_array($payment_method, ['cod', 'bank_transfer', 'credit_card'])) {
     $errors[] = "Invalid payment method.";
@@ -55,8 +53,8 @@ if (!empty($errors)) {
 $conn->begin_transaction();
 
 try {
-    // Lấy danh sách sản phẩm trong giỏ hàng và kiểm tra tồn kho
-    $sql_cart = "SELECT c.product_id, p.price, c.quantity, p.inventory, p.name 
+    // Lấy danh sách sản phẩm trong giỏ hàng
+    $sql_cart = "SELECT c.product_id, p.price, c.quantity, p.name 
                  FROM cart c 
                  JOIN products p ON c.product_id = p.id 
                  WHERE c.user_id = ?";
@@ -69,10 +67,6 @@ try {
     $total_price = 0;
 
     while ($row = $result_cart->fetch_assoc()) {
-        // Kiểm tra tồn kho
-        if ($row['quantity'] > $row['inventory']) {
-            throw new Exception("Not enough stock for product: " . htmlspecialchars($row['name']) . ". Available: " . $row['inventory'] . ", Requested: " . $row['quantity']);
-        }
         $cart_items[] = $row;
         $total_price += $row['price'] * $row['quantity'];
     }
@@ -86,25 +80,15 @@ try {
     $stmt_order = $conn->prepare($sql_order);
     $stmt_order->bind_param("i", $user_id);
     $stmt_order->execute();
-
-    // Lấy order_id vừa tạo
     $order_id = $conn->insert_id;
 
-    // Lưu từng sản phẩm vào `order_items` và cập nhật tồn kho
+    // Lưu từng sản phẩm vào `order_items`
     $sql_item = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
     $stmt_item = $conn->prepare($sql_item);
 
-    $sql_update_inventory = "UPDATE products SET inventory = inventory - ? WHERE id = ?";
-    $stmt_update_inventory = $conn->prepare($sql_update_inventory);
-
     foreach ($cart_items as $item) {
-        // Lưu chi tiết đơn hàng
         $stmt_item->bind_param("iiid", $order_id, $item['product_id'], $item['quantity'], $item['price']);
         $stmt_item->execute();
-
-        // Cập nhật tồn kho
-        $stmt_update_inventory->bind_param("ii", $item['quantity'], $item['product_id']);
-        $stmt_update_inventory->execute();
     }
 
     // Lưu thông tin thanh toán vào `payments`
@@ -133,28 +117,17 @@ try {
     header("Location: ../pages/order_confirmation.php?order_id=$order_id");
     exit();
 } catch (Exception $e) {
-    // Rollback giao dịch nếu có lỗi
     $conn->rollback();
-
-    // Lưu thông báo lỗi vào session và chuyển hướng
     $_SESSION['error'] = $e->getMessage();
     header("Location: ../pages/checkout.php");
     exit();
 } finally {
     // Đóng các statement
-    if (isset($stmt_cart))
-        $stmt_cart->close();
-    if (isset($stmt_order))
-        $stmt_order->close();
-    if (isset($stmt_item))
-        $stmt_item->close();
-    if (isset($stmt_update_inventory))
-        $stmt_update_inventory->close();
-    if (isset($stmt_payment))
-        $stmt_payment->close();
-    if (isset($stmt_clear_cart))
-        $stmt_clear_cart->close();
-    if (isset($stmt_update_user))
-        $stmt_update_user->close();
+    $stmt_cart->close();
+    $stmt_order->close();
+    $stmt_item->close();
+    $stmt_payment->close();
+    $stmt_clear_cart->close();
+    $stmt_update_user->close();
     $conn->close();
 }

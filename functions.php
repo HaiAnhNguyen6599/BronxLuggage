@@ -248,13 +248,11 @@ function getProductById($conn, $product_id)
 {
     $stmt = $conn->prepare("
         SELECT p.id, p.name, p.description, c.name AS category, b.name AS brand, 
-               p.size_id, s.name AS size, p.color_id, col.name AS color, 
-               pi.image_url, p.price, p.gender, p.inventory
+               p.size_id, p.color_id,
+               pi.image_url, p.price, p.gender
         FROM products p
         LEFT JOIN categories c ON p.category_id = c.id
         LEFT JOIN brands b ON p.brand_id = b.id
-        LEFT JOIN sizes s ON p.size_id = s.id
-        LEFT JOIN colors col ON p.color_id = col.id
         LEFT JOIN product_images pi ON p.id = pi.product_id
         WHERE p.id = ?
     ");

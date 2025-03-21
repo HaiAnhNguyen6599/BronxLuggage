@@ -51,7 +51,7 @@ CREATE TABLE products (
     color_id INT NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     gender ENUM('male', 'female', 'kids') NOT NULL,
-    inventory INT NOT NULL DEFAULT 0,  -- Số lượng sản phẩm trong kho
+--     inventory INT NOT NULL DEFAULT 0,  -- Số lượng sản phẩm trong kho
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
     FOREIGN KEY (brand_id) REFERENCES brands(id) ON DELETE CASCADE,
@@ -128,11 +128,6 @@ MODIFY COLUMN phone VARCHAR(20) NULL,
 MODIFY COLUMN address VARCHAR(255) NULL,
 MODIFY COLUMN city VARCHAR(100) NULL;
 
-ALTER TABLE cart
-ADD COLUMN size_id INT NOT NULL,
-ADD COLUMN color_id INT NOT NULL,
-ADD FOREIGN KEY (size_id) REFERENCES sizes(id) ON DELETE CASCADE,
-ADD FOREIGN KEY (color_id) REFERENCES colors(id) ON DELETE CASCADE;
 
 CREATE TABLE contact (
 id INT AUTO_INCREMENT PRIMARY KEY,
