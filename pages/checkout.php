@@ -50,21 +50,21 @@ $total_price = 0;
     <?php include '../includes/topbar.php' ?>
     <?php include '../includes/navbar.php' ?>
     <?php
-if (isset($_SESSION['errors'])) {
-    echo '<div class="alert alert-danger">';
-    foreach ($_SESSION['errors'] as $error) {
-        echo '<p>' . htmlspecialchars($error) . '</p>';
+    if (isset($_SESSION['errors'])) {
+        echo '<div class="alert alert-danger">';
+        foreach ($_SESSION['errors'] as $error) {
+            echo '<p>' . htmlspecialchars($error) . '</p>';
+        }
+        echo '</div>';
+        unset($_SESSION['errors']);
     }
-    echo '</div>';
-    unset($_SESSION['errors']);
-}
-?>
+    ?>
     <div class="container-fluid">
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="#">Home</a>
-                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                    <a class="breadcrumb-item text-dark" href="../pages/index.php">Home</a>
+                    <a class="breadcrumb-item text-dark" href="../pages/shop.php">Shop</a>
                     <span class="breadcrumb-item active">Checkout</span>
                 </nav>
             </div>
@@ -107,35 +107,11 @@ if (isset($_SESSION['errors'])) {
                             </div>
                         </div>
                     </div>
-                    <!-- Javascirpt validate -->
-                    <!-- <script>
-                    document.getElementById('billing-form').addEventListener('submit', function(event) {
-                        let phone = document.querySelector('input[name="phone"]').value.trim();
-                        let address = document.querySelector('input[name="address"]').value.trim();
-                        let city = document.querySelector('input[name="city"]').value.trim();
-                        let phoneRegex = /^[0-9]{10,15}$/; // Chỉ nhận số từ 10-15 chữ số
-
-                        let errors = [];
-
-                        if (!phoneRegex.test(phone)) {
-                            errors.push("Số điện thoại không hợp lệ. Vui lòng nhập 10-15 chữ số.");
-                        }
-
-                        if (address.length < 5) {
-                            errors.push("Địa chỉ phải có ít nhất 5 ký tự.");
-                        }
-
-                        if (city.length < 2) {
-                            errors.push("Tên thành phố phải có ít nhất 2 ký tự.");
-                        }
-
-                        if (errors.length > 0) {
-                            event.preventDefault(); // Ngăn chặn submit nếu có lỗi
-                            alert(errors.join("\n"));
-                        }
-                    });
-                    </script> -->
-
+                    <div>
+                        <a href="cart.php" class="btn btn-primary px-4 py-2">
+                            <i class="fas fa-arrow-left mr-2"></i> Back To Cart
+                        </a>
+                    </div>
                 </div>
                 <div class="col-lg-4">
                     <h5 class="section-title position-relative text-uppercase mb-3"><span
@@ -144,16 +120,17 @@ if (isset($_SESSION['errors'])) {
                         <div class="border-bottom">
                             <h6 class="mb-3">Products</h6>
                             <?php if (empty($cart_items)): ?>
-                            <p>Your cart is empty.</p>
+                                <p>Your cart is empty.</p>
                             <?php else: ?>
-                            <?php foreach ($cart_items as $item): ?>
-                            <div class="d-flex justify-content-between">
-                                <p><?= htmlspecialchars($item['name'] ?? 'Unknown Product') ?> x
-                                    <?= htmlspecialchars($item['quantity'] ?? 0) ?></p>
-                                <p>$<?= number_format(($item['price'] ?? 0) * ($item['quantity'] ?? 0), 2) ?></p>
-                            </div>
-                            <?php $total_price += ($item['price'] ?? 0) * ($item['quantity'] ?? 0); ?>
-                            <?php endforeach; ?>
+                                <?php foreach ($cart_items as $item): ?>
+                                    <div class="d-flex justify-content-between">
+                                        <p><?= htmlspecialchars($item['name'] ?? 'Unknown Product') ?> x
+                                            <?= htmlspecialchars($item['quantity'] ?? 0) ?>
+                                        </p>
+                                        <p>$<?= number_format(($item['price'] ?? 0) * ($item['quantity'] ?? 0), 2) ?></p>
+                                    </div>
+                                    <?php $total_price += ($item['price'] ?? 0) * ($item['quantity'] ?? 0); ?>
+                                <?php endforeach; ?>
                             <?php endif; ?>
                         </div>
                         <div class="pt-2">
@@ -189,7 +166,9 @@ if (isset($_SESSION['errors'])) {
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-block btn-primary font-weight-bold py-3"
-                                <?php echo empty($cart_items) ? 'disabled' : ''; ?>>Place Order</button>
+                                id="placeOrderBtn" <?php echo empty($cart_items) ? 'disabled' : ''; ?>>
+                                Place Order
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -197,6 +176,14 @@ if (isset($_SESSION['errors'])) {
         </form>
     </div>
 
+    <!-- Script for Confirm method of Place Order Button -->
+    <script>
+        document.getElementById("placeOrderBtn").addEventListener("click", function (event) {
+            if (!confirm("Are you sure you want to place this order?")) {
+                event.preventDefault(); // Ngăn không cho form gửi đi nếu chọn Cancel
+            }
+        });
+    </script>
     <?php include '../includes/footer.php' ?>
 
 

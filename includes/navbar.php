@@ -3,7 +3,7 @@
 $current_page = basename($_SERVER['PHP_SELF']);
 
 $user_id = $_SESSION['user_id'] ?? 0;  // Lấy user_id từ session, nếu không có thì gán = 0
-echo $user_id;
+
 
 
 $total_products = 0;
@@ -110,7 +110,11 @@ if (isset($_SESSION['user_id'])) {
                             </div>
                         </div>
                         <a href="../pages/about.php"
-                            class="nav-item nav-link <?= ($current_page == 'about.php') ? 'active' : ''; ?>">About Us</a>
+                            class="nav-item nav-link <?= ($current_page == 'about.php') ? 'active' : ''; ?>">About
+                            Us</a>
+                        <a href="../pages/gallery.php"
+                            class="nav-item nav-link <?= ($current_page == 'gallery.php') ? 'active' : ''; ?>">Gallery
+                        </a>
                         <a href="../pages/contact.php"
                             class="nav-item nav-link <?= ($current_page == 'contact.php') ? 'active' : ''; ?>">Contact</a>
                     </div>

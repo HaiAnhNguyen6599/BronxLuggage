@@ -104,7 +104,7 @@ $stmt_items->close();
                                 </tr>
                                 <tr>
                                     <th>Payment Method:</th>
-                                    <td><?= ucfirst(htmlspecialchars($order['payment_method'])) ?></td>
+                                    <td><?= htmlspecialchars(ucwords(str_replace('_', ' ', $order['payment_method']))) ?></td>
                                 </tr>
                                 <tr>
                                     <th>Status:</th>

@@ -136,7 +136,6 @@ if (isset($_SESSION['user_id'])) {
                                     <td class="align-middle">
                                         <button class="btn btn-sm btn-danger btn-remove"
                                             data-cart-id="<?php echo htmlspecialchars($item['cart_id'] ?? ''); ?>">
-                                            <?php echo $item['cart_id'] ?>
                                             <i class="fa fa-times"></i>
                                         </button>
                                     </td>

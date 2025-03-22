@@ -124,13 +124,17 @@ function getProductImages($conn, $product_id)
 }
 
 
-// Hàm lọc chung cho shop.php
+// Filter products function 
 function buildFilterQuery($filters)
 {
-    $where_clauses = [];
-    $params = [];
-    $types = "";
+    $where_clauses = []; //  Stores the SQL conditions (WHERE clauses).
+    $params = []; // Holds values for placeholders (?).
+    $types = ""; // Stores data type specifiers (s for string, d for float/double).
 
+
+    /**
+     * 
+     */
     $filter_map = [
         'category' => ['table' => 'c', 'column' => 'name', 'type' => 's'],
         'brand' => ['table' => 'b', 'column' => 'name', 'type' => 's'],
@@ -158,12 +162,12 @@ function buildFilterQuery($filters)
             [$min, $max] = explode('-', $range);
             if ($max == '1000') { // Trường hợp "Above $500"
                 $price_conditions[] = "p.price >= ?";
-                $params[] = (float)$min;
+                $params[] = (float) $min;
                 $types .= "d"; // 'd' cho kiểu double/float
             } else {
                 $price_conditions[] = "p.price BETWEEN ? AND ?";
-                $params[] = (float)$min;
-                $params[] = (float)$max;
+                $params[] = (float) $min;
+                $params[] = (float) $max;
                 $types .= "dd"; // Hai tham số kiểu double/float
             }
         }
@@ -320,7 +324,8 @@ function getProductFeedback($conn, $product_id)
 // Hàm lấy tên kích thước theo ID (dùng trong cart.php)
 function getSizeById($conn, $size_id)
 {
-    if (!$size_id) return null; // Trả về null nếu size_id không tồn tại
+    if (!$size_id)
+        return null; // Trả về null nếu size_id không tồn tại
     $stmt = $conn->prepare("SELECT id, name FROM sizes WHERE id = ?");
     $stmt->bind_param("i", $size_id);
     $stmt->execute();
@@ -331,7 +336,8 @@ function getSizeById($conn, $size_id)
 
 function getColorById($conn, $color_id)
 {
-    if (!$color_id) return null; // Trả về null nếu color_id không tồn tại
+    if (!$color_id)
+        return null; // Trả về null nếu color_id không tồn tại
     $stmt = $conn->prepare("SELECT id, name FROM colors WHERE id = ?");
     $stmt->bind_param("i", $color_id);
     $stmt->execute();

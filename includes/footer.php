@@ -34,10 +34,10 @@
                                 class="fa fa-angle-right mr-2"></i>Home</a>
                         <a class="text-secondary mb-2" href="../pages/shop.php"><i
                                 class="fa fa-angle-right mr-2"></i>Our Shop</a>
-                        <a class="text-secondary mb-2" href="../pages/cart.php"><i
-                                class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
-                        <a class="text-secondary mb-2" href="../pages/checkout.php"><i
-                                class=" fa fa-angle-right mr-2"></i>Checkout</a>
+                        <a class="text-secondary mb-2" href="../pages/about.php"><i
+                                class="fa fa-angle-right mr-2"></i>About Us</a>
+                        <a class="text-secondary mb-2" href="../pages/gallery.php"><i
+                                class=" fa fa-angle-right mr-2"></i>Gallery</a>
                         <a class="text-secondary" href="../pages/contact.php"><i
                                 class="fa fa-angle-right mr-2"></i>Contact Us</a>
                     </div>
@@ -47,10 +47,11 @@
                     <div class="d-flex flex-column justify-content-start">
                         <a class="text-secondary mb-2" href="../pages/cart.php"><i class="fa fa-angle-right mr-2"></i>My
                             Cart</a>
-                        <a class="text-secondary mb-2" href="../pages/account.php"><i
-                                class="fa fa-angle-right mr-2"></i>My Orders</a>
+
                         <a class="text-secondary mb-2" href="../pages/checkout.php"><i
                                 class=" fa fa-angle-right mr-2"></i>Checkout</a>
+                        <a class="text-secondary mb-2" href="../pages/account.php"><i
+                                class="fa fa-angle-right mr-2"></i>My Orders</a>
                     </div>
                 </div>
                 <div class="col-md-4 mb-5">
@@ -59,10 +60,14 @@
 
                     <h6 class="text-secondary text-uppercase mt-4 mb-3">Follow Us</h6>
                     <div class="d-flex">
-                        <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
+                        <a class="btn btn-primary btn-square mr-2" href="https://x.com/"><i
+                                class="fab fa-twitter"></i></a>
+                        <a class="btn btn-primary btn-square mr-2" href="https://www.facebook.com/"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-primary btn-square mr-2" href="https://www.linkedin.com/"><i
+                                class="fab fa-linkedin-in"></i></a>
+                        <a class="btn btn-primary btn-square" href="https://www.instagram.com/"><i
+                                class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </div>

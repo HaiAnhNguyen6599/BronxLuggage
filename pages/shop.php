@@ -16,7 +16,6 @@ $offset = ($page - 1) * $limit;
 // Lấy tổng số sản phẩm
 $total_products = getTotalProducts($conn, $filters);
 
-// $total_pages = ($total_products > 0) ? ceil($total_products / $limit) : 1;
 $total_pages = max(1, ceil($total_products / $limit));
 
 if ($total_products > 0 && $page > $total_pages) {
@@ -73,7 +72,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
         <div class="row px-xl-5">
             <!-- Shop Sidebar Start -->
             <div class="col-lg-3 col-md-4">
-                <form action="shop.php" method="GET">
+                <form action="../pages/shop.php" method="GET">
                     <!-- Filter Start -->
                     <!-- Lọc theo Category -->
                     <h5 class="section-title position-relative text-uppercase mb-3"><span
@@ -237,7 +236,9 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
 
                     <!-- Filter End -->
                     <button id="applyFilters" name="search" class="btn btn-primary w-100 mt-3">Apply Filters</button>
+
                 </form>
+
                 <!-- Size End -->
             </div>
             <!-- Shop Sidebar End -->
@@ -248,115 +249,122 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                 <div class="row pb-3">
                     <!-- Product Loop -->
                     <?php
-                    while ($row = $products->fetch_assoc()) { ?>
-                        <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
-                            <div class="product-item bg-light mb-4">
-                                <div class="product-img position-relative overflow-hidden">
-                                    <img class="img-fluid w-100" src="../<?php echo $row['image']; ?>" alt="">
-                                    <div class="product-action">
-                                        <a class="btn btn-outline-dark btn-square"
-                                            href="product.php?id=<?php echo $row['id'] ?>"><i
-                                                class="fa fa-shopping-cart"></i></a>
-                                        <!-- <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a> -->
+                    if ($products->num_rows > 0) {
+                        while ($row = $products->fetch_assoc()) { ?>
+                            <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                                <div class="product-item bg-light mb-4">
+                                    <div class="product-img position-relative overflow-hidden">
+                                        <img class="img-fluid w-100" src="../<?php echo $row['image']; ?>" alt="">
+                                        <div class="product-action">
+                                            <a class="btn btn-outline-dark btn-square"
+                                                href="product.php?id=<?php echo $row['id'] ?>"><i
+                                                    class="fa fa-shopping-cart"></i></a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="text-center py-4">
-                                    <a class="h6 text-decoration-none text-truncate"
-                                        href="product.php?id=<?php echo $row['id'] ?>"><?php echo $row['name'] ?></a>
-                                    <div class="d-flex align-items-center justify-content-center mt-2">
-                                        <h5>$<?php echo $row['price'] ?></h5>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-center mb-1">
-                                        <?php for ($i = 0; $i < 5; $i++): ?>
-                                            <?php if ($i < floor($row['avg_rating'])): ?>
-                                                <small class="fa fa-star text-primary mr-1"></small>
-                                            <?php elseif ($i < $row['avg_rating']): ?>
-                                                <small class="fa fa-star-half-alt text-primary mr-1"></small>
-                                            <?php else: ?>
-                                                <small class="far fa-star text-primary mr-1"></small>
-                                            <?php endif; ?>
-                                        <?php endfor; ?>
-                                        <small>(<?php echo $row['total_reviews']; ?>)</small>
+                                    <div class="text-center py-4">
+                                        <a class="h6 text-decoration-none text-truncate"
+                                            href="product.php?id=<?php echo $row['id'] ?>"><?php echo $row['name'] ?></a>
+                                        <div class="d-flex align-items-center justify-content-center mt-2">
+                                            <h5>$<?php echo $row['price'] ?></h5>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-center mb-1">
+                                            <?php for ($i = 0; $i < 5; $i++): ?>
+                                                <?php if ($i < floor($row['avg_rating'])): ?>
+                                                    <small class="fa fa-star text-primary mr-1"></small>
+                                                <?php elseif ($i < $row['avg_rating']): ?>
+                                                    <small class="fa fa-star-half-alt text-primary mr-1"></small>
+                                                <?php else: ?>
+                                                    <small class="far fa-star text-primary mr-1"></small>
+                                                <?php endif; ?>
+                                            <?php endfor; ?>
+                                            <small>(<?php echo $row['total_reviews']; ?>)</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        <?php }
+                    } else { ?>
+                        <div class="col-12 text-center">
+                            <h4>No Products Found in Stock</h4>
                         </div>
                     <?php } ?>
+                </div>
 
-                    <!-- Phân trang -->
-                    <div class="col-12">
-                        <?php if ($total_pages > 1) { ?>
-                            <nav>
-                                <ul class="pagination justify-content-center">
-                                    <!-- Previous Button -->
-                                    <?php if ($page > 1) { ?>
-                                        <li class="page-item">
-                                            <a class="page-link"
-                                                href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">Previous</a>
-                                        </li>
-                                    <?php } ?>
 
-                                    <!-- Số trang -->
+                <!-- Phân trang -->
+                <div class="col-12">
+                    <?php if ($total_pages > 1) { ?>
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                <!-- Previous Button -->
+                                <?php if ($page > 1) { ?>
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                            href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">Previous</a>
+                                    </li>
+                                <?php } ?>
+
+                                <!-- Số trang -->
+                                <?php
+                                // Số lượng trang tối đa hiển thị xung quanh trang hiện tại (trái và phải)
+                                $range = 2;
+                                $show_dots = false;
+
+                                // Trang đầu tiên
+                                if ($total_pages > 1) {
+                                    ?>
+                                    <li class="page-item <?= ($page == 1) ? 'active' : '' ?>">
+                                        <a class="page-link"
+                                            href="?<?= http_build_query(array_merge($_GET, ['page' => 1])) ?>">1</a>
+                                    </li>
                                     <?php
-                                    // Số lượng trang tối đa hiển thị xung quanh trang hiện tại (trái và phải)
-                                    $range = 2;
-                                    $show_dots = false;
-
-                                    // Trang đầu tiên
-                                    if ($total_pages > 1) {
-                                        ?>
-                                        <li class="page-item <?= ($page == 1) ? 'active' : '' ?>">
-                                            <a class="page-link"
-                                                href="?<?= http_build_query(array_merge($_GET, ['page' => 1])) ?>">1</a>
-                                        </li>
-                                        <?php
-                                        // Hiển thị dấu "..." nếu trang 2 cách xa trang hiện tại
-                                        if ($page - $range > 2) {
-                                            echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
-                                            $show_dots = true;
-                                        }
+                                    // Hiển thị dấu "..." nếu trang 2 cách xa trang hiện tại
+                                    if ($page - $range > 2) {
+                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                        $show_dots = true;
                                     }
+                                }
 
-                                    // Các trang xung quanh trang hiện tại
-                                    for ($i = max(2, $page - $range); $i <= min($total_pages - 1, $page + $range); $i++) {
-                                        ?>
-                                        <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                                            <a class="page-link"
-                                                href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
-                                        </li>
-                                        <?php
-                                    }
+                                // Các trang xung quanh trang hiện tại
+                                for ($i = max(2, $page - $range); $i <= min($total_pages - 1, $page + $range); $i++) {
+                                    ?>
+                                    <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                                        <a class="page-link"
+                                            href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
+                                    </li>
+                                    <?php
+                                }
 
-                                    // Trang cuối cùng và dấu "..." nếu cần
-                                    if ($total_pages > 1) {
-                                        if ($page + $range < $total_pages - 1) {
-                                            echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
-                                            $show_dots = true;
-                                        }
-                                        ?>
-                                        <li class="page-item <?= ($page == $total_pages) ? 'active' : '' ?>">
-                                            <a class="page-link"
-                                                href="?<?= http_build_query(array_merge($_GET, ['page' => $total_pages])) ?>"><?= $total_pages ?></a>
-                                        </li>
-                                        <?php
+                                // Trang cuối cùng và dấu "..." nếu cần
+                                if ($total_pages > 1) {
+                                    if ($page + $range < $total_pages - 1) {
+                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                        $show_dots = true;
                                     }
                                     ?>
+                                    <li class="page-item <?= ($page == $total_pages) ? 'active' : '' ?>">
+                                        <a class="page-link"
+                                            href="?<?= http_build_query(array_merge($_GET, ['page' => $total_pages])) ?>"><?= $total_pages ?></a>
+                                    </li>
+                                    <?php
+                                }
+                                ?>
 
-                                    <!-- Next Button -->
-                                    <?php if ($page < $total_pages) { ?>
-                                        <li class="page-item">
-                                            <a class="page-link"
-                                                href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">Next</a>
-                                        </li>
-                                    <?php } ?>
-                                </ul>
-                            </nav>
-                        <?php } ?>
-                    </div>
+                                <!-- Next Button -->
+                                <?php if ($page < $total_pages) { ?>
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                            href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">Next</a>
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                        </nav>
+                    <?php } ?>
                 </div>
             </div>
-            <!-- Shop Product End -->
         </div>
+        <!-- Shop Product End -->
+    </div>
     </div>
     <!-- Shop End -->
 
