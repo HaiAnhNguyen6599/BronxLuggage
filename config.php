@@ -2,16 +2,16 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$servername = "localhost"; // Hoặc địa chỉ IP của máy chủ MySQL
-$username = "root"; // Thay bằng username của bạn
-$password = "12345678"; // Thay bằng password của bạn
-$database = "ecommerce"; // Tên database
+$servername = "localhost"; // MYSQL IP Address
+$username = "root"; // your username
+$password = "12345678"; // your password
+$database = "ecommerce"; //  database name
 
-// Kết nối MySQL với MySQLi
+// Connect to MySQL to MySQLi
 try {
     $conn = new mysqli($servername, $username, $password, $database);
 
-    // Kiểm tra kết nối
+    // Check Connection
     if ($conn->connect_error) {
         throw new Exception("Connection Failed: " . $conn->connect_error);
     }

@@ -113,7 +113,7 @@ try {
     $conn->commit();
 
     // Chuyển hướng đến trang xác nhận đơn hàng
-    $_SESSION['success'] = "Order placed successfully! Order ID: $order_id";
+    $_SESSION['success'] = "Order placed successfully!";
     header("Location: ../pages/order_confirmation.php?order_id=$order_id");
     exit();
 } catch (Exception $e) {

@@ -112,9 +112,6 @@ if (isset($_SESSION['user_id'])) {
                         <a href="../pages/about.php"
                             class="nav-item nav-link <?= ($current_page == 'about.php') ? 'active' : ''; ?>">About
                             Us</a>
-                        <a href="../pages/gallery.php"
-                            class="nav-item nav-link <?= ($current_page == 'gallery.php') ? 'active' : ''; ?>">Gallery
-                        </a>
                         <a href="../pages/contact.php"
                             class="nav-item nav-link <?= ($current_page == 'contact.php') ? 'active' : ''; ?>">Contact</a>
                     </div>

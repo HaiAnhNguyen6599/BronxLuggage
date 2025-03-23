@@ -36,8 +36,6 @@
                                 class="fa fa-angle-right mr-2"></i>Our Shop</a>
                         <a class="text-secondary mb-2" href="../pages/about.php"><i
                                 class="fa fa-angle-right mr-2"></i>About Us</a>
-                        <a class="text-secondary mb-2" href="../pages/gallery.php"><i
-                                class=" fa fa-angle-right mr-2"></i>Gallery</a>
                         <a class="text-secondary" href="../pages/contact.php"><i
                                 class="fa fa-angle-right mr-2"></i>Contact Us</a>
                     </div>
