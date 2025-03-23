@@ -24,7 +24,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "Invalid email format!";
     }
+    // Kiểm tra xem email đã tồn tại hay chưa
+    $checkEmail = $conn->prepare("SELECT email FROM users WHERE email = ?");
+    $checkEmail->bind_param("s", $email);
+    $checkEmail->execute();
+    $checkEmail->store_result();
 
+    if ($checkEmail->num_rows > 0) {
+        $errors['email'] = "Email already exists. Please use another email!";
+    }
     // Kiểm tra password
     if (empty($password)) {
         $errors['password'] = "Password cannot be empty!";
@@ -53,6 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $errors['database'] = "An error occurred during registration, please try again!";
         }
 
+        $checkEmail->close();
         $stmt->close();
         $conn->close();
     }
@@ -62,13 +71,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- Meta Tags -->
     <?php include '../includes/head.php'; ?>
     <!-- End Meta Tags -->
 </head>
+
 <body>
-    
+
     <!-- Topbar Start -->
     <?php include '../includes/topbar.php'; ?>
     <!-- Topbar End -->
@@ -145,7 +156,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             <!-- Confirm Password -->
                             <div class="form-group">
-                                <input type="password" name="confirm_password" class="form-control" placeholder="Confirm Password">
+                                <input type="password" name="confirm_password" class="form-control"
+                                    placeholder="Confirm Password">
                                 <?php if (isset($errors['confirm_password'])): ?>
                                     <small class="text-danger"><?= $errors['confirm_password'] ?></small>
                                 <?php endif; ?>
@@ -156,7 +168,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             <!-- Login Link -->
                             <div class="text-center mt-3">
-                                <small>Already have an account? <a href="login.php" class="font-weight-bold">Sign in</a></small>
+                                <small>Already have an account? <a href="login.php" class="font-weight-bold">Sign
+                                        in</a></small>
                             </div>
                         </form>
                     </div>
@@ -171,4 +184,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
