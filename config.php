@@ -2,7 +2,7 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-$servername = "localhost"; // MYSQL IP Address
+$servername = "localhost:3307"; // MYSQL IP Address
 $username = "root"; // your username
 $password = "12345678"; // your password
 $database = "ecommerce"; //  database name
