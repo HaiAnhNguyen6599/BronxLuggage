@@ -88,10 +88,10 @@ if (isset($_SESSION['user_id'])) {
                                     class="dropdown-item <?php echo ($current_page == 'shop.php') ? 'active' : ''; ?>">Both
                                 </a>
                                 <a href="../pages/shop.php?gender=male"
-                                    class="dropdown-item <?php echo ($current_page == 'shop.php?gender=male') ? 'active' : ''; ?>">Male
+                                    class="dropdown-item <?php echo ($current_page == 'shop.php?gender=male') ? 'active' : ''; ?>">Men
                                 </a>
                                 <a href="../pages/shop.php?gender=female"
-                                    class="dropdown-item <?php echo ($current_page == 'shop.php?gender=female') ? 'active' : ''; ?>">Female</a>
+                                    class="dropdown-item <?php echo ($current_page == 'shop.php?gender=female') ? 'active' : ''; ?>">Women</a>
                             </div>
                         </div>
 

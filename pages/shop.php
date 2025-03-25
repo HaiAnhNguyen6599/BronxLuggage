@@ -42,6 +42,82 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
         object-fit: cover;
         /* Đảm bảo hình ảnh không bị méo */
     }
+
+    /* CSS cho ảnh No Product Found */
+    .no-product-img {
+        max-width: 300px;
+        /* Giữ nguyên kích thước tối đa */
+        width: 100%;
+        /* Đảm bảo ảnh responsive */
+        height: auto;
+        /* Giữ tỷ lệ ảnh */
+        margin: 0 auto;
+        /* Căn giữa ảnh */
+        display: block;
+        /* Đảm bảo ảnh là block element để căn giữa hoạt động */
+    }
+
+    /* CSS cho toàn bộ container của thông báo không có sản phẩm */
+    .no-product-container {
+        padding: 20px;
+        /* Thêm khoảng cách bên trong */
+        background-color: #fff;
+        /* Nền trắng để khớp với product-item bg-light */
+        border-radius: 5px;
+        /* Bo góc nhẹ cho đồng bộ */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        /* Thêm bóng nhẹ giống product-item */
+        margin-bottom: 24px;
+        /* Khoảng cách dưới tương tự mb-4 */
+    }
+
+    /* CSS cho tiêu đề "No Products Found in Stock" */
+    .no-product-container h4 {
+        color: #333;
+        /* Màu chữ tối để đồng bộ với template */
+        font-size: 1.5rem;
+        /* Kích thước chữ phù hợp với h6 trong product-item */
+        margin-top: 15px;
+        /* Khoảng cách trên với ảnh */
+        font-weight: 500;
+        /* Độ đậm vừa phải */
+    }
+
+    /* CSS cho product-list-header */
+    .product-list-header {
+        text-align: center;
+        /* Căn giữa tiêu đề */
+        margin-bottom: 30px;
+        /* Khoảng cách dưới */
+        position: relative;
+        /* Giữ position relative nếu cần */
+    }
+
+    /* CSS cho span bên trong */
+    .product-list-header span {
+        background-color: #6c757d;
+        /* Màu nền bg-secondary (xám) */
+        padding-right: 12px;
+        /* pr-3 trong Bootstrap */
+        padding-left: 12px;
+        /* Thêm padding trái để cân đối */
+        display: inline-block;
+        /* Chỉ bao quanh nội dung chữ */
+        color: black;
+        /* Chữ Đen */
+        text-transform: uppercase;
+        /* Chữ in hoa */
+        font-size: 1.75rem;
+        /* Kích thước chữ lớn hơn một chút vì là h3 */
+        font-weight: 500;
+        /* Độ đậm vừa phải */
+    }
+
+    /* Loại bỏ đường gạch ngang (nếu có) */
+    .product-list-header::after {
+        content: none;
+        /* Xóa pseudo-element nếu có đường gạch */
+    }
 </style>
 
 <body>
@@ -89,7 +165,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $categories = getCategories($conn);
                         while ($row = $categories->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_categories) ? 'checked' : '';
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="category[]" value="<?= $row['name'] ?>"
@@ -115,7 +191,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $brands = getBrands($conn);
                         while ($row = $brands->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_brands) ? 'checked' : '';
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="brand[]" value="<?= $row['name'] ?>"
@@ -140,7 +216,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $colors = getColors($conn);
                         while ($row = $colors->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_colors) ? 'checked' : '';
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="color[]" value="<?= $row['name'] ?>"
@@ -164,7 +240,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $sizes = getSizes($conn);
                         while ($row = $sizes->fetch_assoc()) {
                             $isChecked = in_array($row['name'], $selected_sizes) ? 'checked' : '';
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="size[]" value="<?= $row['name'] ?>"
@@ -187,7 +263,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         $genders = getGenders($conn);
                         while ($row = $genders->fetch_assoc()) {
                             $isChecked = in_array($row['gender'], $selected_genders) ? 'checked' : '';
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" name="gender[]" value="<?= $row['gender'] ?>"
@@ -224,7 +300,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         foreach ($price_ranges as $range => $label) {
                             $isChecked = in_array($range, $selected_prices) ? 'checked' : '';
                             $id = "price-" . str_replace("-", "_", $range); // ID duy nhất cho mỗi checkbox
-                            ?>
+                        ?>
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input type="checkbox" class="custom-control-input" name="price[]" value="<?= $range ?>"
@@ -247,6 +323,10 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
             <!-- Shop Product Start -->
             <div class="col-lg-9 col-md-8">
                 <div class="row pb-3">
+                    <!-- Header -->
+                    <div class="col-12">
+                        <h3 class="product-list-header"><span class="bg-secondary pr-3">List Of Products</span></h3>
+                    </div>
                     <!-- Product Loop -->
                     <?php
                     if ($products->num_rows > 0) {
@@ -285,7 +365,10 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                         <?php }
                     } else { ?>
                         <div class="col-12 text-center">
-                            <h4>No Products Found in Stock</h4>
+                            <div class="no-product-container">
+                                <img src="../img/no-product-found.png" alt="No Products" class="no-product-img">
+                                <h4>Sorry, No Products Found in Stock !</h4>
+                            </div>
                         </div>
                     <?php } ?>
                 </div>
@@ -312,7 +395,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
 
                                 // Trang đầu tiên
                                 if ($total_pages > 1) {
-                                    ?>
+                                ?>
                                     <li class="page-item <?= ($page == 1) ? 'active' : '' ?>">
                                         <a class="page-link"
                                             href="?<?= http_build_query(array_merge($_GET, ['page' => 1])) ?>">1</a>
@@ -332,7 +415,7 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                                         <a class="page-link"
                                             href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
                                     </li>
-                                    <?php
+                                <?php
                                 }
 
                                 // Trang cuối cùng và dấu "..." nếu cần
@@ -341,12 +424,12 @@ $products = getFilteredProducts($conn, $filters, $limit, $offset);
                                         echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
                                         $show_dots = true;
                                     }
-                                    ?>
+                                ?>
                                     <li class="page-item <?= ($page == $total_pages) ? 'active' : '' ?>">
                                         <a class="page-link"
                                             href="?<?= http_build_query(array_merge($_GET, ['page' => $total_pages])) ?>"><?= $total_pages ?></a>
                                     </li>
-                                    <?php
+                                <?php
                                 }
                                 ?>
 

@@ -1,8 +1,8 @@
 <?php
-// Lấy tên file hiện tại
+// Get current page
 $current_page = basename($_SERVER['PHP_SELF'], ".php");
 
-// Xác định tiêu đề breadcrumb
+// Breadcrumb headers array
 $breadcrumb_titles = [
     "index" => "Home",
     "shop" => "Shop",
@@ -58,14 +58,15 @@ unset($currentFilters['page']); // Loại bỏ tham số phân trang
             position: absolute;
             background-color: #fff;
             min-width: 160px;
-            box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
             z-index: 1;
             padding: 10px;
             border-radius: 5px;
         }
 
         .filter-dropdown:hover .filter-dropdown-content {
-            display: block; /* Hiển thị khi hover */
+            display: block;
+            /* Hiển thị khi hover */
         }
 
         .filter-item {
@@ -127,4 +128,5 @@ unset($currentFilters['page']); // Loại bỏ tham số phân trang
         </div>
     </div>
 </body>
+
 </html>
