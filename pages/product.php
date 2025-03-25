@@ -346,17 +346,15 @@ $feedback_count = count($feedbacks);
                                                     <div class="media-body">
                                                         <h6><?php echo htmlspecialchars($feedback['user_name']); ?><small> - <i><?php echo date('d M Y', strtotime($feedback['created_at'])); ?></i></small></h6>
                                                         <div class="text-primary mb-2">
-                                                            <?php
-                                                            for ($i = 1; $i <= 5; $i++) {
-                                                                if ($i <= floor($feedback['rating'])) {
-                                                                    echo '<i class="fas fa-star"></i>'; // Sao đầy
-                                                                } elseif ($i - 0.5 <= $feedback['rating'] && $feedback['rating'] < $i) {
-                                                                    echo '<i class="fas fa-star-half-alt"></i>'; // Nửa sao
-                                                                } else {
-                                                                    echo '<i class="far fa-star"></i>'; // Sao rỗng
-                                                                }
-                                                            }
-                                                            ?>
+                                                            <?php for ($i = 0; $i < 5; $i++): ?>
+                                                                <?php if ($i < floor($feedback['rating'])): ?>
+                                                                    <small class="fa fa-star text-primary mr-1"></small>
+                                                                <?php elseif ($i < $feedback['rating']): ?>
+                                                                    <small class="fa fa-star-half-alt text-primary mr-1"></small>
+                                                                <?php else: ?>
+                                                                    <small class="far fa-star text-primary mr-1"></small>
+                                                                <?php endif; ?>
+                                                            <?php endfor; ?>
                                                         </div>
                                                         <p><?php echo htmlspecialchars($feedback['message']); ?></p>
                                                     </div>
