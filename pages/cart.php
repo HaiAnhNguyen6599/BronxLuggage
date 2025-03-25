@@ -161,7 +161,10 @@ if (isset($_SESSION['user_id'])) {
                             <h5 id="total-price">$</h5>
                         </div>
                         <a href="<?php echo $user_id > 0 ? 'checkout.php' : '../account/login.php'; ?>"
-                            class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</a>
+                            class="btn btn-block btn-primary font-weight-bold my-3 py-3 <?php echo empty($cart_items) ? 'disabled' : ''; ?>"
+                            <?php echo empty($cart_items) ? 'disabled' : ''; ?>>
+                            Proceed To Checkout
+                        </a>
                     </div>
                 </div>
             </div>
@@ -170,12 +173,10 @@ if (isset($_SESSION['user_id'])) {
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-
-
-        $(document).ready(function () {
+        $(document).ready(function() {
             updateCartTotal(); // Tính tổng tiền ngay khi tải trang
 
-            $(".btn-minus, .btn-plus").click(function () {
+            $(".btn-minus, .btn-plus").click(function() {
                 let row = $(this).closest("tr");
                 let cartId = row.attr("data-cart-id");
                 let quantityInput = row.find(".quantity-input");
@@ -191,7 +192,7 @@ if (isset($_SESSION['user_id'])) {
                 updateCart(cartId, newQuantity, row);
             });
 
-            $(".quantity-input").on("keyup", function (event) {
+            $(".quantity-input").on("keyup", function(event) {
                 if (event.key === "Enter") {
                     let row = $(this).closest("tr");
                     let cartId = row.attr("data-cart-id");
@@ -210,7 +211,7 @@ if (isset($_SESSION['user_id'])) {
                 $.post("../actions/update_cart.php", {
                     cart_id: cartId,
                     quantity: quantity
-                }, function (response) {
+                }, function(response) {
                     let data = JSON.parse(response);
                     if (data.status === "success") {
                         updateCartTotal(); // Cập nhật tổng tiền sau khi update thành công
@@ -220,12 +221,14 @@ if (isset($_SESSION['user_id'])) {
                 });
             }
 
-            $(".btn-remove").click(function () {
+            $(".btn-remove").click(function() {
                 let cartId = $(this).data("cart-id");
                 let row = $(this).closest("tr");
 
                 if (confirm("Are you sure you want to remove this item from your cart?")) {
-                    $.post("../actions/remove_from_cart.php", { cart_id: cartId }, function (response) {
+                    $.post("../actions/remove_from_cart.php", {
+                        cart_id: cartId
+                    }, function(response) {
                         let data = JSON.parse(response);
                         if (data.status === "success") {
                             row.remove(); // Xóa sản phẩm khỏi giao diện
@@ -239,7 +242,7 @@ if (isset($_SESSION['user_id'])) {
 
             function updateCartTotal() {
                 let total = 0;
-                $(".quantity-input").each(function () {
+                $(".quantity-input").each(function() {
                     let row = $(this).closest("tr");
                     let price = parseFloat(row.find("td:nth-child(2)").text().replace("$", ""));
                     let quantity = parseInt($(this).val()) || 1;
@@ -248,9 +251,6 @@ if (isset($_SESSION['user_id'])) {
                 $("#total-price").text("$" + total.toFixed(2));
             }
         });
-
-
-
     </script>
     <?php include '../includes/footer.php'; ?>
 
