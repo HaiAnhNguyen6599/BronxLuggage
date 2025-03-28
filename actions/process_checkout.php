@@ -29,9 +29,13 @@ $payment_method = $_POST['payment_method'] ?? '';
 
 // Kiểm tra dữ liệu đầu vào
 $errors = [];
-if (empty($phone) || !preg_match("/^[0-9]{10,15}$/", $phone)) {
+if (empty($phone) || !preg_match('/^[0-9]{10}$/', $phone)) {
     $errors[] = "Invalid phone number.";
 }
+
+// if (!empty($form_values['phone']) && !preg_match('/^[0-9]{10}$/', $form_values['phone'])) {
+//     $errors['phone'] = "Phone must be exactly 10 digits.";
+// }
 if (empty($address) || strlen($address) > 255) {
     $errors[] = "Address is required and must be under 255 characters.";
 }

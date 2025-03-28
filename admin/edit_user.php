@@ -14,7 +14,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     exit();
 }
 
-$user_id = (int)$_GET['id'];
+$user_id = (int) $_GET['id'];
 
 // Initialize form values (default to database values or empty)
 $stmt = $conn->prepare("SELECT name, email, phone, address, city FROM users WHERE id = ?");
@@ -72,12 +72,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("sssssi", $form_values['name'], $form_values['email'], $form_values['phone'], $form_values['address'], $form_values['city'], $user_id);
 
         if ($stmt->execute()) {
-            header("Location: ../admin/manage_users.php?success=User updated successfully");
-            exit();
+            $_SESSION['user_update_success'] = "User updated successfully";
         } else {
-            $errors['general'] = "Error updating user: " . $stmt->error;
+            $_SESSION['user_update_error'] = "Error updating user: " . $stmt->error;
         }
         $stmt->close();
+
+        header("Location: ../admin/manage_users.php");
+        exit();
+    } else {
+        $_SESSION['user_update_error'] = "Validation errors occurred. Please check your input.";
     }
 }
 ?>
@@ -105,7 +109,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form method="POST" action="">
                     <div class="form-group">
                         <label for="name">Name:</label>
-                        <input type="text" class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>" id="name" name="name" value="<?= htmlspecialchars($form_values['name']) ?>" required>
+                        <input type="text" class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>"
+                            id="name" name="name" value="<?= htmlspecialchars($form_values['name']) ?>" required>
                         <?php if (isset($errors['name'])): ?>
                             <div class="invalid-feedback"><?= htmlspecialchars($errors['name']) ?></div>
                         <?php endif; ?>
@@ -113,7 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>" id="email" name="email" value="<?= htmlspecialchars($form_values['email']) ?>" required>
+                        <input type="email" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>"
+                            id="email" name="email" value="<?= htmlspecialchars($form_values['email']) ?>" required>
                         <?php if (isset($errors['email'])): ?>
                             <div class="invalid-feedback"><?= htmlspecialchars($errors['email']) ?></div>
                         <?php endif; ?>
@@ -121,7 +127,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-group">
                         <label for="phone">Phone:</label>
-                        <input type="text" class="form-control <?= isset($errors['phone']) ? 'is-invalid' : '' ?>" id="phone" name="phone" value="<?= htmlspecialchars($form_values['phone']) ?>" maxlength="10" pattern="[0-9]{10}" placeholder="e.g., 0123456789">
+                        <input type="text" class="form-control <?= isset($errors['phone']) ? 'is-invalid' : '' ?>"
+                            id="phone" name="phone" value="<?= htmlspecialchars($form_values['phone']) ?>"
+                            maxlength="10" pattern="[0-9]{10}" placeholder="e.g., 0123456789">
                         <?php if (isset($errors['phone'])): ?>
                             <div class="invalid-feedback"><?= htmlspecialchars($errors['phone']) ?></div>
                         <?php endif; ?>
@@ -129,7 +137,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-group">
                         <label for="address">Address:</label>
-                        <input type="text" class="form-control <?= isset($errors['address']) ? 'is-invalid' : '' ?>" id="address" name="address" value="<?= htmlspecialchars($form_values['address']) ?>" pattern="[a-zA-Z0-9\s,.-]+">
+                        <input type="text" class="form-control <?= isset($errors['address']) ? 'is-invalid' : '' ?>"
+                            id="address" name="address" value="<?= htmlspecialchars($form_values['address']) ?>"
+                            pattern="[a-zA-Z0-9\s,.-]+">
                         <?php if (isset($errors['address'])): ?>
                             <div class="invalid-feedback"><?= htmlspecialchars($errors['address']) ?></div>
                         <?php endif; ?>
@@ -137,7 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-group">
                         <label for="city">City:</label>
-                        <input type="text" class="form-control <?= isset($errors['city']) ? 'is-invalid' : '' ?>" id="city" name="city" value="<?= htmlspecialchars($form_values['city']) ?>">
+                        <input type="text" class="form-control <?= isset($errors['city']) ? 'is-invalid' : '' ?>"
+                            id="city" name="city" value="<?= htmlspecialchars($form_values['city']) ?>">
                     </div>
 
                     <button type="submit" class="btn btn-primary">

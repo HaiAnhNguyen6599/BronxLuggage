@@ -3,7 +3,7 @@ require "../config.php";
 require_once '../functions.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: login.php");
+    header("Location: ../account/login.php");
     exit();
 }
 
@@ -55,7 +55,7 @@ $result = $stmt->get_result();
                             </tbody>
                         </table>
                         <div class="text-center">
-                            <a href="manage_orders.php" class="btn btn-dark">Back to Orders</a>
+                            <a href="../admin/manage_orders.php" class="btn btn-dark">Back to Orders</a>
                         </div>
                     </div>
                 </div>

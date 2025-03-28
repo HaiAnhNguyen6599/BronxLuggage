@@ -11,7 +11,7 @@ if (!isset($_SESSION['name']) || $_SESSION['role'] !== 'admin') {
 
 // Thiết lập số đơn hàng trên mỗi trang
 $limit = 10;
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
 // Lấy tổng số đơn hàng
@@ -25,7 +25,7 @@ $sql = "SELECT orders.id, users.name AS customer_name, orders.status, orders.cre
         (SELECT SUM(order_items.quantity * order_items.price) FROM order_items WHERE order_items.order_id = orders.id) AS total_price
         FROM orders
         JOIN users ON orders.user_id = users.id
-        ORDER BY orders.created_at DESC
+        ORDER BY orders.updated_at DESC
         LIMIT ? OFFSET ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ii", $limit, $offset);
@@ -68,7 +68,7 @@ $orders = $result->fetch_all(MYSQLI_ASSOC);
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Order ID</th>
                                 <th>Customer</th>
                                 <th>Total Price</th>
                                 <th>Status</th>
@@ -77,32 +77,35 @@ $orders = $result->fetch_all(MYSQLI_ASSOC);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if (!empty($orders)) : ?>
-                                <?php foreach ($orders as $order) : ?>
+                            <?php if (!empty($orders)): ?>
+                                <?php foreach ($orders as $order): ?>
                                     <tr>
                                         <td><?= $order['id'] ?></td>
                                         <td><?= htmlspecialchars($order['customer_name']) ?></td>
                                         <td>$<?= number_format($order['total_price'], 2) ?></td>
                                         <td>
-                                            <span class="badge badge-<?= $order['status'] === 'pending' ? 'warning' : ($order['status'] === 'processing' ? 'info' : ($order['status'] === 'shipped' ? 'primary' : ($order['status'] === 'delivered' ? 'success' : 'danger'))) ?>">
+                                            <span
+                                                class="badge badge-<?= $order['status'] === 'pending' ? 'warning' : ($order['status'] === 'processing' ? 'info' : ($order['status'] === 'shipped' ? 'primary' : ($order['status'] === 'delivered' ? 'success' : 'danger'))) ?>">
                                                 <?= ucfirst($order['status']) ?>
                                             </span>
                                         </td>
                                         <td><?= $order['created_at'] ?></td>
                                         <td>
-                                            <a href="order_detail.php?id=<?= $order['id'] ?>" class="btn btn-sm btn-info">View Detail</a>
+                                            <a href="order_detail.php?id=<?= $order['id'] ?>" class="btn btn-sm btn-info">View
+                                                Detail</a>
                                             <!-- <a href="delete_order.php?id=<?= $order['id'] ?>"
                                                 class="btn btn-sm btn-danger"
                                                 onclick="return confirm('Are you sure you want to delete this order?');">
                                                 Delete
                                             </a> -->
-                                            <a href="delete_order.php?id=<?= $order['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure to delete this Order ?')">
+                                            <a href="delete_order.php?id=<?= $order['id'] ?>" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Are you sure to delete this Order ?')">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
-                            <?php else : ?>
+                            <?php else: ?>
                                 <tr>
                                     <td colspan="6" class="text-center text-muted">
                                         <strong>No orders found.</strong>
@@ -116,17 +119,17 @@ $orders = $result->fetch_all(MYSQLI_ASSOC);
                 <!-- Phân trang -->
                 <nav class="mt-4">
                     <ul class="pagination justify-content-center">
-                        <?php if ($page > 1) : ?>
+                        <?php if ($page > 1): ?>
                             <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>">Previous</a></li>
                         <?php endif; ?>
 
-                        <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                             <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
                                 <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
                             </li>
                         <?php endfor; ?>
 
-                        <?php if ($page < $total_pages) : ?>
+                        <?php if ($page < $total_pages): ?>
                             <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>">Next</a></li>
                         <?php endif; ?>
                     </ul>
@@ -140,9 +143,9 @@ $orders = $result->fetch_all(MYSQLI_ASSOC);
 
     <?php include '../includes/footer.php'; ?>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            setTimeout(function() {
-                document.querySelectorAll(".alert").forEach(function(alert) {
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(function () {
+                document.querySelectorAll(".alert").forEach(function (alert) {
                     alert.style.transition = "opacity 0.5s ease-out";
                     alert.style.opacity = "0";
                     setTimeout(() => alert.remove(), 500);

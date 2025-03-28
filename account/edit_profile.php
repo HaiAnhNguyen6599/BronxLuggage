@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($phone)) {
         $errors['phone'] = "Phone number cannot be empty!";
     } elseif (!preg_match("/^[0-9]{10}$/", $phone)) {
-        $errors['phone'] = "Phone number must be 11 digits!";
+        $errors['phone'] = "Phone number must be 10 digits!";
     }
 
     // Validate address
@@ -161,7 +161,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="form-group">
                                 <label for="phone">Phone</label>
                                 <input type="text" class="form-control" id="phone" name="phone"
-                                    value="<?= htmlspecialchars($user['phone'] ?? ''); ?>">
+                                    value="<?= htmlspecialchars($user['phone'] ?? ''); ?>" maxlength="10"
+                                    pattern="[0-9]{10}">
                                 <?php if (isset($errors['phone'])): ?>
                                     <small class="text-danger"><?= $errors['phone'] ?></small>
                                 <?php endif; ?>

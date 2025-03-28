@@ -14,7 +14,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     exit();
 }
 
-$user_id = (int)$_GET['id'];
+$user_id = (int) $_GET['id'];
 
 // Delete user from database
 $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
@@ -22,13 +22,16 @@ $stmt->bind_param("i", $user_id);
 
 if ($stmt->execute()) {
     if ($stmt->affected_rows > 0) {
-        header("Location: ../admin/manage_users.php?success=User deleted successfully");
+        $_SESSION['user_delete_success'] = "User deleted successfully.";
     } else {
-        header("Location: ../admin/manage_users.php?error=User not found");
+        $_SESSION['user_delete_error'] = "Error deleting User: " . $stmt->error;
+        ;
     }
 } else {
-    header("Location: ../admin/manage_users.php?error=Error deleting user: " . $stmt->error);
+    $_SESSION['delete_error'] = "Error deleting user: " . $stmt->error;
 }
+
+header("Location: ../admin/manage_users.php");
 
 $stmt->close();
 $conn->close();

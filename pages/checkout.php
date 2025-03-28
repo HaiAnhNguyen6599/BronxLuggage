@@ -93,7 +93,12 @@ $total_price = 0;
                             <div class="col-md-6 form-group">
                                 <label>Mobile No</label>
                                 <input class="form-control" type="text" name="phone"
-                                    value="<?= htmlspecialchars($user['phone'] ?? '') ?>" required>
+                                    value="<?= htmlspecialchars($user['phone'] ?? '') ?>" maxlength="10"
+                                    pattern="[0-9]{10}" placeholder="e.g., 0123456789" required>
+                                <!-- <input type="text"
+                                    class="form-control <?= isset($errors['phone']) ? 'is-invalid' : '' ?>" id="phone"
+                                    name="phone" value="<?= htmlspecialchars($form_values['phone']) ?>" maxlength="10"
+                                    pattern="[0-9]{10}" placeholder="e.g., 0123456789"> -->
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>Address</label>

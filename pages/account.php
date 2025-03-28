@@ -139,7 +139,8 @@ $orders = $orders_stmt->get_result();
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $index = 1;
+                                                $index = ($page - 1) * $limit + 1;
+                                                ;
                                                 while ($order = $orders->fetch_assoc()): ?>
                                                     <tr>
                                                         <td><?= $index++; ?></td>

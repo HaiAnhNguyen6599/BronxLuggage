@@ -15,7 +15,7 @@ if (!$conn) {
 
 // Thiết lập số sản phẩm trên mỗi trang
 $limit = 10;
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
 // Lấy tổng số sản phẩm
@@ -32,7 +32,7 @@ $stmt = $conn->prepare("SELECT p.id, p.name, p.price, p.gender, c.name AS catego
                         JOIN brands b ON p.brand_id = b.id 
                         JOIN sizes s ON p.size_id = s.id 
                         JOIN colors col ON p.color_id = col.id 
-                        order by p.created_at DESC
+                        order by p.updated_at DESC
                         LIMIT ? OFFSET ?");
 
 $stmt->bind_param("ii", $limit, $offset);
@@ -76,9 +76,9 @@ $product = $stmt->get_result();
                 ?>
 
                 <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        setTimeout(function() {
-                            document.querySelectorAll(".alert").forEach(function(alert) {
+                    document.addEventListener("DOMContentLoaded", function () {
+                        setTimeout(function () {
+                            document.querySelectorAll(".alert").forEach(function (alert) {
                                 alert.style.transition = "opacity 0.5s ease-out";
                                 alert.style.opacity = "0";
                                 setTimeout(() => alert.remove(), 500);
@@ -109,7 +109,9 @@ $product = $stmt->get_result();
                             while ($row = $product->fetch_assoc()): ?>
                                 <tr>
                                     <td><?= $index++ ?></td>
-                                    <td><a class="h6 text-decoration-none text-truncate" href="../pages/product.php?id=<?= $row['id'] ?>"><?= htmlspecialchars($row['name']) ?></a></td>
+                                    <td><a class="h6 text-decoration-none text-truncate"
+                                            href="../pages/product.php?id=<?= $row['id'] ?>"><?= htmlspecialchars($row['name']) ?></a>
+                                    </td>
                                     <td>$<?= htmlspecialchars($row['price']) ?></td>
                                     <td><?= htmlspecialchars($row['category']) ?></td>
                                     <td><?= htmlspecialchars($row['brand']) ?></td>
@@ -117,10 +119,12 @@ $product = $stmt->get_result();
                                     <td><?= htmlspecialchars($row['color']) ?></td>
                                     <td><?= ucfirst(htmlspecialchars($row['gender'])) ?></td>
                                     <td>
-                                        <a href="../admin/edit_product.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-warning">
+                                        <a href="../admin/edit_product.php?id=<?= $row['id'] ?>"
+                                            class="btn btn-sm btn-warning">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="delete_product.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure to delete this Product ?')">
+                                        <a href="delete_product.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Are you sure to delete this Product ?')">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </td>

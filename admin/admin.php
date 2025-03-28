@@ -34,7 +34,8 @@ $total_orders = $conn->query("SELECT COUNT(*) FROM orders")->fetch_row()[0];
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h2 class="card-title text-center mb-4">Admin Dashboard</h2>
-                        <p class="text-center">Welcome, <?= htmlspecialchars($name) ?>! Manage your e-commerce system here.</p>
+                        <p class="text-center">Welcome, <?= htmlspecialchars($name) ?>! Manage your e-commerce system
+                            here.</p>
 
                         <!-- Thống kê nhanh -->
                         <div class="row mb-4">
@@ -53,7 +54,8 @@ $total_orders = $conn->query("SELECT COUNT(*) FROM orders")->fetch_row()[0];
                                         <p class="card-text">
                                             <?php
                                             $total_products = $conn->query("SELECT COUNT(*) FROM products")->fetch_row()[0];
-                                            echo htmlspecialchars($total_products) ?></p>
+                                            echo htmlspecialchars($total_products) ?>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -62,7 +64,7 @@ $total_orders = $conn->query("SELECT COUNT(*) FROM orders")->fetch_row()[0];
                                     <div class="card-body">
                                         <h5 class="card-title">Total Orders</h5>
                                         <?php
-                                        $total_orders = $conn->query("SELECT COUNT(*) FROM orders WHERE status = 'pending'")->fetch_row()[0];
+                                        $total_orders = $conn->query("SELECT COUNT(*) FROM orders")->fetch_row()[0];
                                         echo htmlspecialchars($total_orders) ?></p>
                                     </div>
                                 </div>

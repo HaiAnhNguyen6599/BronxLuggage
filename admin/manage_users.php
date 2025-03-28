@@ -4,7 +4,7 @@ require_once '../functions.php';
 
 // Kiểm tra quyền admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: login.php");
+    header("Location: ../account/login.php");
     exit();
 }
 
@@ -15,7 +15,7 @@ if (!$conn) {
 
 // Cấu hình phân trang
 $limit = 5; // Số user trên mỗi trang
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $page = ($page < 1) ? 1 : $page;
 $offset = ($page - 1) * $limit;
 
@@ -29,7 +29,7 @@ $total_pages = ceil($total_users / $limit);
 // Truy vấn danh sách user với phân trang
 $query = "SELECT id, name, email, phone, address, city, role 
           FROM users WHERE role = 'customer' 
-          ORDER BY created_at DESC 
+          ORDER BY updated_at DESC 
           LIMIT $limit OFFSET $offset";
 $users = $conn->query($query);
 
@@ -51,30 +51,33 @@ $num_rows = $users->num_rows;
 
     <div class="container">
         <?php
-        if (isset($_GET['success'])) {
-            echo '<div class="alert alert-success" id="success-alert">' . htmlspecialchars($_GET['success']) . '</div>';
-        }
-        if (isset($_GET['error'])) {
-            echo '<div class="alert alert-danger" id="error-alert">' . htmlspecialchars($_GET['error']) . '</div>';
+        $alerts = [
+            'user_add_success' => 'alert-success',
+            'user_update_success' => 'alert-success',
+            'user_delete_success' => 'alert-success',
+            'user_add_error' => 'alert-danger',
+            'user_update_error' => 'alert-danger',
+            'user_delete_error' => 'alert-danger'
+        ];
+
+        foreach ($alerts as $key => $class) {
+            if (isset($_SESSION[$key])) {
+                echo '<div class="alert ' . $class . ' fade show" id="alert-' . $key . '">' . htmlspecialchars($_SESSION[$key]) . '</div>';
+                unset($_SESSION[$key]); // Xóa session ngay sau khi hiển thị
+            }
         }
         ?>
 
         <script>
-            // Function to hide an element after a delay
-            function hideAlert(alertId) {
-                const alert = document.getElementById(alertId);
-                if (alert) {
-                    setTimeout(() => {
-                        alert.style.transition = 'opacity 0.5s'; // Smooth fade-out
-                        alert.style.opacity = '0';
-                        setTimeout(() => alert.remove(), 500); // Remove after fade-out
-                    }, 3000); // 3000ms = 3 seconds
-                }
-            }
-
-            // Apply to success and error alerts if they exist
-            hideAlert('success-alert');
-            hideAlert('error-alert');
+            document.addEventListener("DOMContentLoaded", function () {
+                setTimeout(function () {
+                    document.querySelectorAll(".alert").forEach(function (alert) {
+                        alert.style.transition = "opacity 0.5s ease-out";
+                        alert.style.opacity = "0";
+                        setTimeout(() => alert.remove(), 500);
+                    });
+                }, 3000); // 3 giây sau tự động ẩn
+            });
         </script>
         <div class="row justify-content-center mt-5">
             <div class="col-md-12">
@@ -117,10 +120,12 @@ $num_rows = $users->num_rows;
                                             <td><?= htmlspecialchars($row['city'] ?? 'N/A') ?></td>
                                             <td><?= ucfirst(htmlspecialchars($row['role'])) ?></td>
                                             <td>
-                                                <a href="../admin/edit_user.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-warning">
+                                                <a href="../admin/edit_user.php?id=<?= $row['id'] ?>"
+                                                    class="btn btn-sm btn-warning">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a href="../admin/delete_user.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                                                <a href="../admin/delete_user.php?id=<?= $row['id'] ?>"
+                                                    class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                             </td>

@@ -4,17 +4,17 @@ require_once '../functions.php';
 
 if (!isset($_SESSION['name']) || $_SESSION['role'] !== 'admin') {
     $_SESSION['order_error'] = "Unauthorized access.";
-    header("Location: manage_orders.php");
+    header("Location: ../admin/manage_orders.php");
     exit();
 }
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     $_SESSION['order_error'] = "Invalid order ID.";
-    header("Location: manage_orders.php");
+    header("Location: ../admin/manage_orders.php");
     exit();
 }
 
-$order_id = (int)$_GET['id'];
+$order_id = (int) $_GET['id'];
 
 // Cập nhật trạng thái đơn hàng
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['status'])) {
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['status'])) {
         $_SESSION['order_update_error'] = "Failed to update order status.";
     }
     $update_stmt->close();
-    header("Location: manage_orders.php");
+    header("Location: ../admin/manage_orders.php");
     exit();
 }
 
@@ -44,12 +44,12 @@ $order = $order_stmt->get_result()->fetch_assoc();
 
 if (!$order) {
     $_SESSION['order_error'] = "Order not found.";
-    header("Location: manage_orders.php");
+    header("Location: ../admin/manage_orders.php");
     exit();
 }
 
 // Lấy danh sách sản phẩm trong đơn hàng
-$item_sql = "SELECT products.name AS product_name, order_items.quantity, order_items.price 
+$item_sql = "SELECT products.id as product_id, products.name AS product_name, order_items.quantity, order_items.price 
              FROM order_items
              JOIN products ON order_items.product_id = products.id
              WHERE order_items.order_id = ?";
@@ -89,9 +89,9 @@ $item_stmt->close();
                     <?php unset($_SESSION['order_error']); ?>
                 <?php endif; ?>
                 <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        setTimeout(function() {
-                            document.querySelectorAll(".alert").forEach(function(alert) {
+                    document.addEventListener("DOMContentLoaded", function () {
+                        setTimeout(function () {
+                            document.querySelectorAll(".alert").forEach(function (alert) {
                                 alert.style.transition = "opacity 0.5s ease-out";
                                 alert.style.opacity = "0";
                                 setTimeout(() => alert.remove(), 500);
@@ -119,11 +119,16 @@ $item_stmt->close();
                     <div class="form-group">
                         <label for="status"><strong>Update Status:</strong></label>
                         <select name="status" id="status" class="form-control">
-                            <option value="pending" <?= ($order['status'] == 'pending') ? 'selected' : '' ?>>Pending</option>
-                            <option value="processing" <?= ($order['status'] == 'processing') ? 'selected' : '' ?>>Processing</option>
-                            <option value="shipped" <?= ($order['status'] == 'shipped') ? 'selected' : '' ?>>Shipped</option>
-                            <option value="delivered" <?= ($order['status'] == 'delivered') ? 'selected' : '' ?>>Delivered</option>
-                            <option value="cancelled" <?= ($order['status'] == 'cancelled') ? 'selected' : '' ?>>Cancelled</option>
+                            <option value="pending" <?= ($order['status'] == 'pending') ? 'selected' : '' ?>>Pending
+                            </option>
+                            <option value="processing" <?= ($order['status'] == 'processing') ? 'selected' : '' ?>>
+                                Processing</option>
+                            <option value="shipped" <?= ($order['status'] == 'shipped') ? 'selected' : '' ?>>Shipped
+                            </option>
+                            <option value="delivered" <?= ($order['status'] == 'delivered') ? 'selected' : '' ?>>Delivered
+                            </option>
+                            <option value="cancelled" <?= ($order['status'] == 'cancelled') ? 'selected' : '' ?>>Cancelled
+                            </option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-success">
@@ -144,10 +149,12 @@ $item_stmt->close();
                     </thead>
                     <tbody>
                         <?php $total = 0; ?>
-                        <?php foreach ($items as $item) : ?>
+                        <?php foreach ($items as $item): ?>
                             <?php $subtotal = $item['quantity'] * $item['price']; ?>
                             <tr>
-                                <td><?= htmlspecialchars($item['product_name']) ?></td>
+                                <td><a class="h6 text-decoration-none text-truncate"
+                                        href="../pages/product.php?id=<?php echo $item['product_id'] ?>"><?php echo $item['product_name'] ?></a>
+                                </td>
                                 <td><?= $item['quantity'] ?></td>
                                 <td>$<?= number_format($item['price'], 2) ?></td>
                                 <td>$<?= number_format($subtotal, 2) ?></td>
@@ -163,7 +170,7 @@ $item_stmt->close();
                     </tfoot>
                 </table>
 
-                <a href="manage_orders.php" class="btn btn-secondary">
+                <a href="../admin/manage_orders.php" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Back to Orders
                 </a>
             </div>

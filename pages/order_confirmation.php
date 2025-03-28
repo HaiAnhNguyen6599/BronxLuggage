@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$user_id =  $_SESSION['user_id'];
+$user_id = $_SESSION['user_id'];
 $order_id = $_GET['order_id'] ?? null;
 
 if (!$order_id || !is_numeric($order_id)) {
@@ -104,7 +104,8 @@ $stmt_items->close();
                                 </tr>
                                 <tr>
                                     <th>Payment Method:</th>
-                                    <td><?= htmlspecialchars(ucwords(str_replace('_', ' ', $order['payment_method']))) ?></td>
+                                    <td><?= htmlspecialchars(ucwords(str_replace('_', ' ', $order['payment_method']))) ?>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>Status:</th>
@@ -136,12 +137,12 @@ $stmt_items->close();
                                 </thead>
                                 <tbody>
                                     <?php foreach ($order_items as $item): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($item['name']) ?></td>
-                                        <td><?= $item['quantity'] ?></td>
-                                        <td>$<?= number_format($item['price'], 2) ?></td>
-                                        <td>$<?= number_format($item['quantity'] * $item['price'], 2) ?></td>
-                                    </tr>
+                                        <tr>
+                                            <td><?= htmlspecialchars($item['name']) ?></td>
+                                            <td><?= $item['quantity'] ?></td>
+                                            <td>$<?= number_format($item['price'], 2) ?></td>
+                                            <td>$<?= number_format($item['quantity'] * $item['price'], 2) ?></td>
+                                        </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                                 <tfoot>
@@ -155,8 +156,8 @@ $stmt_items->close();
 
                         <!-- Buttons -->
                         <div class="text-center">
-                            <a href="../pages/index.php" class="btn btn-primary">Back to Home</a>
-                            <a href="../pages/order_detail.php?order_id=<?php echo $order_id?>"
+                            <a href="../pages/shop.php" class="btn btn-primary">Continue Shopping</a>
+                            <a href="../pages/order_detail.php?order_id=<?php echo $order_id ?>"
                                 class="btn btn-secondary ml-2">View My Orders</a>
                         </div>
                     </div>
@@ -176,10 +177,10 @@ $stmt_items->close();
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-    </script>
+        </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
-    </script>
+        </script>
     <script src="../lib/easing/easing.min.js"></script>
     <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
     <script src="../js/main.js"></script>

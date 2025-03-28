@@ -16,7 +16,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     exit();
 }
 
-$product_id = (int)$_GET['id'];
+$product_id = (int) $_GET['id'];
 
 // Fetch product data
 $stmt = $conn->prepare("SELECT name, description, category_id, brand_id, size_id, color_id, price, gender FROM products WHERE id = ?");
@@ -124,7 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form method="POST" action="">
                     <div class="form-group">
                         <label for="name">Product Name:</label>
-                        <input type="text" class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>" id="name" name="name" value="<?= htmlspecialchars($form_values['name']) ?>" required>
+                        <input type="text" class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>"
+                            id="name" name="name" value="<?= htmlspecialchars($form_values['name']) ?>" required>
                         <?php if (isset($errors['name'])): ?>
                             <div class="invalid-feedback"><?= htmlspecialchars($errors['name']) ?></div>
                         <?php endif; ?>
@@ -132,7 +133,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-group">
                         <label for="description">Description:</label>
-                        <textarea class="form-control <?= isset($errors['description']) ? 'is-invalid' : '' ?>" id="description" name="description" rows="4"><?= htmlspecialchars($form_values['description']) ?></textarea>
+                        <textarea class="form-control <?= isset($errors['description']) ? 'is-invalid' : '' ?>"
+                            id="description" name="description"
+                            rows="4"><?= htmlspecialchars($form_values['description']) ?></textarea>
                         <?php if (isset($errors['description'])): ?>
                             <div class="invalid-feedback"><?= htmlspecialchars($errors['description']) ?></div>
                         <?php endif; ?>
@@ -140,7 +143,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-group">
                         <label for="category_id">Category:</label>
-                        <select class="form-control <?= isset($errors['category_id']) ? 'is-invalid' : '' ?>" id="category_id" name="category_id" required>
+                        <select class="form-control <?= isset($errors['category_id']) ? 'is-invalid' : '' ?>"
+                            id="category_id" name="category_id" required>
                             <option value="">Choose Category</option>
                             <?php
                             $result = $conn->query("SELECT * FROM categories");
@@ -157,7 +161,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-group">
                         <label for="brand_id">Brand:</label>
-                        <select class="form-control <?= isset($errors['brand_id']) ? 'is-invalid' : '' ?>" id="brand_id" name="brand_id" required>
+                        <select class="form-control <?= isset($errors['brand_id']) ? 'is-invalid' : '' ?>" id="brand_id"
+                            name="brand_id" required>
                             <option value="">Choose Brand</option>
                             <?php
                             $result = $conn->query("SELECT * FROM brands");
@@ -174,7 +179,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-group">
                         <label for="size_id">Size:</label>
-                        <select class="form-control <?= isset($errors['size_id']) ? 'is-invalid' : '' ?>" id="size_id" name="size_id" required>
+                        <select class="form-control <?= isset($errors['size_id']) ? 'is-invalid' : '' ?>" id="size_id"
+                            name="size_id" required>
                             <option value="">Choose Size</option>
                             <?php
                             $result = $conn->query("SELECT * FROM sizes");
@@ -191,7 +197,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-group">
                         <label for="color_id">Color:</label>
-                        <select class="form-control <?= isset($errors['color_id']) ? 'is-invalid' : '' ?>" id="color_id" name="color_id" required>
+                        <select class="form-control <?= isset($errors['color_id']) ? 'is-invalid' : '' ?>" id="color_id"
+                            name="color_id" required>
                             <option value="">Choose Color</option>
                             <?php
                             $result = $conn->query("SELECT * FROM colors");
@@ -208,18 +215,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-group">
                         <label for="price">Price ($):</label>
-                        <input type="number" step="0.01" class="form-control <?= isset($errors['price']) ? 'is-invalid' : '' ?>" id="price" name="price" value="<?= htmlspecialchars($form_values['price']) ?>" required>
+                        <input type="number" step="0.01" min="1" max="1000"
+                            class="form-control <?= isset($errors['price']) ? 'is-invalid' : '' ?>" id="price"
+                            name="price" value="<?= htmlspecialchars($form_values['price'] ?? '') ?>" required>
                         <?php if (isset($errors['price'])): ?>
                             <div class="invalid-feedback"><?= htmlspecialchars($errors['price']) ?></div>
                         <?php endif; ?>
                     </div>
-
                     <div class="form-group">
                         <label for="gender">Gender:</label>
-                        <select class="form-control <?= isset($errors['gender']) ? 'is-invalid' : '' ?>" id="gender" name="gender" required>
+                        <select class="form-control <?= isset($errors['gender']) ? 'is-invalid' : '' ?>" id="gender"
+                            name="gender" required>
                             <option value="">Choose Gender</option>
                             <option value="male" <?= $form_values['gender'] === 'male' ? 'selected' : '' ?>>Men</option>
-                            <option value="female" <?= $form_values['gender'] === 'female' ? 'selected' : '' ?>>Women</option>
+                            <option value="female" <?= $form_values['gender'] === 'female' ? 'selected' : '' ?>>Women
+                            </option>
                         </select>
                         <?php if (isset($errors['gender'])): ?>
                             <div class="invalid-feedback"><?= htmlspecialchars($errors['gender']) ?></div>

@@ -168,13 +168,117 @@ INSERT INTO product_images (product_id, image_url, is_primary) VALUES
 (37, 'img/products/product37.jpg', true);
 
 -- Insert feedback
--- INSERT INTO feedback (user_id, product_id, message, rating) VALUES
--- (1, 1, 'Really sturdy suitcase, perfect for long trips!', 5),
--- (1, 1, 'This backpack looks sleek, but the padding could be better.', 3),
--- (1, 1, 'Fantastic briefcase, super professional vibe.', 5),
--- (1, 1, 'Tote bag is stylish but a little small for my needs.', 4),
--- (1, 1, 'Briefcase holds up well, loving the compartments.', 5),
--- (1, 1, 'Messenger bag is great, but the strap wears out fast.', 3);
+
+
+INSERT INTO feedback (user_id, product_id, message, rating) VALUES
+(1, 1, 'Really sturdy suitcase, perfect for long trips!', 5),
+(1, 1, 'This backpack looks sleek, but the padding could be better.', 3),
+(1, 1, 'Fantastic briefcase, super professional vibe.', 5),
+(1, 1, 'Tote bag is stylish but a little small for my needs.', 4),
+(1, 1, 'Briefcase holds up well, loving the compartments.', 5),
+(1, 1, 'Messenger bag is great, but the strap wears out fast.', 3),
+-- Product 1
+(2, 1, 'Great quality, highly recommend!', 4),
+(3, 1, 'Spacious and durable.', 5),
+(4, 1, 'Not as expected, but still okay.', 3),
+(5, 1, 'A must-have for frequent travelers!', 5),
+(6, 1, 'Zippers could be better.', 4),
+(7, 1, 'Very lightweight and easy to carry.', 5),
+(8, 1, 'Color fades a bit after a while.', 3),
+(9, 1, 'Worth every penny.', 5),
+(10, 1, 'Handles feel a bit flimsy.', 3),
+(1, 1, 'Perfect size for weekend trips.', 4),
+(2, 1, 'Highly functional and stylish.', 5),
+(3, 1, 'Had an issue with the wheels.', 3),
+(4, 1, 'Super spacious inside.', 4),
+(5, 1, 'Locks work great.', 5),
+(6, 1, 'Material feels premium.', 5),
+(7, 1, 'Could use more compartments.', 4),
+(8, 1, 'Very satisfied with the purchase.', 5),
+(9, 1, 'The design is really modern.', 4),
+(10, 1, 'Would buy again.', 5),
+
+-- Product 2
+(1, 2, 'Affordable and reliable!', 5),
+(2, 2, 'Not as strong as I thought.', 3),
+(3, 2, 'Good value for money.', 4),
+(4, 2, 'Perfect for short trips.', 5),
+(5, 2, 'Material is okay but scratches easily.', 3),
+(6, 2, 'Lightweight and stylish.', 4),
+(7, 2, 'Zippers broke after a few uses.', 2),
+(8, 2, 'Amazing suitcase for the price.', 5),
+(9, 2, 'Could use a better lock.', 3),
+(10, 2, 'Very spacious and strong.', 5),
+(1, 2, 'Wheels roll very smoothly.', 5),
+(2, 2, 'I love the color!', 4),
+(3, 2, 'Handles are not sturdy.', 3),
+(4, 2, 'Highly functional and lightweight.', 5),
+(5, 2, 'Great for frequent travelers.', 5),
+(6, 2, 'Zipper got stuck after some time.', 3),
+(7, 2, 'Decent quality but overpriced.', 3),
+(8, 2, 'Perfect for my needs.', 5),
+(9, 2, 'Would definitely buy again.', 5),
+(10, 2, 'The compartments are very useful.', 4),
+
+-- Product 3
+(1, 3, 'Well-built and durable.', 5),
+(2, 3, 'Scratches easily, but still good.', 3),
+(3, 3, 'Smooth rolling wheels.', 5),
+(4, 3, 'Great suitcase at this price.', 4),
+(5, 3, 'Material feels solid.', 5),
+(6, 3, 'Not too heavy, which I like.', 4),
+(7, 3, 'Spacious and practical.', 5),
+(8, 3, 'Had an issue with the handle.', 3),
+(9, 3, 'Good for domestic travel.', 4),
+(10, 3, 'Very easy to maneuver.', 5),
+(1, 3, 'Affordable and durable.', 4),
+(2, 3, 'Handles feel a bit weak.', 3),
+(3, 3, 'Perfect for my needs.', 5),
+(4, 3, 'Nice design, very modern.', 4),
+(5, 3, 'Locks work well.', 5),
+(6, 3, 'Good suitcase overall.', 4),
+(7, 3, 'Decent but expected more.', 3),
+(8, 3, 'Great deal for the price.', 5),
+(9, 3, 'Would purchase again.', 5),
+(10, 3, 'Very spacious inside.', 5);
+
+
+-- Inser Orders
+INSERT INTO orders (user_id, status, created_at)
+SELECT 
+    user_id,
+    CASE FLOOR(RAND() * 5)  -- Chọn status ngẫu nhiên từ ENUM
+        WHEN 0 THEN 'pending'
+        WHEN 1 THEN 'processing'
+        WHEN 2 THEN 'shipped'
+        WHEN 3 THEN 'delivered'
+        ELSE 'cancelled'
+    END AS status,
+    NOW() AS created_at
+FROM (
+    SELECT 1 AS user_id UNION ALL SELECT 1 UNION ALL SELECT 1 UNION ALL 
+    SELECT 1 UNION ALL SELECT 1 UNION ALL SELECT 1 UNION ALL 
+    SELECT 1 UNION ALL SELECT 1 UNION ALL SELECT 1 UNION ALL SELECT 1 UNION ALL 
+    SELECT 2 UNION ALL SELECT 2 UNION ALL SELECT 2 UNION ALL 
+    SELECT 2 UNION ALL SELECT 2 UNION ALL SELECT 2 UNION ALL 
+    SELECT 2 UNION ALL SELECT 2 UNION ALL SELECT 2 UNION ALL SELECT 2 UNION ALL 
+    SELECT 3 UNION ALL SELECT 3 UNION ALL SELECT 3 UNION ALL 
+    SELECT 3 UNION ALL SELECT 3 UNION ALL SELECT 3 UNION ALL 
+    SELECT 3 UNION ALL SELECT 3 UNION ALL SELECT 3 UNION ALL SELECT 3
+) AS users;
+
+-- Inser Order items
+INSERT INTO order_items (order_id, product_id, quantity, price)
+SELECT 
+    o.id AS order_id,
+    p.id AS product_id,
+    GREATEST(1, FLOOR(1 + (RAND() * 2))) AS quantity, -- Đảm bảo số lượng ít nhất là 1
+    LEAST(ROUND(p.price * GREATEST(1, FLOOR(1 + (RAND() * 2))), 2), 99999999.99) AS price -- Đảm bảo price hợp lệ
+FROM orders o
+JOIN products p ON p.id BETWEEN 1 AND 8 -- Chỉ lấy product_id từ 1-8
+WHERE o.user_id IN (1, 2, 3)
+ORDER BY RAND();
+
 
 
 

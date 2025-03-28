@@ -3,17 +3,17 @@ require "../config.php";
 
 if (!isset($_SESSION['name']) || $_SESSION['role'] !== 'admin') {
     $_SESSION['order_delete_error'] = "Unauthorized access.";
-    header("Location: manage_orders.php");
+    header("Location: ../admin/manage_orders.php");
     exit();
 }
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     $_SESSION['order_delete_error'] = "Invalid order ID.";
-    header("Location: manage_orders.php");
+    header("Location: ../admin/manage_orders.php");
     exit();
 }
 
-$order_id = (int)$_GET['id'];
+$order_id = (int) $_GET['id'];
 
 // Xóa tất cả sản phẩm trong đơn hàng trước
 $delete_items_stmt = $conn->prepare("DELETE FROM order_items WHERE order_id = ?");
@@ -32,5 +32,5 @@ if ($delete_order_stmt->execute()) {
 }
 
 $delete_order_stmt->close();
-header("Location: manage_orders.php");
+header("Location: ../admin/manage_orders.php");
 exit();
