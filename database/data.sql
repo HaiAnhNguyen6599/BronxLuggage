@@ -1,3 +1,26 @@
+-- Chèn một bản ghi tài khoản admin vào bảng users
+INSERT INTO users (name, email, password, phone, address, city, role, created_at)
+VALUES (
+    'Admin User',                      -- Tên admin
+    'admin@gmail.com',              -- Email admin
+    '$2y$10$EdZCa15KVWnza0s1glX83.ndJ6UaWKyty1xWToLVKe4gzNgW0YGi2', -- Mật khẩu băm cho 'admin123'
+    '0123456789',                     -- Số điện thoại (có thể thay đổi)
+    '123 Admin Street',               -- Địa chỉ (có thể thay đổi)
+    'Admin City',                     -- Thành phố (có thể thay đổi)
+    'admin',                          -- Vai trò là admin
+    NOW()                             -- Thời gian tạo là thời điểm hiện tại
+),
+('John Doe', 'johndoe@example.com', '$2y$10$b/Py0HLFd1/d.HHBo6r3Z.oucppMJ3MQ1qf/5h68TWQ6yUz7.4ZUC', '0987654321', '123 Main St', 'New York', 'customer', NOW()),
+('Jane Smith', 'janesmith@example.com', '$2y$10$b/Py0HLFd1/d.HHBo6r3Z.oucppMJ3MQ1qf/5h68TWQ6yUz7.4ZUC', '0971234567', '456 Elm St', 'Los Angeles', 'customer', NOW()),
+('Alice Johnson', 'alicejohnson@example.com', '$2y$10$b/Py0HLFd1/d.HHBo6r3Z.oucppMJ3MQ1qf/5h68TWQ6yUz7.4ZUC', '0962345678', '789 Oak St', 'Chicago', 'customer', NOW()),
+('Bob Brown', 'bobbrown@example.com', '$2y$10$b/Py0HLFd1/d.HHBo6r3Z.oucppMJ3MQ1qf/5h68TWQ6yUz7.4ZUC', '0953456789', '321 Pine St', 'Houston', 'customer', NOW()),
+('Charlie White', 'charliewhite@example.com', '$2y$10$b/Py0HLFd1/d.HHBo6r3Z.oucppMJ3MQ1qf/5h68TWQ6yUz7.4ZUC', '0944567890', '654 Cedar St', 'Phoenix', 'customer', NOW()),
+('David Black', 'davidblack@example.com', '$2y$10$b/Py0HLFd1/d.HHBo6r3Z.oucppMJ3MQ1qf/5h68TWQ6yUz7.4ZUC', '0935678901', '987 Birch St', 'Philadelphia', 'customer', NOW()),
+('Emma Green', 'emmagreen@example.com', '$2y$10$b/Py0HLFd1/d.HHBo6r3Z.oucppMJ3MQ1qf/5h68TWQ6yUz7.4ZUC', '0926789012', '741 Spruce St', 'San Antonio', 'customer', NOW()),
+('Frank Harris', 'frankharris@example.com', '$2y$10$b/Py0HLFd1/d.HHBo6r3Z.oucppMJ3MQ1qf/5h68TWQ6yUz7.4ZUC', '0917890123', '852 Maple St', 'San Diego', 'customer', NOW()),
+('Grace Lee', 'gracelee@example.com', '$2y$10$b/Py0HLFd1/d.HHBo6r3Z.oucppMJ3MQ1qf/5h68TWQ6yUz7.4ZUC', '0908901234', '963 Walnut St', 'Dallas', 'customer', NOW()),
+('Henry Adams', 'henryadams@example.com', '$2y$10$b/Py0HLFd1/d.HHBo6r3Z.oucppMJ3MQ1qf/5h68TWQ6yUz7.4ZUC', '0899012345', '159 Redwood St', 'San Jose', 'customer', NOW());
+
 -- Insert Brands- giữ nguyên
 INSERT INTO brands (name) VALUES
 ('Samsonite'),
@@ -152,4 +175,9 @@ INSERT INTO product_images (product_id, image_url, is_primary) VALUES
 -- (1, 1, 'Tote bag is stylish but a little small for my needs.', 4),
 -- (1, 1, 'Briefcase holds up well, loving the compartments.', 5),
 -- (1, 1, 'Messenger bag is great, but the strap wears out fast.', 3);
+
+
+
+
+
 

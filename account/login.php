@@ -59,8 +59,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $_SESSION['role'] = $role;
                         //thông báo đăng nhập thành công
                         $_SESSION['success'] = "Welcome " . htmlspecialchars($name) . " to your account!";
-                        header("Location: ../pages/index.php"); // Chuyển hướng khi đăng nhập thành công
-                        exit();
+                        // Kiểm tra vai trò và chuyển hướng
+                        if ($role === 'admin') {
+                            header("Location: ../admin/admin.php"); // Chuyển đến admin.php nếu là admin
+                        } else {
+                            header("Location: ../pages/index.php"); // Chuyển đến index.php nếu là customer
+                        }
                     } else {
                         $errors['password'] = "Incorrect password!"; // Lỗi sai mật khẩu
                     }

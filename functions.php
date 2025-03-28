@@ -144,6 +144,17 @@ function buildFilterQuery($filters)
     ];
 
     // Xử lý các bộ lọc thông thường
+    /**
+     * $values = ['Nike', 'Adidas', 'Puma'];
+     * $placeholders = implode(',', array_fill(0, count($values), '?'));
+     * $placeholders = '?, ?, ?';
+     * 
+     * 
+     * 
+     * 
+     * 
+     *  
+     */
     foreach ($filter_map as $key => $data) {
         if (!empty($filters[$key])) {
             $values = is_array($filters[$key]) ? $filters[$key] : [$filters[$key]];
@@ -322,25 +333,3 @@ function getProductFeedback($conn, $product_id)
 
 
 // Hàm lấy tên kích thước theo ID (dùng trong cart.php)
-function getSizeById($conn, $size_id)
-{
-    if (!$size_id)
-        return null; // Trả về null nếu size_id không tồn tại
-    $stmt = $conn->prepare("SELECT id, name FROM sizes WHERE id = ?");
-    $stmt->bind_param("i", $size_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    return $result->fetch_assoc(); // Trả về mảng chứa id và name
-}
-
-
-function getColorById($conn, $color_id)
-{
-    if (!$color_id)
-        return null; // Trả về null nếu color_id không tồn tại
-    $stmt = $conn->prepare("SELECT id, name FROM colors WHERE id = ?");
-    $stmt->bind_param("i", $color_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    return $result->fetch_assoc(); // Trả về mảng chứa id và name
-}

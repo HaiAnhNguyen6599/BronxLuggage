@@ -50,7 +50,7 @@ CREATE TABLE products (
     size_id INT NOT NULL,
     color_id INT NOT NULL,
     price DECIMAL(10,2) NOT NULL,
-    gender ENUM('male', 'female', 'kids') NOT NULL,
+    gender ENUM('male', 'female') NOT NULL,
 --     inventory INT NOT NULL DEFAULT 0,  -- Số lượng sản phẩm trong kho
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
